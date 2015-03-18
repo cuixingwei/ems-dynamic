@@ -1,0 +1,187 @@
+﻿[
+    {
+        "menuId": 0,
+        "menuName": "调度统计",
+        "resources": [
+            {
+                "id": 0,
+                "name": "振铃到接听大于X秒",
+                "url": "RingToAnswerTimes.jsp"
+            },
+            {
+                "id": 1,
+                "name": "开始受理到派车大于X秒",
+                "url": "AcceptSendCar.jsp"
+            },
+            {
+                "id": 2,
+                "name": "受理备注查询",
+                "url": "AcceptMark.jsp"
+            },
+            {
+                "id": 3,
+                "name": "事件类型统计",
+                "url": "AcceptEventType.jsp"
+            },
+            {
+                "id": 4,
+                "name": "受理时间统计",
+                "url": "AcceptTime.jsp"
+            },
+            {
+                "id": 5,
+                "name": "通讯录",
+                "url": "TeleBook.jsp"
+            },
+            {
+                "id": 6,
+                "name": "重大紧急事件情况统计",
+                "url": "Accident.jsp"
+            },
+            {
+                "id": 7,
+                "name": "状态变化统计",
+                "url": "StateChange.jsp"
+            }
+        ]
+    },
+    {
+        "menuId": 1,
+        "menuName": "工作统计",
+        "resources": [
+            {
+                "id": 0,
+                "name": "中心任务信息统计",
+                "url": "CenterTask.jsp"
+            },
+            {
+                "id": 1,
+                "name": "中止任务信息统计",
+                "url": "StopTask.jsp"
+            },
+            {
+                "id": 2,
+                "name": "中止任务原因统计",
+                "url": "StopTaskReason.jsp"
+            },
+            {
+                "id": 3,
+                "name": "车辆暂停调用情况",
+                "url": "CarPause.jsp"
+            },
+            {
+                "id": 4,
+                "name": "车辆状态变化情况",
+                "url": "CarStateChange.jsp"
+            },
+            {
+                "id": 5,
+                "name": "放空车统计",
+                "url": "EmptyCar.jsp"
+            },
+            {
+                "id": 6,
+                "name": "放空车原因统计",
+                "url": "EmptyCarReaspm.jsp"
+            },
+            {
+                "id": 7,
+                "name": "挂起事件流水统计",
+                "url": "HungEvent.jsp"
+            },
+            {
+                "id": 8,
+                "name": "挂起原因统计",
+                "url": "HungEventReason.jsp"
+            },
+            {
+                "id": 9,
+                "name": "呼救现场地点类型统计",
+                "url": "CallSpotType.jsp"
+            },
+            {
+                "id": 10,
+                "name": "送往地点类型统计",
+                "url": "SendSpotType.jsp"
+            },
+            {
+                "id": 12,
+                "name": "中心接警情况统计",
+                "url": "AnswerAlarm.jsp"
+            }
+        ]
+    },
+    {
+        "menuId": 2,
+        "menuName": "分站统计",
+        "resources": [
+            {
+                "id": 0,
+                "name": "急救站出诊情况查询",
+                "url": "SubstationVisit.jsp"
+            },
+            {
+                "id": 1,
+                "name": "急救站出诊人员情况查询",
+                "url": "SubstationVisitStaff.jsp"
+            },
+            {
+                "id": 2,
+                "name": "急救站3分钟未出诊统计",
+                "url": "SubstationLateVisit.jsp"
+            },
+            {
+                "id": 3,
+                "name": "车辆工作情况统计",
+                "url": "CarWork.jsp"
+            },
+            {
+                "id": 4,
+                "name": "司机工作情况查询",
+                "url": "DriverWork.jsp"
+            },
+            {
+                "id": 5,
+                "name": "医生工作情况查询",
+                "url": "DoctorWork.jsp"
+            },
+            {
+                "id": 6,
+                "name": "护士工作情况查询",
+                "url": "NurseWork.jsp"
+            },
+            {
+                "id": 7,
+                "name": "任务备注查询",
+                "url": "TaskMark.jsp"
+            },
+            {
+                "id": 8,
+                "name": "院前急救病例回填数统计",
+                "url": "PatientCaseFillCount.jsp"
+            }
+        ]
+    },
+    {
+        "menuId": 3,
+        "menuName": "医务统计",
+        "resources": [
+            {
+                "id": 0,
+                "name": "疾病原因统计",
+                "url": "PatientReason.jsp"
+            },
+            {
+                "id": 1,
+                "name": "疾病分类统计",
+                "url": "PatientType.jsp"
+            },
+            {
+                "id": 2,
+                "name": "病发时间段统计",
+                "url": "PatientTimeSpan.jsp"
+            }
+         
+        ]
+    }
+]
