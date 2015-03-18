@@ -12,7 +12,7 @@ import com.xhs.ems.bean.User;
 import com.xhs.ems.service.UserService;
 
 @Controller
-@RequestMapping(value = "page")
+@RequestMapping(value = "page/base")
 public class UserController {
 
 	@Autowired

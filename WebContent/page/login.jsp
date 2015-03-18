@@ -2,8 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%
 	String contextPath = request.getContextPath();
-%>
-<%
 	String version = "20150311";
 %>
 <!DOCTYPE html>
@@ -60,9 +58,14 @@
 						$("#validationSummary").text("密码错误");
 						break;
 					case "success":
+						$.messager.show({
+							title : '提示',
+							msg : '登录成功',
+							timeout : 5000,
+							showType : 'slide'
+						});
 						window.location.replace("page/main.jsp");
 						break;
-
 					default:
 						break;
 					}

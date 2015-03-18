@@ -1,26 +1,72 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%
+	String contextPath = request.getContextPath();
+	String version = "20150311";
+%>
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script type="text/javascript" src="../lib/jquery-2.1.3.js"></script>
-<script type="text/javascript" src="../lib/jquery.cookie.js"></script>
 <title>主界面</title>
+<jsp:include page="../inc.jsp"></jsp:include>
+<link rel="stylesheet" type="text/css"
+	href="<%=contextPath%>/style/header.css?version=<%=version%>">
+<script type="text/javascript">
+	var mainMenu;
+	var mainTabs;
+</script>
 </head>
-<frameset border="0" framespacing="0" rows="110,*,35" frameborder="no"
-	cols="*">
-	<frame id="topFrame" name="topFrame" src="header.jsp" noresize="noresize"
-		scrolling="no"></frame>
-	<frameset id="mainFrm" border="0" rows="*" frameborder="no"
-		cols="220,10,*">
-		<frame id="left" style="OVERFLOW: auto" name="left" src="menu.jsp"
-			frameborder="0"></frame>
-		<frame id="middle" frameborder="0" src="middle.html"></frame>
-		<frame id="right" style="OVERFLOW: auto" name="right" src="RingToAnswerTimes.jsp"
-			frameborder="0"></frame>
-	</frameset>
-	<frame id="footFrame" name="footFrame" src="footer.jsp" noresize="noresize"
-		scrolling="no"></frame>
-</frameset>
+<body id="mainLayout" class="easyui-layout">
+	<div
+		data-options="region:'north',href:'<%=contextPath%>/page/north.jsp'"
+		style="height: 110px; overflow: hidden;" class="logo"></div>
+	<div data-options="region:'west',href:'',split:true" title="导航"
+		style="width: 200px; padding: 10px;">
+		<ul id="mainMenu"></ul>
+	</div>
+	<div
+		data-options="region:'south',href:'<%=contextPath%>/page/south.jsp',border:false"
+		style="height: 30px; overflow: hidden;"></div>
+
+	<div data-options="region:'center'" style="overflow: hidden;">
+		<div id="mainTabs" style="width: 100%; height: 99%;">
+			<iframe src="<%=contextPath%>/page/base/RingToAnswerTimes.jsp"
+				allowTransparency="true"
+				style="border: 0; width: 100%; height: 98%;" frameBorder="0"></iframe>
+		</div>
+	</div>
+
+
+	<div id="loginDialog" title="解锁登录" style="display: none;">
+		<form method="post" class="form" onsubmit="return false;">
+			<table class="table">
+				<tr>
+					<th width="50">登录名</th>
+				</tr>
+				<tr>
+					<th>密码</th>
+					<td><input name="data.pwd" type="password"
+						class="easyui-validatebox" data-options="required:true" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<div id="passwordDialog" title="修改密码" style="display: none;">
+		<form method="post" class="form" onsubmit="return false;">
+			<table class="table">
+				<tr>
+					<th>新密码</th>
+					<td><input id="pwd" name="data.pwd" type="password"
+						class="easyui-validatebox" data-options="required:true" /></td>
+				</tr>
+				<tr>
+					<th>重复密码</th>
+					<td><input type="password" class="easyui-validatebox"
+						data-options="required:true,validType:'eqPwd[\'#pwd\']'" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
 </html>

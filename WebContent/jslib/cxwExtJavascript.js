@@ -1,35 +1,35 @@
-var sy = sy || {};
+var cxw = cxw || {};
 
 /**
  * 去字符串空格
  * 
- * @author 孙宇
+ * @author 崔兴伟
  */
-sy.trim = function(str) {
+cxw.trim = function(str) {
 	return str.replace(/(^\s*)|(\s*$)/g, '');
 };
-sy.ltrim = function(str) {
+cxw.ltrim = function(str) {
 	return str.replace(/(^\s*)/g, '');
 };
-sy.rtrim = function(str) {
+cxw.rtrim = function(str) {
 	return str.replace(/(\s*$)/g, '');
 };
 
 /**
  * 判断开始字符是否是XX
  * 
- * @author 孙宇
+ * @author 崔兴伟
  */
-sy.startWith = function(source, str) {
+cxw.startWith = function(source, str) {
 	var reg = new RegExp("^" + str);
 	return reg.test(source);
 };
 /**
  * 判断结束字符是否是XX
  * 
- * @author 孙宇
+ * @author 崔兴伟
  */
-sy.endWith = function(source, str) {
+cxw.endWith = function(source, str) {
 	var reg = new RegExp(str + "$");
 	return reg.test(source);
 };
@@ -37,21 +37,21 @@ sy.endWith = function(source, str) {
 /**
  * iframe自适应高度
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * 
  * @param iframe
  */
-sy.autoIframeHeight = function(iframe) {
+cxw.autoIframeHeight = function(iframe) {
 	iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
 };
 
 /**
  * 设置iframe高度
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * 
  * @param iframe
  */
-sy.setIframeHeight = function(iframe, height) {
+cxw.setIframeHeight = function(iframe, height) {
 	iframe.height = height;
 };
