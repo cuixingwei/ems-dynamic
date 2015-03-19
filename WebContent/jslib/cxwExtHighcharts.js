@@ -1,4 +1,4 @@
-var sy = sy || {};
+var cxw = cxw || {};
 
 $.extend(Highcharts.getOptions().lang, {
 	printChart : '打印图表',
@@ -10,7 +10,7 @@ $.extend(Highcharts.getOptions().lang, {
 });
 $.extend(Highcharts.getOptions().exporting, {
 	filename : 'chart',
-	url : sy.contextPath + '/downloadChart'
+	url : cxw.contextPath + '/downloadChart'
 });
 $.extend(Highcharts.getOptions(), {
 	credits : {

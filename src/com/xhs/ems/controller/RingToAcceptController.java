@@ -15,7 +15,7 @@ import com.xhs.ems.bean.RingToAccept;
 import com.xhs.ems.service.RingToAcceptService;
 
 @Controller
-@RequestMapping(value = "/page")
+@RequestMapping(value = "/page/base")
 public class RingToAcceptController {
 
 	@Autowired

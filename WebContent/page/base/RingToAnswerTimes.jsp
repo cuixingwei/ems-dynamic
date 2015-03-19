@@ -51,32 +51,32 @@
 			columns : [ [ {
 				field : 'dispatcher',
 				title : '调度员',
-				width : 100,
+				width : "15%",
 				align : 'center'
 			}, {
 				field : 'ringTime',
 				title : '电话振铃时刻',
-				width : 120,
+				width : "15%",
 				align : 'center'
 			}, {
 				field : 'callTime',
 				title : '通话时刻',
-				width : 120,
+				width : "15%",
 				align : 'center'
 			}, {
 				field : 'ringDuration',
 				title : '响铃时长(秒)',
-				width : 100,
+				width : "20%",
 				align : 'center'
 			}, {
 				field : 'acceptCode',
 				title : '受理台号',
-				width : 100,
+				width : "15%",
 				align : 'center'
 			}, {
 				field : 'acceptRemark',
 				title : '受理备注',
-				width : 200,
+				width : "20%",
 				align : 'center'
 			} ] ],
 			method : 'post',

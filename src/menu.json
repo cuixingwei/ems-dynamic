@@ -1,187 +1,479 @@
 ﻿[
     {
-        "menuId": 0,
-        "menuName": "调度统计",
-        "resources": [
-            {
-                "id": 0,
-                "name": "振铃到接听大于X秒",
-                "url": "RingToAnswerTimes.jsp"
-            },
-            {
-                "id": 1,
-                "name": "开始受理到派车大于X秒",
-                "url": "AcceptSendCar.jsp"
-            },
-            {
-                "id": 2,
-                "name": "受理备注查询",
-                "url": "AcceptMark.jsp"
-            },
-            {
-                "id": 3,
-                "name": "事件类型统计",
-                "url": "AcceptEventType.jsp"
-            },
-            {
-                "id": 4,
-                "name": "受理时间统计",
-                "url": "AcceptTime.jsp"
-            },
-            {
-                "id": 5,
-                "name": "通讯录",
-                "url": "TeleBook.jsp"
-            },
-            {
-                "id": 6,
-                "name": "重大紧急事件情况统计",
-                "url": "Accident.jsp"
-            },
-            {
-                "id": 7,
-                "name": "状态变化统计",
-                "url": "StateChange.jsp"
-            }
-        ]
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":""
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"0",
+    	"state":"open",
+    	"text":"调度统计"
     },
     {
-        "menuId": 1,
-        "menuName": "工作统计",
-        "resources": [
-            {
-                "id": 0,
-                "name": "中心任务信息统计",
-                "url": "CenterTask.jsp"
-            },
-            {
-                "id": 1,
-                "name": "中止任务信息统计",
-                "url": "StopTask.jsp"
-            },
-            {
-                "id": 2,
-                "name": "中止任务原因统计",
-                "url": "StopTaskReason.jsp"
-            },
-            {
-                "id": 3,
-                "name": "车辆暂停调用情况",
-                "url": "CarPause.jsp"
-            },
-            {
-                "id": 4,
-                "name": "车辆状态变化情况",
-                "url": "CarStateChange.jsp"
-            },
-            {
-                "id": 5,
-                "name": "放空车统计",
-                "url": "EmptyCar.jsp"
-            },
-            {
-                "id": 6,
-                "name": "放空车原因统计",
-                "url": "EmptyCarReaspm.jsp"
-            },
-            {
-                "id": 7,
-                "name": "挂起事件流水统计",
-                "url": "HungEvent.jsp"
-            },
-            {
-                "id": 8,
-                "name": "挂起原因统计",
-                "url": "HungEventReason.jsp"
-            },
-            {
-                "id": 9,
-                "name": "呼救现场地点类型统计",
-                "url": "CallSpotType.jsp"
-            },
-            {
-                "id": 10,
-                "name": "送往地点类型统计",
-                "url": "SendSpotType.jsp"
-            },
-            {
-                "id": 12,
-                "name": "中心接警情况统计",
-                "url": "AnswerAlarm.jsp"
-            }
-        ]
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"RingToAnswerTimes.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"00",
+    	"pid":"0",
+    	"state":"open",
+    	"text":"振铃到接听大于X秒"
     },
     {
-        "menuId": 2,
-        "menuName": "分站统计",
-        "resources": [
-            {
-                "id": 0,
-                "name": "急救站出诊情况查询",
-                "url": "SubstationVisit.jsp"
-            },
-            {
-                "id": 1,
-                "name": "急救站出诊人员情况查询",
-                "url": "SubstationVisitStaff.jsp"
-            },
-            {
-                "id": 2,
-                "name": "急救站3分钟未出诊统计",
-                "url": "SubstationLateVisit.jsp"
-            },
-            {
-                "id": 3,
-                "name": "车辆工作情况统计",
-                "url": "CarWork.jsp"
-            },
-            {
-                "id": 4,
-                "name": "司机工作情况查询",
-                "url": "DriverWork.jsp"
-            },
-            {
-                "id": 5,
-                "name": "医生工作情况查询",
-                "url": "DoctorWork.jsp"
-            },
-            {
-                "id": 6,
-                "name": "护士工作情况查询",
-                "url": "NurseWork.jsp"
-            },
-            {
-                "id": 7,
-                "name": "任务备注查询",
-                "url": "TaskMark.jsp"
-            },
-            {
-                "id": 8,
-                "name": "院前急救病例回填数统计",
-                "url": "PatientCaseFillCount.jsp"
-            }
-        ]
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"AcceptSendCar.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"01",
+    	"pid":"0",
+    	"state":"open",
+    	"text":"开始受理到派车大于X秒"
     },
     {
-        "menuId": 3,
-        "menuName": "医务统计",
-        "resources": [
-            {
-                "id": 0,
-                "name": "疾病原因统计",
-                "url": "PatientReason.jsp"
-            },
-            {
-                "id": 1,
-                "name": "疾病分类统计",
-                "url": "PatientType.jsp"
-            },
-            {
-                "id": 2,
-                "name": "病发时间段统计",
-                "url": "PatientTimeSpan.jsp"
-            }
-         
-        ]
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"AcceptMark.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"02",
+    	"pid":"0",
+    	"state":"open",
+    	"text":"受理备注查询"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"AcceptEventType.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"03",
+    	"pid":"0",
+    	"state":"open",
+    	"text":"事件类型统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"AcceptTime.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"04",
+    	"pid":"0",
+    	"state":"open",
+    	"text":"受理时间统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"TeleBook.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"05",
+    	"pid":"0",
+    	"state":"open",
+    	"text":"通讯录"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"Accident.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"06",
+    	"pid":"0",
+    	"state":"open",
+    	"text":"重大紧急事件情况统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"StateChange.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"07",
+    	"pid":"0",
+    	"state":"open",
+    	"text":"状态变化统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":""
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"1",
+    	"state":"open",
+    	"text":"工作统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"CenterTask.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"10",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"中心任务信息统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"StopTask.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"11",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"中止任务信息统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"StopTaskReason.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"12",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"中止任务原因统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"CarPause.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"13",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"车辆暂停调用情况"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"CarStateChange.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"14",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"车辆状态变化情况"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"EmptyCar.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"15",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"放空车统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"EmptyCarReaspm.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"16",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"放空车原因统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"HungEvent.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"17",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"挂起事件流水统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"HungEventReason.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"18",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"挂起原因统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"CallSpotType.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"19",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"呼救现场地点类型统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"SendSpotType.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"110",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"送往地点类型统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"AnswerAlarm.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"111",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"中心接警情况统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":""
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"2",
+    	"state":"open",
+    	"text":"分站统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"SubstationVisit.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"20",
+    	"pid":"2",
+    	"state":"open",
+    	"text":"急救站出诊情况查询"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"SubstationVisitStaff.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"21",
+    	"pid":"2",
+    	"state":"open",
+    	"text":"急救站出诊人员情况查询"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"SubstationLateVisit.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"22",
+    	"pid":"2",
+    	"state":"open",
+    	"text":"急救站3分钟未出诊统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"CarWork.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"23",
+    	"pid":"2",
+    	"state":"open",
+    	"text":"车辆工作情况统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"DriverWork.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"24",
+    	"pid":"2",
+    	"state":"open",
+    	"text":"司机工作情况查询"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"DoctorWork.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"25",
+    	"pid":"2",
+    	"state":"open",
+    	"text":"医生工作情况查询"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"NurseWork.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"26",
+    	"pid":"2",
+    	"state":"open",
+    	"text":"护士工作情况查询"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"TaskMark.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"27",
+    	"pid":"2",
+    	"state":"open",
+    	"text":"任务备注查询"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"PatientCaseFillCount.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"28",
+    	"pid":"2",
+    	"state":"open",
+    	"text":"院前急救病例回填数统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":""
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"3",
+    	"state":"open",
+    	"text":"医务统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"PatientReason.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"30",
+    	"pid":"3",
+    	"state":"open",
+    	"text":"疾病原因统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"StopTask.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"11",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"中止任务信息统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"PatientType.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"32",
+    	"pid":"3",
+    	"state":"open",
+    	"text":"疾病分类统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"PatientTimeSpan.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"33",
+    	"pid":"3",
+    	"state":"open",
+    	"text":"病发时间段统计"
     }
 ]

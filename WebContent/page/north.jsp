@@ -37,20 +37,6 @@
 
 	setInterval(show, 500);
 
-	function modifyPassword() {
-		var left = (parseInt(screen.width, 10) - 500) / 2;
-		var top = (parseInt(screen.height, 10) - 300) / 2;
-		window
-				.open(
-						"base/ModifyPassword.jsp",
-						"newwin",
-						"top"
-								+ top
-								+ ",left="
-								+ left
-								+ ", width=500,height=300,location=no,toolbar=no,scrollbars=no,menubar=no,z-look=yes,resizable=no");
-	}
-
 	function helpUse() {
 		window
 				.open("base/helpUse.jsp", "newwin",
@@ -81,7 +67,7 @@
 		style="width: 125px; height: 38px; float: right;"></div>
 
 	<div style="width: 220px; height: 38px; float: right; color: blue;">
-		<a href="javascript:void(0)" onclick="modifyPassword()"
+		<a href="javascript:void(0)" onclick="$('#passwordDialog').dialog('open');" 
 			style="width: 70px; height: 36px; display: inline-block; line-height: 36px; text-align: center; vertical-align: middle; padding-left: 10px; background: url(../style/image/topmid_spilter.png) left center no-repeat;">修改密码</a>
 		<a href="javascript:void(0)" onclick="helpUse()"
 			style="width: 30px; height: 36px; line-height: 36px; vertical-align: middle; padding-left: 10px; background: url(../style/image/topmid_spilter.png) left center no-repeat;">帮助</a>

@@ -1,9 +1,9 @@
-var sy = sy || {};
+var cxw = cxw || {};
 
 /**
  * 更改easyui加载panel时的提示文字
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * 
  * @requires jQuery,EasyUI
  */
@@ -14,7 +14,7 @@ $.extend($.fn.panel.defaults, {
 /**
  * 更改easyui加载grid时的提示文字
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * 
  * @requires jQuery,EasyUI
  */
@@ -25,7 +25,7 @@ $.extend($.fn.datagrid.defaults, {
 /**
  * panel关闭时回收内存，主要用于layout使用iframe嵌入网页时的内存泄漏问题
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * 
  * @requires jQuery,EasyUI
  * 
@@ -56,11 +56,11 @@ $.extend($.fn.panel.defaults, {
 /**
  * 防止panel/window/dialog组件超出浏览器边界
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * 
  * @requires jQuery,EasyUI
  */
-sy.onMove = {
+cxw.onMove = {
 	onMove : function(left, top) {
 		var l = left;
 		var t = top;
@@ -88,9 +88,9 @@ sy.onMove = {
 		});
 	}
 };
-$.extend($.fn.dialog.defaults, sy.onMove);
-$.extend($.fn.window.defaults, sy.onMove);
-$.extend($.fn.panel.defaults, sy.onMove);
+$.extend($.fn.dialog.defaults, cxw.onMove);
+$.extend($.fn.window.defaults, cxw.onMove);
+$.extend($.fn.panel.defaults, cxw.onMove);
 
 /**
  * 
@@ -98,11 +98,11 @@ $.extend($.fn.panel.defaults, sy.onMove);
  * 
  * 用于datagrid/treegrid/tree/combogrid/combobox/form加载数据出错时的操作
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * 
  * @requires jQuery,EasyUI
  */
-sy.onLoadError = {
+cxw.onLoadError = {
 	onLoadError : function(XMLHttpRequest) {
 		if (parent.$ && parent.$.messager) {
 			parent.$.messager.progress('close');
@@ -113,17 +113,17 @@ sy.onLoadError = {
 		}
 	}
 };
-$.extend($.fn.datagrid.defaults, sy.onLoadError);
-$.extend($.fn.treegrid.defaults, sy.onLoadError);
-$.extend($.fn.tree.defaults, sy.onLoadError);
-$.extend($.fn.combogrid.defaults, sy.onLoadError);
-$.extend($.fn.combobox.defaults, sy.onLoadError);
-$.extend($.fn.form.defaults, sy.onLoadError);
+$.extend($.fn.datagrid.defaults, cxw.onLoadError);
+$.extend($.fn.treegrid.defaults, cxw.onLoadError);
+$.extend($.fn.tree.defaults, cxw.onLoadError);
+$.extend($.fn.combogrid.defaults, cxw.onLoadError);
+$.extend($.fn.combobox.defaults, cxw.onLoadError);
+$.extend($.fn.form.defaults, cxw.onLoadError);
 
 /**
  * 扩展combobox在自动补全模式时，检查用户输入的字符是否存在于下拉框中，如果不存在则清空用户输入
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * 
  * @requires jQuery,EasyUI
  */
@@ -165,7 +165,7 @@ $.extend($.fn.combobox.defaults, {
 /**
  * 扩展combogrid在自动补全模式时，检查用户输入的字符是否存在于下拉框中，如果不存在则清空用户输入
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * 
  * @requires jQuery,EasyUI
  */
@@ -202,7 +202,7 @@ $.extend($.fn.combogrid.defaults, {
 /**
  * 扩展validatebox，添加新的验证功能
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * 
  * @requires jQuery,EasyUI
  */
@@ -218,12 +218,12 @@ $.extend($.fn.validatebox.defaults.rules, {
 /**
  * 扩展tree和combotree，使其支持平滑数据格式
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * 
  * @requires jQuery,EasyUI
  * 
  */
-sy.loadFilter = {
+cxw.loadFilter = {
 	loadFilter : function(data, parent) {
 		var opt = $(this).data().tree.options;
 		var idField, textField, parentField;
@@ -251,13 +251,13 @@ sy.loadFilter = {
 		return data;
 	}
 };
-$.extend($.fn.combotree.defaults, sy.loadFilter);
-$.extend($.fn.tree.defaults, sy.loadFilter);
+$.extend($.fn.combotree.defaults, cxw.loadFilter);
+$.extend($.fn.tree.defaults, cxw.loadFilter);
 
 /**
  * 扩展treegrid，使其支持平滑数据格式
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * 
  * @requires jQuery,EasyUI
  * 
@@ -294,12 +294,12 @@ $.extend($.fn.treegrid.defaults, {
 /**
  * 创建一个模式化的dialog
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * 
  * @requires jQuery,EasyUI
  * 
  */
-sy.modalDialog = function(options) {
+cxw.modalDialog = function(options) {
 	var opts = $.extend({
 		title : '&nbsp;',
 		width : 640,
@@ -319,11 +319,11 @@ sy.modalDialog = function(options) {
 /**
  * 更换主题
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * @requires jQuery,EasyUI
  * @param themeName
  */
-sy.changeTheme = function(themeName) {
+cxw.changeTheme = function(themeName) {
 	var $easyuiTheme = $('#easyuiTheme');
 	var url = $easyuiTheme.attr('href');
 	var href = url.substring(0, url.indexOf('themes')) + 'themes/' + themeName + '/easyui.css';
@@ -344,7 +344,7 @@ sy.changeTheme = function(themeName) {
 		}
 	}
 
-	sy.cookie('easyuiTheme', themeName, {
+	cxw.cookie('easyuiTheme', themeName, {
 		expires : 7
 	});
 };
@@ -352,10 +352,10 @@ sy.changeTheme = function(themeName) {
 /**
  * 滚动条
  * 
- * @author 孙宇
+ * @author 崔兴伟
  * @requires jQuery,EasyUI
  */
-sy.progressBar = function(options) {
+cxw.progressBar = function(options) {
 	if (typeof options == 'string') {
 		if (options == 'close') {
 			$('#syProgressBarDiv').dialog('destroy');
@@ -385,7 +385,7 @@ var cardview = $.extend({}, $.fn.datagrid.defaults.view, {
         var cc = [];   
         cc.push('<td colspan=' + fields.length + ' style="padding:5px;border:0;">');   
         if (!frozen){   
-            cc.push('<img src="' +sy.contextPath+ rowData.image + '" style="width:200px;height:200px;float:left">');   
+            cc.push('<img src="' +cxw.contextPath+ rowData.image + '" style="width:200px;height:200px;float:left">');   
             cc.push('<div style="float:left;width:100px;">');   
             for(var i=0; i<fields.length; i++){
             	if(i==2){
