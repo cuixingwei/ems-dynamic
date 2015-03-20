@@ -200,8 +200,11 @@
 	</div>
 	<div data-options="region:'center'" style="overflow: hidden;">
 		<div id="mainTabs">
-			<div title="响铃到接听" data-options="iconCls:'ext-icon-heart'">
-				<iframe src="<%=contextPath%>/page/base/RingToAnswerTimes.jsp" allowTransparency="true" style="border: 0; width: 100%; height: 99%;" frameBorder="0"></iframe>
+			<div title="响铃到接听"
+				data-options="iconCls:'ext-icon-heart',closable:true,fit:true">
+				<iframe src="<%=contextPath%>/page/base/RingToAnswerTimes.jsp"
+					allowTransparency="true"
+					style="border: 0; width: 100%; height: 99%;" frameBorder="0"></iframe>
 			</div>
 		</div>
 	</div>
