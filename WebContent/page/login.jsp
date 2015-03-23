@@ -48,9 +48,8 @@
 				error : function() {
 					alert('登录失败，请稍后重试');
 				},
-				success : function(data, textStatus) {
-					var result = data.msg;
-					switch (result) {
+				success : function(result) {
+					switch (result.msg) {
 					case "fail":
 						$("#validationSummary").text("用户不存在");
 						break;

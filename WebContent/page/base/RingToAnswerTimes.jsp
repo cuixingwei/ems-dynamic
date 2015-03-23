@@ -13,15 +13,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript">
 	var grid;
-	var parameter = $('#searchForm').serializeArray();
-	function search() {
-		grid.datagrid('load', {
-			overtimes : $('#overtimes').val(),
-			startTime : $('#startTime').val(),
-			endTime : $('#endTime').val(),
-			dispatcher : $('#dispatcher').val()
-		});
-	}
+	var exportData = function() {
+
+	};
 	/* 初始化页面标签 */
 	function init() {
 		$('#overtimes').numberbox({
@@ -44,15 +38,12 @@
 		grid = $('#grid').datagrid({
 			url : 'getRingToAcceptDatas',
 			pagePosition : 'bottom',
-			loadMsg : '加载中，请稍后',
 			pagination : true,
 			striped : true,
-			rownumbers : true,
 			singleSelect : true,
+			rownumbers : true,
 			idField : 'id',
-			sortName : 'ringTime',
-			sortOrder : 'desc',
-			pageSize : 50,
+			pageSize : 20,
 			pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 			columns : [ [ {
 				field : 'dispatcher',
@@ -93,7 +84,6 @@
 				});
 			},
 			onLoadSuccess : function(data) {
-				$('.iconImg').attr('src', cxw.pixel_0);
 				parent.$.messager.progress('close');
 			}
 		});
@@ -101,6 +91,7 @@
 
 	$(document).ready(function() {
 		init();
+		grid.datagrid('load', cxw.serializeObject($('#searchForm')))
 	});
 </script>
 </head>
@@ -121,14 +112,14 @@
 								<td>查询时间</td>
 								<td><input id="startTime" name="startTime" class="Wdate"
 									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-									readonly="readonly" style="width: 180px;" />-<input
-									id="endTime" name="endTime" class="Wdate"
+									style="width: 180px;" />-<input id="endTime" name="endTime"
+									class="Wdate"
 									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-									readonly="readonly" style="width: 180px;" /></td>
+									style="width: 180px;" /></td>
 								<td><a href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
-									onclick="search()">查询</a><a href="javascript:void(0);"
-									class="easyui-linkbutton"
+									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a><a
+									href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom_out',plain:true"
 									onclick="$('#searchForm input').val('');grid.datagrid('load',{});">重置查询</a></td>
 							</tr>
@@ -138,7 +129,8 @@
 			</tr>
 			<tr>
 				<td><a href="javascript:void(0);" class="easyui-linkbutton"
-					data-options="iconCls:'ext-icon-table_go',plain:true" onclick="">导出</a></td>
+					data-options="iconCls:'ext-icon-table_go',plain:true"
+					onclick="exportData();">导出</a></td>
 			</tr>
 		</table>
 	</div>

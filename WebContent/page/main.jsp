@@ -19,7 +19,7 @@
 		$.messager.show({
 			title : '提示',
 			msg : '登录成功',
-			timeout : 5000,
+			timeout : 3000,
 			showType : 'slide'
 		});
 		/* 修改密码 */
@@ -69,7 +69,7 @@
 											iconCls : node.iconCls,
 											content : cxw
 													.formatString(
-															'<iframe src="{0}" allowTransparency="true" style="border:0;width:100%;height:99%;" frameBorder="0"></iframe>',
+															'<iframe src="{0}" allowTransparency="true" style="border:0;width:99%;height:99%;" frameBorder="0"></iframe>',
 															src),
 											border : false,
 											fit : true
@@ -108,26 +108,10 @@
 										}
 									},
 									{
-										iconCls : 'ext-icon-arrow_left',
-										handler : function() {
-											mainTabs.tabs({
-												tabPosition : 'left'
-											});
-										}
-									},
-									{
 										iconCls : 'ext-icon-arrow_down',
 										handler : function() {
 											mainTabs.tabs({
 												tabPosition : 'bottom'
-											});
-										}
-									},
-									{
-										iconCls : 'ext-icon-arrow_right',
-										handler : function() {
-											mainTabs.tabs({
-												tabPosition : 'right'
 											});
 										}
 									},
@@ -191,9 +175,8 @@
 </script>
 </head>
 <body id="mainLayout" class="easyui-layout">
-	<div
-		data-options="region:'north',href:'<%=contextPath%>/page/north.jsp'"
-		style="height: 110px; overflow: hidden;" class="logo"></div>
+	<div data-options="region:'north',href:'<%=contextPath%>/page/north.jsp',border:false"
+				style="height: 110px; overflow: hidden;"></div>
 	<div data-options="region:'west',href:'',split:true" title="导航"
 		style="width: 250px; padding: 10px;">
 		<ul id="mainMenu"></ul>
@@ -203,16 +186,13 @@
 			<div title="响铃到接听"
 				data-options="iconCls:'ext-icon-heart',closable:true,fit:true">
 				<iframe src="<%=contextPath%>/page/base/RingToAnswerTimes.jsp"
-					allowTransparency="true"
-					style="border: 0; width: 100%; height: 99%;" frameBorder="0"></iframe>
+					style="border: 0; width: 99%; height: 99%;"></iframe>
 			</div>
 		</div>
 	</div>
 	<div
 		data-options="region:'south',href:'<%=contextPath%>/page/south.jsp',border:false"
 		style="height: 30px; overflow: hidden;"></div>
-
-
 
 	<div id="passwordDialog" title="修改密码" style="display: none;">
 		<form method="post" class="form" onsubmit="return false;">

@@ -1,19 +1,14 @@
 package com.xhs.ems.dao;
 
-import java.util.List;
-
-import com.xhs.ems.bean.RingToAccept;
+import com.xhs.ems.bean.Grid;
+import com.xhs.ems.bean.Parameter;
 
 public interface RingToAcceptDAO {
 	/**
 	 * 返回振铃到接听大于X秒的相关数据
 	 * 
-	 * @param overtimes
-	 * @param dispatcher
-	 * @param startTime
-	 * @param endTime
+	 * @param parameter
 	 * @return
 	 */
-	public List<RingToAccept> getData(String overtimes, String dispatcher,
-			String startTime, String endTime);
+	public Grid getData(Parameter parameter);
 }

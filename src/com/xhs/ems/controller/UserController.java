@@ -2,6 +2,7 @@ package com.xhs.ems.controller;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,13 +15,14 @@ import com.xhs.ems.service.UserService;
 @Controller
 @RequestMapping(value = "page/base")
 public class UserController {
-
+	private static final Logger logger = Logger
+			.getLogger(UserController.class);
 	@Autowired
 	private UserService userService;
 
 	@RequestMapping(value = "/getUsers", method = RequestMethod.GET)
 	public @ResponseBody List<User> getUser() {
-		System.out.println("获取调度员");
+		logger.info("获取调度员");
 		return userService.getAvailableDispatcher();
 	}
 }

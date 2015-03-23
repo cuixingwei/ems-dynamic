@@ -17,6 +17,26 @@ public class Parameter {
 	 * 调试员
 	 */
 	private String dispatcher;
+	/**
+	 * datagrid 参数
+	 * 页码
+	 */
+	private int page;
+	/**
+	 * datagrid 参数
+	 * 每页的行数
+	 */
+	private int rows;
+	/**
+	 * datagrid 参数
+	 * 排序字段
+	 */
+	private String sort;
+	/**
+	 * datagrid 参数
+	 * 排序类型desc , asc
+	 */
+	private String order;
 	public String getStartTime() {
 		return startTime;
 	}
@@ -41,5 +61,30 @@ public class Parameter {
 	public void setDispatcher(String dispatcher) {
 		this.dispatcher = dispatcher;
 	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public int getRows() {
+		return rows;
+	}
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+	public String getSort() {
+		return sort;
+	}
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+	public String getOrder() {
+		return order;
+	}
+	public void setOrder(String order) {
+		this.order = order;
+	}
+	
 	
 }

@@ -8,17 +8,22 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.xhs.ems.bean.Grid;
+import com.xhs.ems.bean.Parameter;
 import com.xhs.ems.bean.RingToAccept;
 import com.xhs.ems.common.CommonUtil;
 import com.xhs.ems.dao.RingToAcceptDAO;
 
 @Repository("ringToAcceptDAO")
 public class RingToAcceptDAOImpl implements RingToAcceptDAO {
+	private static final Logger logger = Logger
+			.getLogger(RingToAcceptDAOImpl.class);
 
 	private NamedParameterJdbcTemplate npJdbcTemplate;
 
@@ -28,25 +33,25 @@ public class RingToAcceptDAOImpl implements RingToAcceptDAO {
 	}
 
 	@Override
-	public List<RingToAccept> getData(String overtimes, String dispatcher,
-			String startTime, String endTime) {
-		String sql = "select  m.姓名 dispatcher,convert(varchar(20),a.电话振铃时刻,120) ringTime,convert(varchar(20),a.开始受理时刻,120) callTime,"
-				+ "datediff(Second,a.电话振铃时刻,a.开始受理时刻) ringDuration,a.受理台号 acceptCode,a.备注  acceptRemark "
-				+ "from AuSp120.tb_AcceptDescriptV a "
-				+ "left outer join AuSp120.tb_MrUser m on a.调度员编码=m.工号 "
-				+ "left outer join AuSp120.tb_EventV e on a.事件编码=e.事件编码 "
-				+ "where e.事件性质编码=1  and datediff(Second,a.电话振铃时刻,a.开始受理时刻)>:overtimes and  m.人员类型=0 and a.电话振铃时刻<a.开始受理时刻 and a.开始受理时刻>=:startTime and a.开始受理时刻<:endTime ";
-		if (!CommonUtil.isNullOrEmpty(dispatcher)) {
-			sql = sql + " and a.调度员编码=:dispatcher ";
+	public Grid getData(Parameter parameter) {
+		String sql = "select m.姓名 dispatcher,tr.振铃时刻 ringTime,tr.通话开始时刻 callTime,datediff(Second,tr.振铃时刻,tr.通话开始时刻) ringDuration,tr.座席号 acceptCode,tr.备注  acceptRemark	"
+				+ "from AuSp120.tb_TeleRecord tr left outer join AuSp120.tb_MrUser m on tr.调度员编码=m.工号 	"
+				+ "where m.人员类型=0 and tr.振铃时刻 between :startTime and :endTime  and datediff(Second,tr.振铃时刻,tr.通话开始时刻)> :overtimes ";
+		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
+			sql = sql + " and tr.调度员编码=:dispatcher ";
 		}
 		Map<String, String> paramMap = new HashMap<String, String>();
-		paramMap.put("overtimes", overtimes);
-		paramMap.put("dispatcher", dispatcher);
-		paramMap.put("startTime", startTime);
-		paramMap.put("endTime", endTime);
-		
-		List<RingToAccept> results = this.npJdbcTemplate.query(sql, paramMap, new RowMapper<RingToAccept>() {
-			@Override
+		paramMap.put("overtimes", parameter.getOvertimes());
+		paramMap.put("dispatcher", parameter.getDispatcher());
+		paramMap.put("startTime", parameter.getStartTime());
+		paramMap.put("endTime", parameter.getEndTime());
+
+		int page = (int) parameter.getPage();
+		int rows = (int) parameter.getRows();
+
+		List<RingToAccept> results = this.npJdbcTemplate.query(sql, paramMap,
+				new RowMapper<RingToAccept>() {
+					@Override
 					public RingToAccept mapRow(ResultSet rs, int index)
 							throws SQLException {
 
@@ -58,7 +63,14 @@ public class RingToAcceptDAOImpl implements RingToAcceptDAO {
 								.getString("acceptRemark"));
 					}
 				});
-		System.out.println(results.size());
-		return results;
+		logger.info("一共有" + results.size() + "条数据");
+
+		Grid grid = new Grid();
+		int fromIndex = (page - 1) * rows;
+		int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
+				* rows) ? results.size() : page * rows;
+		grid.setRows(results.subList(fromIndex, toIndex));
+		grid.setTotal(results.size());
+		return grid;
 	}
 }
