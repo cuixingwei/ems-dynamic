@@ -2,8 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%
 	String contextPath = request.getContextPath();
-%>
-<%
 	String version = "20150311";
 %>
 <!DOCTYPE html>
@@ -42,7 +40,7 @@
 			striped : true,
 			singleSelect : true,
 			rownumbers : true,
-			idField : 'id',
+			idField : 'ringTime',
 			pageSize : 20,
 			pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 			columns : [ [ {
@@ -74,7 +72,8 @@
 			}, {
 				field : 'acceptRemark',
 				title : '受理备注',
-				width : "20%",
+				width : "19.9%",
+				resizable : true,
 				align : 'center'
 			} ] ],
 			toolbar : '#toolbar',

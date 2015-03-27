@@ -9,26 +9,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
-import com.xhs.ems.service.RingToAcceptService;
+import com.xhs.ems.service.AcceptTimeService;
 
 @Controller
 @RequestMapping(value = "/page/base")
-public class RingToAcceptController {
+public class AcceptTimeController {
 	private static final Logger logger = Logger
-			.getLogger(RingToAcceptController.class);
-
+			.getLogger(AcceptTimeController.class);
 	@Autowired
-	private RingToAcceptService ringToAcceptService;
-
-	@RequestMapping(value = "/getRingToAcceptDatas", method = RequestMethod.POST)
+	private AcceptTimeService acceptTimeService;
+	
+	@RequestMapping(value = "/getAcceptTimeDatas", method = RequestMethod.POST)
 	public @ResponseBody Grid getData(Parameter parameter) {
-		logger.info("响铃到接听大于X秒");
-		return ringToAcceptService.getData(parameter);
+		logger.info("受理时间统计");
+		return acceptTimeService.getData(parameter);
 	}
 	
-	@RequestMapping(value = "/exportRingToAcceptDatas", method = RequestMethod.POST)
-	public @ResponseBody void exportRingToAcceptDatas(Parameter parameter) {
-		logger.info("导出响铃到接听大于X秒数据到excel");
-		
+	@RequestMapping(value = "/exportAcceptTimeDatas", method = RequestMethod.POST)
+	public @ResponseBody void exportAcceptMarkDatas(Parameter parameter) {
+		logger.info("导出受理时间统计到excel");
 	}
 }

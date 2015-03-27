@@ -9,26 +9,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
-import com.xhs.ems.service.RingToAcceptService;
+import com.xhs.ems.service.AcceptEventTypeService;
 
 @Controller
 @RequestMapping(value = "/page/base")
-public class RingToAcceptController {
+public class AcceptEventTypeController {
 	private static final Logger logger = Logger
-			.getLogger(RingToAcceptController.class);
-
+			.getLogger(AcceptEventTypeController.class);
 	@Autowired
-	private RingToAcceptService ringToAcceptService;
-
-	@RequestMapping(value = "/getRingToAcceptDatas", method = RequestMethod.POST)
+	private AcceptEventTypeService acceptEventTypeService;
+	
+	@RequestMapping(value = "/getAcceptEventTypeDatas", method = RequestMethod.POST)
 	public @ResponseBody Grid getData(Parameter parameter) {
-		logger.info("响铃到接听大于X秒");
-		return ringToAcceptService.getData(parameter);
+		logger.info("事件类型统计");
+		return acceptEventTypeService.getData(parameter);
 	}
 	
-	@RequestMapping(value = "/exportRingToAcceptDatas", method = RequestMethod.POST)
-	public @ResponseBody void exportRingToAcceptDatas(Parameter parameter) {
-		logger.info("导出响铃到接听大于X秒数据到excel");
+	@RequestMapping(value = "/exportAcceptEventTypeDatas", method = RequestMethod.POST)
+	public @ResponseBody void exportAcceptEventTypeDatas(Parameter parameter) {
+		logger.info("导出事件类型统计到excel");
 		
 	}
+	
 }

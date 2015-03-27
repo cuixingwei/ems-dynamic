@@ -69,7 +69,7 @@
 											iconCls : node.iconCls,
 											content : cxw
 													.formatString(
-															'<iframe src="{0}" allowTransparency="true" style="border:0;width:99%;height:99%;" frameBorder="0"></iframe>',
+															'<iframe src="{0}" allowTransparency="true" style="border:0;width:99.9%;height:99%;" frameBorder="0"></iframe>',
 															src),
 											border : false,
 											fit : true
@@ -186,7 +186,7 @@
 			<div title="响铃到接听"
 				data-options="iconCls:'ext-icon-heart',closable:true,fit:true">
 				<iframe src="<%=contextPath%>/page/base/RingToAnswerTimes.jsp"
-					style="border: 0; width: 99%; height: 99%;"></iframe>
+					style="border: 0; width: 99.9%; height: 99%;"></iframe>
 			</div>
 		</div>
 	</div>

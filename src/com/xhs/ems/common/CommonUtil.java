@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -37,6 +38,11 @@ public class CommonUtil {
 		return false;
 	}
 
+	/**
+	 * 读取文件内容，返回字符串
+	 * @param file
+	 * @return
+	 */
 	public static String readContentFromFile(File file) {
 		StringBuilder builder = new StringBuilder();
 		if (file.exists() && file.isFile()) {
@@ -59,4 +65,55 @@ public class CommonUtil {
 		}
 		return builder.toString();
 	}
+	
+	/**
+	 * 计算百分比
+	 * @author CUIXINGWEI
+	 * @param total
+	 * @param portion
+	 * @return
+	 */
+	public static String calculateRate(Integer total, Object portion) {
+		Integer numerator = Integer.parseInt(String.valueOf(portion));
+		
+		NumberFormat percent=NumberFormat.getPercentInstance();
+		percent.setMinimumFractionDigits(2);
+		percent.setMaximumFractionDigits(2);
+		
+		return percent.format(total>0?(float)numerator/total:0);
+	}
+	
+	/**
+	 * 把秒格式化成几时几分几秒
+	 * @author CUIXINGWEI
+	 * @param second
+	 * @return
+	 */
+	public static String formatSecond(Object second){
+		 String  html="0秒";
+         if(second!=null){
+             int s=Integer.parseInt(second.toString());
+             String format;
+             Object[] array;
+             Integer hours =(int) (s/(60*60));
+             Integer minutes = (int) (s/60-hours*60);
+             Integer seconds = (int) (s-minutes*60-hours*60*60);
+             if(hours>0){
+                 format="%1$,d时%2$,d分%3$,d秒";
+                 array=new Object[]{hours,minutes,seconds};
+             }else if(minutes>0){
+                 format="%1$,d分%2$,d秒";
+                 array=new Object[]{minutes,seconds};
+             }else{
+                 format="%1$,d秒";
+                 array=new Object[]{seconds};
+             }
+             html= String.format(format, array);
+         }
+		
+		return html;
+		
+	}
+	
+	
 }
