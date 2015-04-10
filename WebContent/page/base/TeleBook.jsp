@@ -25,7 +25,7 @@
 			striped : true,
 			singleSelect : true,
 			rownumbers : true,
-			idField : 'ringTime',
+			idField : 'ownerName',
 			pageSize : 20,
 			pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 			columns : [ [ {
@@ -58,7 +58,6 @@
 				field : 'mobilePhone',
 				title : '移动电话',
 				width : "10%",
-				resizable : true,
 				align : 'center'
 			}, {
 				field : 'littleSmart',
@@ -78,13 +77,11 @@
 					text : '数据加载中....'
 				});
 			},
+			onSortColumn : function(sort, order) {
+			},
 			onLoadSuccess : function(data) {
 				parent.$.messager.progress('close');
-				if (data.rows.length > 0) {
-					//调用mergeCellsByField()合并单元格
-					mergeCellsByField("grid", "department");
-
-				}
+				$(this).datagrid("autoMergeCells");
 			}
 		});
 	}

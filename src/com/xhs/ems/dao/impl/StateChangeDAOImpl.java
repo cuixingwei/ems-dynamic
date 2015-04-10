@@ -16,14 +16,18 @@ import org.springframework.stereotype.Repository;
 
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
-import com.xhs.ems.bean.RingToAccept;
+import com.xhs.ems.bean.StateChange;
 import com.xhs.ems.common.CommonUtil;
-import com.xhs.ems.dao.RingToAcceptDAO;
+import com.xhs.ems.dao.StateChangeDAO;
 
-@Repository("ringToAcceptDAO")
-public class RingToAcceptDAOImpl implements RingToAcceptDAO {
+/**
+ * @author CUIXINGWEI
+ * @date 2015年3月30日
+ */
+@Repository
+public class StateChangeDAOImpl implements StateChangeDAO {
 	private static final Logger logger = Logger
-			.getLogger(RingToAcceptDAOImpl.class);
+			.getLogger(StateChangeDAOImpl.class);
 
 	private NamedParameterJdbcTemplate npJdbcTemplate;
 
@@ -32,17 +36,21 @@ public class RingToAcceptDAOImpl implements RingToAcceptDAO {
 		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 	}
 
+	/**
+	 * @author CUIXINGWEI
+	 * @see com.xhs.ems.dao.StateChangeDAO#getData(com.xhs.ems.bean.Parameter)
+	 * @date 2015年3月30日
+	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select m.姓名 dispatcher,convert(varchar(20),tr.振铃时刻,120) ringTime,convert(varchar(20),tr.通话开始时刻,120) callTime,datediff(Second,tr.振铃时刻,tr.通话开始时刻) ringDuration,tr.座席号 acceptCode,tr.备注  acceptRemark	"
-				+ "from AuSp120.tb_TeleRecord tr left outer join AuSp120.tb_MrUser m on tr.调度员编码=m.工号 	"
-				+ "where m.人员类型=0 and tr.振铃时刻 between :startTime and :endTime  and datediff(Second,tr.振铃时刻,tr.通话开始时刻)> :overtimes ";
+		String sql = "select sl.座席号 seatCode,m.姓名 dispatcher,sl.座席状态 seatState,sl.开始时刻 startTime,sl.结束时刻 endTime	"
+				+ "from AuSp120.tb_SlinoLog sl	left outer join AuSp120.tb_MrUser m on sl.调度员编码=m.工号 "
+				+ "where sl.开始时刻 between :startTime and :endTime and m.人员类型=0";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
-			sql = sql + " and tr.调度员编码=:dispatcher ";
+			sql = sql + " and sl.调度员编码=:dispatcher ";
 		}
-		sql = sql + "order by tr.调度员编码";
+		sql = sql + " order by sl.调度员编码";
 		Map<String, String> paramMap = new HashMap<String, String>();
-		paramMap.put("overtimes", parameter.getOvertimes());
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
@@ -50,18 +58,17 @@ public class RingToAcceptDAOImpl implements RingToAcceptDAO {
 		int page = (int) parameter.getPage();
 		int rows = (int) parameter.getRows();
 
-		List<RingToAccept> results = this.npJdbcTemplate.query(sql, paramMap,
-				new RowMapper<RingToAccept>() {
+		List<StateChange> results = this.npJdbcTemplate.query(sql, paramMap,
+				new RowMapper<StateChange>() {
 					@Override
-					public RingToAccept mapRow(ResultSet rs, int index)
+					public StateChange mapRow(ResultSet rs, int index)
 							throws SQLException {
 
-						return new RingToAccept(rs.getString("dispatcher"), rs
-								.getString("ringTime"), rs
-								.getString("callTime"), rs
-								.getString("ringDuration"), rs
-								.getString("acceptCode"), rs
-								.getString("acceptRemark"));
+						return new StateChange(rs.getString("seatCode"), rs
+								.getString("dispatcher"), rs
+								.getString("seatState"), rs
+								.getString("startTime"), rs
+								.getString("endTime"));
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");
@@ -74,4 +81,5 @@ public class RingToAcceptDAOImpl implements RingToAcceptDAO {
 		grid.setTotal(results.size());
 		return grid;
 	}
+
 }

@@ -103,8 +103,8 @@
 						<table>
 							<tr>
 								<td>超时时长:</td>
-								<td><input style="width: 80px;" id="overtimes"
-									name="overtimes" /></td>
+								<td><input type="text" style="width: 80px;" id="overtimes" name="overtimes"
+									class="easyui-numberbox" data-options="min:0,precision:0" /></td>
 								<td>调度员:</td>
 								<td><input style="width: 80px;" id="dispatcher"
 									name="dispatcher" /></td>
