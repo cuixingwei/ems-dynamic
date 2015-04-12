@@ -1,0 +1,9 @@
+.class
+.git
+build
+target
+.settings
+.project
+.classpath
+bin
+/doc
