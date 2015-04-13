@@ -56,7 +56,20 @@ public class Parameter {
 	 * 中止任务信息（空跑时间）
 	 */
 	private String emptyRunTime;
+	/**
+	 * 车辆暂停调用情况(暂停调用原因)
+	 */
+	private String pauseReason;
 	
+	
+	public String getPauseReason() {
+		return pauseReason;
+	}
+
+	public void setPauseReason(String pauseReason) {
+		this.pauseReason = pauseReason;
+	}
+
 	public String getEmptyRunTime() {
 		return emptyRunTime;
 	}
