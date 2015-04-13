@@ -14,5 +14,5 @@ public interface CarService {
 	 *@author CUIXINGWEI
 	 *@return 车辆列表
 	 */
-	public List<Car> getData();
+	public List<Car> getData(String stationID);
 }

@@ -18,14 +18,15 @@ public class CarServiceImpl implements CarService {
 
 	@Autowired
 	private CarDAO carDAO;
-	/** 
+
+	/**
 	 * @author CUIXINGWEI
 	 * @see com.xhs.ems.service.CarService#getData()
 	 * @datetime 2015年4月10日 下午2:28:17
 	 */
 	@Override
-	public List<Car> getData() {
-		return carDAO.getData();
+	public List<Car> getData(String stationID) {
+		return carDAO.getData(stationID);
 	}
 
 }

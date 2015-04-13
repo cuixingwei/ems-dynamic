@@ -27,7 +27,11 @@
 			url : 'getStations',
 			valueField : 'stationCode',
 			textField : 'stationName',
-			method : 'get'
+			method : 'get',
+			onSelect : function(rec) {
+				var url = 'getCars?id=' + rec.stationCode;
+				$('#carCode').combobox('reload', url);
+			}
 		});
 		$('#stopReason').combobox({
 			url : 'getStopReasons',
@@ -115,7 +119,7 @@
 				field : 'remark',
 				title : '备注说明',
 				resizable : true,
-				width : "10%",
+				width : "9.9%",
 				align : 'center'
 			} ] ],
 			toolbar : '#toolbar',
@@ -147,30 +151,35 @@
 								<td>分站:</td>
 								<td><input style="width: 120em;" id="station"
 									name="station" /></td>
-								<td>中止原因:</td>
+								<td>&nbsp;中止原因:</td>
 								<td><input style="width: 120em;" id="stopReason"
 									name="stopReason" /></td>
-								<td>车辆:</td>
+								<td>&nbsp;车辆:</td>
 								<td><input style="width: 120em;" id="carCode"
 									name="carCode" /></td>
-								<td>调度员:</td>
+								<td>&nbsp;调度员:</td>
 								<td><input style="width: 120em;" id="dispatcher"
 									name="dispatcher" /></td>
-								<td>空跑时间:</td>
+								<td>&nbsp;空跑时间:</td>
 								<td><input type="text" id="emptyRunTime"
 									style="width: 120em" name="emptyRunTime"
 									class="easyui-numberbox" data-options="min:0,precision:0" /></td>
-								<td>查询时间</td>
-								<td><input id="startTime" name="startTime" class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-									style="width: 180px;" />-<input id="endTime" name="endTime"
+							</tr>
+							<tr>
+								<td>查询时间:</td>
+								<td colspan="3"><input id="startTime" name="startTime"
 									class="Wdate"
 									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-									style="width: 180px;" /></td>
-								<td><a href="javascript:void(0);" class="easyui-linkbutton"
+									style="width: 150em;" />-<input id="endTime" name="endTime"
+									class="Wdate"
+									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+									style="width: 150em;" /></td>
+								<td colspan="2">&nbsp;<a href="javascript:void(0);"
+									class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
-									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a><a
-									href="javascript:void(0);" class="easyui-linkbutton"
+									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a></td>
+								<td colspan="2">&nbsp;<a href="javascript:void(0);"
+									class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom_out',plain:true"
 									onclick="$('#searchForm input').val('');grid.datagrid('load',{});">重置查询</a></td>
 							</tr>

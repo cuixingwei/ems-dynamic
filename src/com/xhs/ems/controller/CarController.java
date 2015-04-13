@@ -19,14 +19,13 @@ import com.xhs.ems.service.CarService;
 @Controller
 @RequestMapping(value = "page/base")
 public class CarController {
-	private static final Logger logger = Logger
-			.getLogger(CarController.class);
+	private static final Logger logger = Logger.getLogger(CarController.class);
 	@Autowired
 	private CarService carService;
 
 	@RequestMapping(value = "/getCars", method = RequestMethod.GET)
-	public @ResponseBody List<Car> getStation() {
+	public @ResponseBody List<Car> getStation(String id) {
 		logger.info("获取车辆列表");
-		return carService.getData();
+		return carService.getData(id);
 	}
 }
