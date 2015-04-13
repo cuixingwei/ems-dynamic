@@ -60,8 +60,20 @@ public class Parameter {
 	 * 车辆暂停调用情况(暂停调用原因)
 	 */
 	private String pauseReason;
+	/**
+	 * 车辆状态变化（事件名称）
+	 */
+	private String eventName;
 	
 	
+	public String getEventName() {
+		return eventName;
+	}
+
+	public void setEventName(String eventName) {
+		this.eventName = eventName;
+	}
+
 	public String getPauseReason() {
 		return pauseReason;
 	}
