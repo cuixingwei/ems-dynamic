@@ -64,8 +64,19 @@ public class Parameter {
 	 * 车辆状态变化（事件名称）
 	 */
 	private String eventName;
-	
-	
+	/**
+	 * 放空车统计（空车原因）
+	 */
+	private String emptyCarReason;
+
+	public String getEmptyCarReason() {
+		return emptyCarReason;
+	}
+
+	public void setEmptyCarReason(String emptyCarReason) {
+		this.emptyCarReason = emptyCarReason;
+	}
+
 	public String getEventName() {
 		return eventName;
 	}

@@ -9,24 +9,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
-import com.xhs.ems.service.AccidentService;
+import com.xhs.ems.service.EmptyCarService;
 
+/**
+ * @author 崔兴伟
+ * @datetime 2015年4月14日 上午8:58:13
+ */
 @Controller
 @RequestMapping(value = "/page/base")
-public class AccidentController {
+public class EmptyCarController {
 	private static final Logger logger = Logger
-			.getLogger(AccidentController.class);
+			.getLogger(EmptyCarController.class);
 	@Autowired
-	private AccidentService accidentService;
+	private EmptyCarService emptyCarService;
 
-	@RequestMapping(value = "/getAccidentDatas", method = RequestMethod.POST)
+	@RequestMapping(value = "getEmptyCarData", method = RequestMethod.POST)
 	public @ResponseBody Grid getData(Parameter parameter) {
-		logger.info("重大事故统计");
-		return accidentService.getData(parameter);
+		logger.info("放空车统计");
+		return emptyCarService.getData(parameter);
 	}
 
-	@RequestMapping(value = "/exportAccidentDatas", method = RequestMethod.POST)
-	public void exportAccidentDatas(Parameter parameter) {
-		logger.info("导出重大事故统计到excel");
+	@RequestMapping(value = "exportEmptyCarData", method = RequestMethod.POST)
+	public void export() {
+		logger.info("导出放空车统计到Excel");
 	}
 }
