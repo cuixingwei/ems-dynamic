@@ -2,32 +2,50 @@ package com.xhs.ems.bean;
 
 /**
  * @author 崔兴伟
- * @datetime 2015年4月14日 上午11:10:22
- *  放空车原因列表
+ * @datetime 2015年4月14日 下午1:44:22
  */
 public class EmptyCarReason {
-	private String code;
-	private String name;
+	/**
+	 * 原因
+	 */
+	private String reason;
+	/**
+	 * 次数
+	 */
+	private String times;
+	/**
+	 * 比率
+	 */
+	private String rate;
 
-	public String getCode() {
-		return code;
+	public String getReason() {
+		return reason;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 
-	public String getName() {
-		return name;
+	public String getTimes() {
+		return times;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTimes(String times) {
+		this.times = times;
 	}
 
-	public EmptyCarReason(String code, String name) {
-		this.code = code;
-		this.name = name;
+	public String getRate() {
+		return rate;
+	}
+
+	public void setRate(String rate) {
+		this.rate = rate;
+	}
+
+	public EmptyCarReason(String reason, String times, String rate) {
+		this.reason = reason;
+		this.times = times;
+		this.rate = rate;
 	}
 
 }

@@ -1,18 +1,18 @@
 package com.xhs.ems.dao;
 
-import java.util.List;
-
-import com.xhs.ems.bean.EmptyCarReason;
+import com.xhs.ems.bean.Grid;
+import com.xhs.ems.bean.Parameter;
 
 /**
  * @author 崔兴伟
- * @datetime 2015年4月14日 上午11:12:34
+ * @datetime 2015年4月14日 下午1:45:49
  */
 public interface EmptyCarReasonDAO {
 	/**
 	 * @author 崔兴伟
-	 * @datetime 2015年4月14日 上午11:13:37
-	 * @return 放空车原因列表
+	 * @datetime 2015年4月14日 下午1:46:16
+	 * @param parameter
+	 * @return 放空车原因统计
 	 */
-	public List<EmptyCarReason> getData();
+	public Grid getData(Parameter parameter);
 }

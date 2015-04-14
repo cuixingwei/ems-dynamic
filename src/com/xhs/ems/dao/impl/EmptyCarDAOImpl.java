@@ -51,11 +51,11 @@ public class EmptyCarDAOImpl implements EmptyCarDAO {
 				+ "left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码	"
 				+ "left outer join AuSp120.tb_MrUser m on t.调度员编码=m.工号	"
 				+ "left outer join AuSp120.tb_DEmptyReason der on der.Code=t.放空车原因编码  	"
-				+ "where e.事件性质编码=1 and t.结果编码=3 and a.开始受理时刻 between :startTime and :endTime ";
+				+ "where e.事件性质编码=1 and t.结果编码=3 and t.放空车原因编码 is not null and a.开始受理时刻 between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
 			sql += " and t.调度员编码=:dispatcher ";
 		}
-		if (!CommonUtil.isNullOrEmpty(parameter.getEmptyCarReason())) {
+		if (!CommonUtil.isNullOrEmpty(parameter.getEmptyReason())) {
 			sql += " and t.放空车原因编码=:emptyCarReason ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
@@ -66,7 +66,7 @@ public class EmptyCarDAOImpl implements EmptyCarDAO {
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
 		paramMap.put("station", parameter.getStation());
-		paramMap.put("emptyCarReason", parameter.getEmptyCarReason());
+		paramMap.put("emptyCarReason", parameter.getEmptyReason());
 
 		int page = (int) parameter.getPage();
 		int rows = (int) parameter.getRows();

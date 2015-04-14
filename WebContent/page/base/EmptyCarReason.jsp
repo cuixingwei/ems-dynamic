@@ -22,22 +22,12 @@
 		});
 		$('#endTime').datetimebox({
 			value : getCurrentTime()
-		});
-		$('#dispatcher').combobox({
-			url : 'getUsers',
-			valueField : 'employeeId',
-			textField : 'name',
-			method : 'get'
-		});
+		})
 		$('#station').combobox({
 			url : 'getStations',
 			valueField : 'stationCode',
 			textField : 'stationName',
-			method : 'get',
-			onSelect : function(rec) {
-				var url = 'getCars?id=' + rec.stationCode;
-				$('#carCode').combobox('reload', url);
-			}
+			method : 'get'
 		});
 		$('#emptyReason').combobox({
 			url : 'getEmptyReasons',
@@ -45,8 +35,9 @@
 			textField : 'name',
 			method : 'get'
 		});
+
 		grid = $('#grid').datagrid({
-			url : 'getEmptyCarData',
+			url : 'getEmptyCarReasonDatas',
 			pagePosition : 'bottom',
 			pagination : true,
 			striped : true,
@@ -56,34 +47,22 @@
 			pageSize : 20,
 			pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 			columns : [ [ {
-				field : 'acceptTime',
-				title : '受理时间',
+				field : 'reason',
+				title : '原因',
 				resizable : true,
-				width : "20%",
+				width : "33%",
 				align : 'center'
 			}, {
-				field : 'sickAddress',
-				title : '患者地址',
+				field : 'times',
+				title : '次数',
 				resizable : true,
-				width : "20%",
+				width : "33%",
 				align : 'center',
 			}, {
-				field : 'dispatcher',
-				title : '调度员',
+				field : 'rate',
+				title : '比率',
 				resizable : true,
-				width : "20%",
-				align : 'center'
-			}, {
-				field : 'emptyRunTimes',
-				title : '空跑时间',
-				resizable : true,
-				width : "20%",
-				align : 'center',
-			}, {
-				field : 'emptyReason',
-				title : '空炮原因',
-				resizable : true,
-				width : "19%",
+				width : "33%",
 				align : 'center'
 			} ] ],
 			toolbar : '#toolbar',
@@ -112,18 +91,14 @@
 					<form id="searchForm">
 						<table>
 							<tr>
-								<td>调度员:</td>
-								<td><input style="width: 120em;" id="dispatcher"
-									name="dispatcher" /></td>
-								<td>&nbsp;分站:</td>
+								<td>分站:</td>
 								<td><input style="width: 120em;" id="station"
 									name="station" /></td>
-								<td>&nbsp;空车原因:</td>
+								<td>空车原因:</td>
 								<td><input style="width: 120em;" id="emptyReason"
 									name="emptyReason" /></td>
-								<td>&nbsp;查询时间:</td>
-								<td colspan="3"><input id="startTime" name="startTime"
-									class="Wdate"
+								<td>查询时间:</td>
+								<td><input id="startTime" name="startTime" class="Wdate"
 									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
 									style="width: 150em;" />-<input id="endTime" name="endTime"
 									class="Wdate"

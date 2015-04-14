@@ -67,14 +67,15 @@ public class Parameter {
 	/**
 	 * 放空车统计（空车原因）
 	 */
-	private String emptyCarReason;
+	private String emptyReason;
 
-	public String getEmptyCarReason() {
-		return emptyCarReason;
+
+	public String getEmptyReason() {
+		return emptyReason;
 	}
 
-	public void setEmptyCarReason(String emptyCarReason) {
-		this.emptyCarReason = emptyCarReason;
+	public void setEmptyReason(String emptyReason) {
+		this.emptyReason = emptyReason;
 	}
 
 	public String getEventName() {

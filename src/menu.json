@@ -209,7 +209,7 @@
     	"attributes":
     		{
     			"target":"",
-    			"url":"EmptyCarReaspm.jsp"
+    			"url":"EmptyCarReason.jsp"
     		},
     	"checked":false,
     	"iconCls":"ext-icon-world",
