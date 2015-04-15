@@ -72,8 +72,31 @@ public class Parameter {
 	 * 挂起事件流水统计(挂起原因)
 	 */
 	private String hungReason;
+	/**
+	 * 中心接警情况统计(报警电话)
+	 */
+	private String alarmPhone;
+	/**
+	 * 中心接警情况统计(报警地点)
+	 */
+	private String siteAddress;
 
-	
+	public String getAlarmPhone() {
+		return alarmPhone;
+	}
+
+	public void setAlarmPhone(String alarmPhone) {
+		this.alarmPhone = alarmPhone;
+	}
+
+	public String getSiteAddress() {
+		return siteAddress;
+	}
+
+	public void setSiteAddress(String siteAddress) {
+		this.siteAddress = siteAddress;
+	}
+
 	public String getHungReason() {
 		return hungReason;
 	}
