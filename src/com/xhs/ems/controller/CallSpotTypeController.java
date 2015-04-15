@@ -9,32 +9,30 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
-import com.xhs.ems.service.StopTaskReasonService;
+import com.xhs.ems.service.CallSpotTypeService;
 
 /**
  * @author 崔兴伟
- * @datetime 2015年4月13日  下午3:10:49
+ * @datetime 2015年4月15日 下午3:17:33
  */
 @Controller
 @RequestMapping(value = "/page/base")
-public class StopTaskReasonController {
-
+public class CallSpotTypeController {
 	private static final Logger logger = Logger
-			.getLogger(StopTaskReasonController.class);
+			.getLogger(EmptyCarReasonController.class);
 
 	@Autowired
-	private StopTaskReasonService stopTaskReasonService;
+	private CallSpotTypeService callSpotTypeService;
 
-	@RequestMapping(value = "/getStopTaskReasonDatas", method = RequestMethod.POST)
+	@RequestMapping(value = "/getCallSpotTypeDatas", method = RequestMethod.POST)
 	public @ResponseBody Grid getData(Parameter parameter) {
-		logger.info("中止任务原因查询");
-		return stopTaskReasonService.getData(parameter);
+		logger.info("呼救现场地点类型统计");
+		return callSpotTypeService.getData(parameter);
 	}
-	
-	@RequestMapping(value = "/exportStopTaskReasonDatas", method = RequestMethod.POST)
-	public  void export(Parameter parameter) {
-		logger.info("导出中止任务原因数据到excel");
-		
+
+	@RequestMapping(value = "/exportCallSpotTypeDatas", method = RequestMethod.POST)
+	public void export(Parameter parameter) {
+		logger.info("呼救现场地点类型统计");
 	}
 
 }
