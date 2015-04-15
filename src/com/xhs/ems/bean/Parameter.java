@@ -68,7 +68,19 @@ public class Parameter {
 	 * 放空车统计（空车原因）
 	 */
 	private String emptyReason;
+	/**
+	 * 挂起事件流水统计(挂起原因)
+	 */
+	private String hungReason;
 
+	
+	public String getHungReason() {
+		return hungReason;
+	}
+
+	public void setHungReason(String hungReason) {
+		this.hungReason = hungReason;
+	}
 
 	public String getEmptyReason() {
 		return emptyReason;

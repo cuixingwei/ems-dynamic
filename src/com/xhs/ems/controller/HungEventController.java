@@ -1,0 +1,37 @@
+package com.xhs.ems.controller;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.xhs.ems.bean.Grid;
+import com.xhs.ems.bean.Parameter;
+import com.xhs.ems.service.HungEventService;
+
+/**
+ * @author 崔兴伟
+ * @datetime 2015年4月15日 下午12:21:59
+ */
+@Controller
+@RequestMapping(value = "/page/base")
+public class HungEventController {
+	private static final Logger logger = Logger
+			.getLogger(HungEventController.class);
+	@Autowired
+	private HungEventService hungEventService;
+
+	@RequestMapping(value = "gethungEventData", method = RequestMethod.POST)
+	public @ResponseBody Grid getData(Parameter parameter) {
+		logger.info("挂起事件流水统计");
+		return hungEventService.getData(parameter);
+	}
+
+	@RequestMapping(value = "exporthungEventData", method = RequestMethod.POST)
+	public void export() {
+		logger.info("导出挂起事件流水统计到Excel");
+	}
+
+}
