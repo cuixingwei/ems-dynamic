@@ -9,30 +9,30 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
-import com.xhs.ems.service.CarPauseService;
+import com.xhs.ems.service.SubstationVisitService;
 
 /**
  * @author 崔兴伟
- * @datetime 2015年4月13日  下午4:44:44
+ * @datetime 2015年4月16日 上午10:57:59
  */
 @Controller
 @RequestMapping(value = "/page/base")
-public class CarPauseController {
+public class SubstationVisitController {
 	private static final Logger logger = Logger
-			.getLogger(CarPauseController.class);
+			.getLogger(SubstationVisitController.class);
 
 	@Autowired
-	private CarPauseService carPauseService;
+	private SubstationVisitService substationVisitService;
 
-	@RequestMapping(value = "/getCarPauseDatas", method = RequestMethod.POST)
+	@RequestMapping(value = "/getSubstationVisitDatas", method = RequestMethod.POST)
 	public @ResponseBody Grid getData(Parameter parameter) {
-		logger.info("车辆暂停调用原因查询");
-		return carPauseService.getData(parameter);
+		logger.info("急救站出诊情况查询");
+		return substationVisitService.getData(parameter);
 	}
-	
-	@RequestMapping(value = "/exportCarPauseDatas", method = RequestMethod.POST)
-	public  void export(Parameter parameter) {
-		logger.info("导出车辆暂停调用原因数据到excel");
+
+	@RequestMapping(value = "/exportSubstationVisitDatas", method = RequestMethod.POST)
+	public void export(Parameter parameter) {
+		logger.info("导出急救站出诊情况数据到excel");
 	}
 
 }
