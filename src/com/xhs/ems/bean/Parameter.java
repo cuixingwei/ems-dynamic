@@ -80,6 +80,30 @@ public class Parameter {
 	 * 中心接警情况统计(报警地点)
 	 */
 	private String siteAddress;
+	/**
+	 * 急救站晚出诊统计(出诊时长最小值)
+	 */
+	private String outCarTimesMin;
+	/**
+	 * 急救站晚出诊统计(出诊时长最大值)
+	 */
+	private String outCarTimesMax;
+
+	public String getOutCarTimesMin() {
+		return outCarTimesMin;
+	}
+
+	public void setOutCarTimesMin(String outCarTimesMin) {
+		this.outCarTimesMin = outCarTimesMin;
+	}
+
+	public String getOutCarTimesMax() {
+		return outCarTimesMax;
+	}
+
+	public void setOutCarTimesMax(String outCarTimesMax) {
+		this.outCarTimesMax = outCarTimesMax;
+	}
 
 	public String getAlarmPhone() {
 		return alarmPhone;

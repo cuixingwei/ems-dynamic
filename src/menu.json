@@ -312,27 +312,14 @@
     	"attributes":
     		{
     			"target":"",
-    			"url":"SubstationVisitStaff.jsp"
+    			"url":"SubstationLateVisit.jsp"
     		},
     	"checked":false,
     	"iconCls":"ext-icon-world",
     	"id":"21",
     	"pid":"2",
     	"state":"open",
-    	"text":"急救站出诊人员情况查询"
-    },
-    {
-    	"attributes":
-    		{
-    			"target":"",
-    			"url":"SubstationLateVisit.jsp"
-    		},
-    	"checked":false,
-    	"iconCls":"ext-icon-world",
-    	"id":"22",
-    	"pid":"2",
-    	"state":"open",
-    	"text":"急救站3分钟未出诊统计"
+    	"text":"急救站晚出诊统计"
     },
     {
     	"attributes":
@@ -342,7 +329,7 @@
     		},
     	"checked":false,
     	"iconCls":"ext-icon-world",
-    	"id":"23",
+    	"id":"22",
     	"pid":"2",
     	"state":"open",
     	"text":"车辆工作情况统计"
@@ -355,7 +342,7 @@
     		},
     	"checked":false,
     	"iconCls":"ext-icon-world",
-    	"id":"24",
+    	"id":"23",
     	"pid":"2",
     	"state":"open",
     	"text":"司机工作情况查询"
@@ -364,27 +351,14 @@
     	"attributes":
     		{
     			"target":"",
-    			"url":"DoctorWork.jsp"
+    			"url":"DoctorNurseWork.jsp"
     		},
     	"checked":false,
     	"iconCls":"ext-icon-world",
-    	"id":"25",
+    	"id":"24",
     	"pid":"2",
     	"state":"open",
-    	"text":"医生工作情况查询"
-    },
-    {
-    	"attributes":
-    		{
-    			"target":"",
-    			"url":"NurseWork.jsp"
-    		},
-    	"checked":false,
-    	"iconCls":"ext-icon-world",
-    	"id":"26",
-    	"pid":"2",
-    	"state":"open",
-    	"text":"护士工作情况查询"
+    	"text":"医生护士工作情况查询"
     },
     {
     	"attributes":
@@ -394,7 +368,7 @@
     		},
     	"checked":false,
     	"iconCls":"ext-icon-world",
-    	"id":"27",
+    	"id":"25",
     	"pid":"2",
     	"state":"open",
     	"text":"任务备注查询"
@@ -407,7 +381,7 @@
     		},
     	"checked":false,
     	"iconCls":"ext-icon-world",
-    	"id":"28",
+    	"id":"26",
     	"pid":"2",
     	"state":"open",
     	"text":"院前急救病例回填数统计"
