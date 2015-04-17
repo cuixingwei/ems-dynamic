@@ -48,7 +48,7 @@
     	"id":"02",
     	"pid":"0",
     	"state":"open",
-    	"text":"受理备注查询"
+    	"text":"备注查询"
     },
     {
     	"attributes":
@@ -364,24 +364,11 @@
     	"attributes":
     		{
     			"target":"",
-    			"url":"TaskMark.jsp"
-    		},
-    	"checked":false,
-    	"iconCls":"ext-icon-world",
-    	"id":"25",
-    	"pid":"2",
-    	"state":"open",
-    	"text":"任务备注查询"
-    },
-    {
-    	"attributes":
-    		{
-    			"target":"",
     			"url":"PatientCaseFillCount.jsp"
     		},
     	"checked":false,
     	"iconCls":"ext-icon-world",
-    	"id":"26",
+    	"id":"25",
     	"pid":"2",
     	"state":"open",
     	"text":"院前急救病例回填数统计"
