@@ -32,7 +32,6 @@ var cxw = cxw || {};
 cxw.contextPath = '<%=contextPath%>';
 cxw.basePath = '<%=basePath%>';
 cxw.version = '<%=version%>';
-cxw.pixel_0 = '<%=contextPath%>/style/images/pixel_0.gif';//0像素的背景，一般用于占位
 </script>
 
 
@@ -54,10 +53,6 @@ cxw.pixel_0 = '<%=contextPath%>/style/images/pixel_0.gif';//0像素的背景，�
 				+ "/jslib/jquery-2.0.3.js' type='text/javascript' charset='utf-8'></script>");
 	}
 %>
-<%-- 引入my97日期时间控件 --%>
-<script type="text/javascript"
-	src="<%=contextPath%>/jslib/My97DatePicker4.8Beta3/My97DatePicker/WdatePicker.js"
-	charset="utf-8"></script>
 <%-- 引入jquery扩展 --%>
 <script
 	src="<%=contextPath%>/jslib/cxwExtJquery.js?version=<%=version%>"
@@ -101,8 +96,7 @@ cxw.pixel_0 = '<%=contextPath%>/style/images/pixel_0.gif';//0像素的背景，�
 <script
 	src="<%=contextPath%>/jslib/cxwExtJavascript.js?version=<%=version%>"
 	type="text/javascript" charset="utf-8"></script>
-	
+
 <%-- 引入自定义js --%>
-<script
-	src="<%=contextPath%>/jslib/cxwUtil.js?version=<%=version%>"
+<script src="<%=contextPath%>/jslib/cxwUtil.js?version=<%=version%>"
 	type="text/javascript" charset="utf-8"></script>

@@ -23,52 +23,59 @@
 		$('#endTime').datetimebox({
 			value : getCurrentTime()
 		})
-		grid = $('#grid').datagrid({
-			url : 'getAccidentDatas',
-			pagePosition : 'bottom',
-			pagination : true,
-			striped : true,
-			singleSelect : true,
-			rownumbers : true,
-			idField : 'eventCode',
-			pageSize : 20,
-			pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
-			columns : [ [ {
-				field : 'eventCode',
-				title : '事件编码',
-				width : "20%",
-				align : 'center'
-			}, {
-				field : 'eventTime',
-				title : '事发时间',
-				width : "20%",
-				align : 'center',
-			}, {
-				field : 'eventName',
-				title : '事件名称',
-				width : "20%",
-				align : 'center'
-			}, {
-				field : 'callPhone',
-				title : '呼救电话',
-				width : "20%",
-				align : 'center'
-			}, {
-				field : 'dispatcher',
-				title : '调度员',
-				width : "19.9%",
-				align : 'center'
-			} ] ],
-			toolbar : '#toolbar',
-			onBeforeLoad : function(param) {
-				parent.$.messager.progress({
-					text : '数据加载中....'
+		grid = $('#grid').datagrid(
+				{
+					url : 'getAccidentDatas',
+					pagePosition : 'bottom',
+					pagination : true,
+					striped : true,
+					singleSelect : true,
+					rownumbers : true,
+					idField : 'eventCode',
+					pageSize : 20,
+					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+					columns : [ [ {
+						field : 'eventCode',
+						title : '事件编码',
+						width : "20%",
+						align : 'center'
+					}, {
+						field : 'eventTime',
+						title : '事发时间',
+						width : "20%",
+						align : 'center',
+					}, {
+						field : 'eventName',
+						title : '事件名称',
+						width : "20%",
+						align : 'center'
+					}, {
+						field : 'callPhone',
+						title : '呼救电话',
+						width : "20%",
+						align : 'center'
+					}, {
+						field : 'dispatcher',
+						title : '调度员',
+						width : "19.9%",
+						align : 'center'
+					} ] ],
+					toolbar : '#toolbar',
+					onBeforeLoad : function(param) {
+						var varify = cxw.checkStartTimeBeforeEndTime(
+								'#startTime', '#endTime');
+						if (varify) {
+							parent.$.messager.progress({
+								text : '数据加载中....'
+							});
+						} else {
+							$.messager.alert('警告', '结束时间要大于开始时间', 'warning');
+						}
+					},
+					onLoadSuccess : function(data) {
+						parent.$.messager.progress('close');
+					}
 				});
-			},
-			onLoadSuccess : function(data) {
-				parent.$.messager.progress('close');
-			}
-		});
 	}
 
 	$(document).ready(function() {
@@ -86,12 +93,9 @@
 						<table>
 							<tr>
 								<td>查询时间</td>
-								<td><input id="startTime" name="startTime" class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-									style="width: 180px;" />-<input id="endTime" name="endTime"
-									class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-									style="width: 180px;" /></td>
+								<td><input id="startTime" name="startTime"
+									style="width: 150em;" />至<input id="endTime" name="endTime"
+									style="width: 150em;" /></td>
 								<td><a href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
 									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a><a

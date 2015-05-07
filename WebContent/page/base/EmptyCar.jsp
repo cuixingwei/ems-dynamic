@@ -45,57 +45,64 @@
 			textField : 'name',
 			method : 'get'
 		});
-		grid = $('#grid').datagrid({
-			url : 'getEmptyCarData',
-			pagePosition : 'bottom',
-			pagination : true,
-			striped : true,
-			singleSelect : true,
-			rownumbers : true,
-			idField : 'id',
-			pageSize : 20,
-			pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
-			columns : [ [ {
-				field : 'acceptTime',
-				title : '受理时间',
-				resizable : true,
-				width : "20%",
-				align : 'center'
-			}, {
-				field : 'sickAddress',
-				title : '患者地址',
-				resizable : true,
-				width : "20%",
-				align : 'center',
-			}, {
-				field : 'dispatcher',
-				title : '调度员',
-				resizable : true,
-				width : "20%",
-				align : 'center'
-			}, {
-				field : 'emptyRunTimes',
-				title : '空跑时间',
-				resizable : true,
-				width : "20%",
-				align : 'center',
-			}, {
-				field : 'emptyReason',
-				title : '空炮原因',
-				resizable : true,
-				width : "19%",
-				align : 'center'
-			} ] ],
-			toolbar : '#toolbar',
-			onBeforeLoad : function(param) {
-				parent.$.messager.progress({
-					text : '数据加载中....'
+		grid = $('#grid').datagrid(
+				{
+					url : 'getEmptyCarData',
+					pagePosition : 'bottom',
+					pagination : true,
+					striped : true,
+					singleSelect : true,
+					rownumbers : true,
+					idField : 'id',
+					pageSize : 20,
+					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+					columns : [ [ {
+						field : 'acceptTime',
+						title : '受理时间',
+						resizable : true,
+						width : "20%",
+						align : 'center'
+					}, {
+						field : 'sickAddress',
+						title : '患者地址',
+						resizable : true,
+						width : "20%",
+						align : 'center',
+					}, {
+						field : 'dispatcher',
+						title : '调度员',
+						resizable : true,
+						width : "20%",
+						align : 'center'
+					}, {
+						field : 'emptyRunTimes',
+						title : '空跑时间',
+						resizable : true,
+						width : "20%",
+						align : 'center',
+					}, {
+						field : 'emptyReason',
+						title : '空炮原因',
+						resizable : true,
+						width : "19%",
+						align : 'center'
+					} ] ],
+					toolbar : '#toolbar',
+					onBeforeLoad : function(param) {
+						var varify = cxw.checkStartTimeBeforeEndTime(
+								'#startTime', '#endTime');
+						if (varify) {
+							parent.$.messager.progress({
+								text : '数据加载中....'
+							});
+						} else {
+							$.messager.alert('警告', '结束时间要大于开始时间', 'warning');
+						}
+					},
+					onLoadSuccess : function(data) {
+						parent.$.messager.progress('close');
+					}
 				});
-			},
-			onLoadSuccess : function(data) {
-				parent.$.messager.progress('close');
-			}
-		});
 	}
 
 	$(document).ready(function() {
@@ -123,11 +130,7 @@
 									name="emptyReason" /></td>
 								<td>&nbsp;查询时间:</td>
 								<td colspan="3"><input id="startTime" name="startTime"
-									class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-									style="width: 150em;" />-<input id="endTime" name="endTime"
-									class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+									style="width: 150em;" />至<input id="endTime" name="endTime"
 									style="width: 150em;" /></td>
 								<td colspan="2">&nbsp;<a href="javascript:void(0);"
 									class="easyui-linkbutton"

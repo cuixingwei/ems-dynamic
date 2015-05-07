@@ -29,70 +29,77 @@
 			textField : 'name',
 			method : 'get'
 		});
-		grid = $('#grid').datagrid({
-			url : 'getAnswerAlarmDatas',
-			pagePosition : 'bottom',
-			pagination : true,
-			striped : true,
-			singleSelect : true,
-			rownumbers : true,
-			idField : 'id',
-			pageSize : 20,
-			pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
-			columns : [ [ {
-				field : 'answerAlarmTime',
-				title : '接诊时间',
-				width : "15%",
-				align : 'center'
-			}, {
-				field : 'alarmPhone',
-				title : '报警电话',
-				width : "10%",
-				align : 'center',
-				sortable : true
-			}, {
-				field : 'relatedPhone',
-				title : '相关电话',
-				width : "10%",
-				align : 'center'
-			}, {
-				field : 'siteAddress',
-				title : '报警地址',
-				width : "15%",
-				align : 'center'
-			}, {
-				field : 'judgementOnPhone',
-				title : '电话判断',
-				width : "15%",
-				align : 'center'
-			}, {
-				field : 'station',
-				title : '出车急救站',
-				width : "10%",
-				resizable : true,
-				align : 'center'
-			}, {
-				field : 'sendCarTime',
-				title : '派车时间',
-				width : "14%",
-				align : 'center'
-			}, {
-				field : 'dispatcher',
-				title : '调度员',
-				width : "10%",
-				resizable : true,
-				align : 'center'
-			} ] ],
-			toolbar : '#toolbar',
-			onBeforeLoad : function(param) {
-				parent.$.messager.progress({
-					text : '数据加载中....'
+		grid = $('#grid').datagrid(
+				{
+					url : 'getAnswerAlarmDatas',
+					pagePosition : 'bottom',
+					pagination : true,
+					striped : true,
+					singleSelect : true,
+					rownumbers : true,
+					idField : 'id',
+					pageSize : 20,
+					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+					columns : [ [ {
+						field : 'answerAlarmTime',
+						title : '接诊时间',
+						width : "15%",
+						align : 'center'
+					}, {
+						field : 'alarmPhone',
+						title : '报警电话',
+						width : "10%",
+						align : 'center',
+						sortable : true
+					}, {
+						field : 'relatedPhone',
+						title : '相关电话',
+						width : "10%",
+						align : 'center'
+					}, {
+						field : 'siteAddress',
+						title : '报警地址',
+						width : "15%",
+						align : 'center'
+					}, {
+						field : 'judgementOnPhone',
+						title : '电话判断',
+						width : "15%",
+						align : 'center'
+					}, {
+						field : 'station',
+						title : '出车急救站',
+						width : "10%",
+						resizable : true,
+						align : 'center'
+					}, {
+						field : 'sendCarTime',
+						title : '派车时间',
+						width : "14%",
+						align : 'center'
+					}, {
+						field : 'dispatcher',
+						title : '调度员',
+						width : "10%",
+						resizable : true,
+						align : 'center'
+					} ] ],
+					toolbar : '#toolbar',
+					onBeforeLoad : function(param) {
+						var varify = cxw.checkStartTimeBeforeEndTime(
+								'#startTime', '#endTime');
+						if (varify) {
+							parent.$.messager.progress({
+								text : '数据加载中....'
+							});
+						} else {
+							$.messager.alert('警告', '结束时间要大于开始时间', 'warning');
+						}
+					},
+					onLoadSuccess : function(data) {
+						parent.$.messager.progress('close');
+					}
 				});
-			},
-			onLoadSuccess : function(data) {
-				parent.$.messager.progress('close');
-			}
-		});
 	}
 
 	$(document).ready(function() {
@@ -119,11 +126,8 @@
 								<td><input type="text" style="width: 80px" id="siteAddress"
 									name="siteAddress" /></td>
 								<td>查询时间</td>
-								<td><input id="startTime" name="startTime" class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-									style="width: 150em;" />-<input id="endTime" name="endTime"
-									class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+								<td><input id="startTime" name="startTime"
+									style="width: 150em;" />至<input id="endTime" name="endTime"
 									style="width: 150em;" /></td>
 								<td><a href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"

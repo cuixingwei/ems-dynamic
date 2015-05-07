@@ -29,57 +29,64 @@
 			textField : 'name',
 			method : 'get'
 		});
-		grid = $('#grid').datagrid({
-			url : 'getAcceptTimeDatas',
-			pagePosition : 'bottom',
-			pagination : true,
-			striped : true,
-			singleSelect : true,
-			rownumbers : true,
-			idField : 'id',
-			pageSize : 20,
-			pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
-			columns : [ [ {
-				field : 'dispatcher',
-				title : '调度员',
-				width : "15%",
-				align : 'center'
-			}, {
-				field : 'averageOffhookTime',
-				title : '平均摘机时长(秒)',
-				width : "15%",
-				align : 'center',
-			}, {
-				field : 'averageOffSendCar',
-				title : '平均派车时长(秒)',
-				width : "10%",
-				align : 'center'
-			}, {
-				field : 'averageAccept',
-				title : '平均受理时长(秒)',
-				width : "20%",
-				align : 'center'
-			}, {
-				field : 'readyTime',
-				title : '就绪时长',
-				width : "19.9%",
-				align : 'center'
-			}, {
-				field : 'leaveTime',
-				title : '离席时长',
-				width : "20%",
-				align : 'center'
-			} ] ],
-			toolbar : '#toolbar',
-			onBeforeLoad : function(param) {
-				parent.$.messager.progress({
-					text : '数据加载中....'
+		grid = $('#grid').datagrid(
+				{
+					url : 'getAcceptTimeDatas',
+					pagePosition : 'bottom',
+					pagination : true,
+					striped : true,
+					singleSelect : true,
+					rownumbers : true,
+					idField : 'id',
+					pageSize : 20,
+					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+					columns : [ [ {
+						field : 'dispatcher',
+						title : '调度员',
+						width : "15%",
+						align : 'center'
+					}, {
+						field : 'averageOffhookTime',
+						title : '平均摘机时长(秒)',
+						width : "15%",
+						align : 'center',
+					}, {
+						field : 'averageOffSendCar',
+						title : '平均派车时长(秒)',
+						width : "10%",
+						align : 'center'
+					}, {
+						field : 'averageAccept',
+						title : '平均受理时长(秒)',
+						width : "20%",
+						align : 'center'
+					}, {
+						field : 'readyTime',
+						title : '就绪时长',
+						width : "19.9%",
+						align : 'center'
+					}, {
+						field : 'leaveTime',
+						title : '离席时长',
+						width : "20%",
+						align : 'center'
+					} ] ],
+					toolbar : '#toolbar',
+					onBeforeLoad : function(param) {
+						var varify = cxw.checkStartTimeBeforeEndTime(
+								'#startTime', '#endTime');
+						if (varify) {
+							parent.$.messager.progress({
+								text : '数据加载中....'
+							});
+						} else {
+							$.messager.alert('警告', '结束时间要大于开始时间', 'warning');
+						}
+					},
+					onLoadSuccess : function(data) {
+						parent.$.messager.progress('close');
+					}
 				});
-			},
-			onLoadSuccess : function(data) {
-				parent.$.messager.progress('close');
-			}
-		});
 	}
 
 	$(document).ready(function() {
@@ -97,15 +104,12 @@
 						<table>
 							<tr>
 								<td>调度员:</td>
-								<td><input style="width: 80px;" id="dispatcher"
+								<td><input style="width: 80em;" id="dispatcher"
 									name="dispatcher" /></td>
 								<td>查询时间</td>
-								<td><input id="startTime" name="startTime" class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-									style="width: 180px;" />-<input id="endTime" name="endTime"
-									class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-									style="width: 180px;" /></td>
+								<td><input id="startTime" name="startTime"
+									style="width: 150em;" />至<input id="endTime" name="endTime"
+									style="width: 150em;" /></td>
 								<td><a href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
 									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a><a

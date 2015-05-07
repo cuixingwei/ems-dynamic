@@ -35,70 +35,77 @@
 			textField : 'name',
 			method : 'get'
 		});
-		grid = $('#grid').datagrid({
-			url : 'getCarStateChangeDatas',
-			pagePosition : 'bottom',
-			pagination : true,
-			striped : true,
-			singleSelect : true,
-			rownumbers : true,
-			idField : 'id',
-			pageSize : 20,
-			pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
-			columns : [ [ {
-				field : 'eventName',
-				title : '事件名称',
-				resizable : true,
-				width : "17%",
-				align : 'center'
-			}, {
-				field : 'carCode',
-				title : '车辆',
-				resizable : true,
-				width : "13%",
-				align : 'center',
-			}, {
-				field : 'carState',
-				title : '车辆状态',
-				resizable : true,
-				width : "13%",
-				align : 'center'
-			}, {
-				field : 'recordTime',
-				title : '记录时刻',
-				resizable : true,
-				width : "17%",
-				align : 'center'
-			}, {
-				field : 'recordClass',
-				title : '记录类型',
-				resizable : true,
-				width : "13%",
-				align : 'center'
-			}, {
-				field : 'seatCode',
-				title : '坐席号',
-				resizable : true,
-				width : "13%",
-				align : 'center'
-			}, {
-				field : 'dispatcher',
-				title : '操作人',
-				resizable : true,
-				width : "13%",
-				align : 'center',
-			} ] ],
-			toolbar : '#toolbar',
-			onBeforeLoad : function(param) {
-				parent.$.messager.progress({
-					text : '数据加载中....'
+		grid = $('#grid').datagrid(
+				{
+					url : 'getCarStateChangeDatas',
+					pagePosition : 'bottom',
+					pagination : true,
+					striped : true,
+					singleSelect : true,
+					rownumbers : true,
+					idField : 'id',
+					pageSize : 20,
+					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+					columns : [ [ {
+						field : 'eventName',
+						title : '事件名称',
+						resizable : true,
+						width : "17%",
+						align : 'center'
+					}, {
+						field : 'carCode',
+						title : '车辆',
+						resizable : true,
+						width : "13%",
+						align : 'center',
+					}, {
+						field : 'carState',
+						title : '车辆状态',
+						resizable : true,
+						width : "13%",
+						align : 'center'
+					}, {
+						field : 'recordTime',
+						title : '记录时刻',
+						resizable : true,
+						width : "17%",
+						align : 'center'
+					}, {
+						field : 'recordClass',
+						title : '记录类型',
+						resizable : true,
+						width : "13%",
+						align : 'center'
+					}, {
+						field : 'seatCode',
+						title : '坐席号',
+						resizable : true,
+						width : "13%",
+						align : 'center'
+					}, {
+						field : 'dispatcher',
+						title : '操作人',
+						resizable : true,
+						width : "13%",
+						align : 'center',
+					} ] ],
+					toolbar : '#toolbar',
+					onBeforeLoad : function(param) {
+						var varify = cxw.checkStartTimeBeforeEndTime(
+								'#startTime', '#endTime');
+						if (varify) {
+							parent.$.messager.progress({
+								text : '数据加载中....'
+							});
+						} else {
+							$.messager.alert('警告', '结束时间要大于开始时间', 'warning');
+						}
+					},
+					onLoadSuccess : function(data) {
+						parent.$.messager.progress('close');
+						cxw.mergeCellsByField("grid", "eventName,");
+					}
 				});
-			},
-			onLoadSuccess : function(data) {
-				parent.$.messager.progress('close');
-				cxw.mergeCellsByField("grid", "eventName,");
-			}
-		});
 	}
 
 	$(document).ready(function() {
@@ -116,16 +123,13 @@
 						<table>
 							<tr>
 								<td>事件名称:</td>
-								<td><input width="120em" id="eventName" name="eventName" /></td>
+								<td><input style="width: 150px;" id="eventName" name="eventName" /></td>
 								<td>&nbsp;车辆:</td>
-								<td><input style="width: 120em;" id="carCode"
+								<td><input style="width: 100em;" id="carCode"
 									name="carCode" /></td>
 								<td>&nbsp;查询时间:</td>
-								<td><input id="startTime" name="startTime" class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-									style="width: 150em;" />-<input id="endTime" name="endTime"
-									class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+								<td><input id="startTime" name="startTime"
+									style="width: 150em;" />至<input id="endTime" name="endTime"
 									style="width: 150em;" /></td>
 								<td colspan="2">&nbsp;<a href="javascript:void(0);"
 									class="easyui-linkbutton"

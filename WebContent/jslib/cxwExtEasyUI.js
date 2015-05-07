@@ -463,3 +463,24 @@ cxw.mergeCellsByField = function(tableID, colList) {
 		}
 	}
 }
+/**
+ * 验证开始时间小于结束时间
+ */
+cxw.checkStartTimeBeforeEndTime = function(startTime, endTime) {
+	if ($(startTime).datebox('getValue') <= $(endTime).datebox('getValue')) {
+		return true;
+	} else {
+		return false;
+	}
+}
+/**
+ * 验证一个数小于另一个数
+ */
+cxw.checkMinBeforeMax = function(min, max) {
+	if ($(max).numberbox('getValue') == ""
+			|| ($(min).numberbox('getValue') <= $(max).numberbox('getValue'))) {
+		return true;
+	} else {
+		return false;
+	}
+}

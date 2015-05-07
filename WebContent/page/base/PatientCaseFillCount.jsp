@@ -24,51 +24,58 @@
 			value : getCurrentTime()
 		});
 
-		grid = $('#grid').datagrid({
-			url : 'getPatientCaseFillCountDatas',
-			pagePosition : 'bottom',
-			pagination : true,
-			striped : true,
-			singleSelect : true,
-			rownumbers : true,
-			idField : 'id',
-			pageSize : 20,
-			pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
-			columns : [ [ {
-				field : 'station',
-				title : '分站名称',
-				resizable : true,
-				width : "25%",
-				align : 'center'
-			}, {
-				field : 'sendNumbers',
-				title : '120派诊数',
-				resizable : true,
-				width : "25%",
-				align : 'center',
-			}, {
-				field : 'fillNumbers',
-				title : '回填数',
-				resizable : true,
-				width : "25%",
-				align : 'center'
-			}, {
-				field : 'rate',
-				title : '回填率',
-				resizable : true,
-				width : "24%",
-				align : 'center'
-			} ] ],
-			toolbar : '#toolbar',
-			onBeforeLoad : function(param) {
-				parent.$.messager.progress({
-					text : '数据加载中....'
+		grid = $('#grid').datagrid(
+				{
+					url : 'getPatientCaseFillCountDatas',
+					pagePosition : 'bottom',
+					pagination : true,
+					striped : true,
+					singleSelect : true,
+					rownumbers : true,
+					idField : 'id',
+					pageSize : 20,
+					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+					columns : [ [ {
+						field : 'station',
+						title : '分站名称',
+						resizable : true,
+						width : "25%",
+						align : 'center'
+					}, {
+						field : 'sendNumbers',
+						title : '120派诊数',
+						resizable : true,
+						width : "25%",
+						align : 'center',
+					}, {
+						field : 'fillNumbers',
+						title : '回填数',
+						resizable : true,
+						width : "25%",
+						align : 'center'
+					}, {
+						field : 'rate',
+						title : '回填率',
+						resizable : true,
+						width : "24%",
+						align : 'center'
+					} ] ],
+					toolbar : '#toolbar',
+					onBeforeLoad : function(param) {
+						var varify = cxw.checkStartTimeBeforeEndTime(
+								'#startTime', '#endTime');
+						if (varify) {
+							parent.$.messager.progress({
+								text : '数据加载中....'
+							});
+						} else {
+							$.messager.alert('警告', '结束时间要大于开始时间', 'warning');
+						}
+					},
+					onLoadSuccess : function(data) {
+						parent.$.messager.progress('close');
+					}
 				});
-			},
-			onLoadSuccess : function(data) {
-				parent.$.messager.progress('close');
-			}
-		});
 	}
 
 	$(document).ready(function() {
@@ -86,11 +93,8 @@
 						<table>
 							<tr>
 								<td>查询时间:</td>
-								<td><input id="startTime" name="startTime" class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-									style="width: 150em;" />-<input id="endTime" name="endTime"
-									class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+								<td><input id="startTime" name="startTime"
+									style="width: 150em;" />至<input id="endTime" name="endTime"
 									style="width: 150em;" /></td>
 								<td colspan="2">&nbsp;<a href="javascript:void(0);"
 									class="easyui-linkbutton"

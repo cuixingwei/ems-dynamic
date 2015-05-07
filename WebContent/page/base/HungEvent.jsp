@@ -35,69 +35,76 @@
 			textField : 'name',
 			method : 'get'
 		});
-		grid = $('#grid').datagrid({
-			url : 'gethungEventData',
-			pagePosition : 'bottom',
-			pagination : true,
-			striped : true,
-			singleSelect : true,
-			rownumbers : true,
-			idField : 'id',
-			pageSize : 20,
-			pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
-			columns : [ [ {
-				field : 'eventName',
-				title : '事件名称',
-				resizable : true,
-				width : "14%",
-				align : 'center'
-			}, {
-				field : 'acceptType',
-				title : '受理类型',
-				resizable : true,
-				width : "14%",
-				align : 'center',
-			}, {
-				field : 'dispatcher',
-				title : '操作人',
-				resizable : true,
-				width : "14%",
-				align : 'center'
-			}, {
-				field : 'hungTime',
-				title : '挂起时刻',
-				resizable : true,
-				width : "14%",
-				align : 'center',
-			}, {
-				field : 'hungReason',
-				title : '挂起原因',
-				resizable : true,
-				width : "14%",
-				align : 'center'
-			}, {
-				field : 'endTime',
-				title : '结束时刻',
-				resizable : true,
-				width : "14%",
-				align : 'center',
-			}, {
-				field : 'hungtimes',
-				title : '时长',
-				resizable : true,
-				width : "14%",
-				align : 'center'
-			} ] ],
-			toolbar : '#toolbar',
-			onBeforeLoad : function(param) {
-				parent.$.messager.progress({
-					text : '数据加载中....'
+		grid = $('#grid').datagrid(
+				{
+					url : 'gethungEventData',
+					pagePosition : 'bottom',
+					pagination : true,
+					striped : true,
+					singleSelect : true,
+					rownumbers : true,
+					idField : 'id',
+					pageSize : 20,
+					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+					columns : [ [ {
+						field : 'eventName',
+						title : '事件名称',
+						resizable : true,
+						width : "14%",
+						align : 'center'
+					}, {
+						field : 'acceptType',
+						title : '受理类型',
+						resizable : true,
+						width : "14%",
+						align : 'center',
+					}, {
+						field : 'dispatcher',
+						title : '操作人',
+						resizable : true,
+						width : "14%",
+						align : 'center'
+					}, {
+						field : 'hungTime',
+						title : '挂起时刻',
+						resizable : true,
+						width : "14%",
+						align : 'center',
+					}, {
+						field : 'hungReason',
+						title : '挂起原因',
+						resizable : true,
+						width : "14%",
+						align : 'center'
+					}, {
+						field : 'endTime',
+						title : '结束时刻',
+						resizable : true,
+						width : "14%",
+						align : 'center',
+					}, {
+						field : 'hungtimes',
+						title : '时长',
+						resizable : true,
+						width : "14%",
+						align : 'center'
+					} ] ],
+					toolbar : '#toolbar',
+					onBeforeLoad : function(param) {
+						var varify = cxw.checkStartTimeBeforeEndTime(
+								'#startTime', '#endTime');
+						if (varify) {
+							parent.$.messager.progress({
+								text : '数据加载中....'
+							});
+						} else {
+							$.messager.alert('警告', '结束时间要大于开始时间', 'warning');
+						}
+					},
+					onLoadSuccess : function(data) {
+						parent.$.messager.progress('close');
+					}
 				});
-			},
-			onLoadSuccess : function(data) {
-				parent.$.messager.progress('close');
-			}
-		});
 	}
 
 	$(document).ready(function() {
@@ -122,11 +129,7 @@
 									name="hungReason" /></td>
 								<td>&nbsp;查询时间:</td>
 								<td colspan="3"><input id="startTime" name="startTime"
-									class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-									style="width: 150em;" />-<input id="endTime" name="endTime"
-									class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+									style="width: 150em;" />至<input id="endTime" name="endTime"
 									style="width: 150em;" /></td>
 								<td colspan="2">&nbsp;<a href="javascript:void(0);"
 									class="easyui-linkbutton"

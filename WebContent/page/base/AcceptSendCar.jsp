@@ -29,75 +29,82 @@
 			textField : 'name',
 			method : 'get'
 		});
-		grid = $('#grid').datagrid({
-			url : 'getAcceptSendCarDatas',
-			pagePosition : 'bottom',
-			pagination : true,
-			striped : true,
-			singleSelect : true,
-			rownumbers : true,
-			idField : 'id',
-			pageSize : 20,
-			pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
-			columns : [ [ {
-				field : 'dispatcher',
-				title : '调度员',
-				resizable : true,
-				width : "15%",
-				align : 'center'
-			}, {
-				field : 'startAcceptTime',
-				title : '开始受理时刻',
-				width : "15%",
-				align : 'center',
-				sortable : true
-			}, {
-				field : 'sendCarTime',
-				title : '派车时刻',
-				resizable : true,
-				width : "15%",
-				align : 'center'
-			}, {
-				field : 'acceptType',
-				title : '受理类型',
-				width : "10%",
-				align : 'center'
-			}, {
-				field : 'ringPhone',
-				title : '呼救电话',
-				resizable : true,
-				width : "13%",
-				align : 'center'
-			}, {
-				field : 'sendCarTimes',
-				title : '派车时长',
-				width : "14%",
-				resizable : true,
-				align : 'center'
-			}, {
-				field : 'remark',
-				title : '受理备注',
-				resizable : true,
-				width : "14%",
-				align : 'center'
-			}, {
-				field : '',
-				title : '详情',
-				width : "10%",
-				resizable : true,
-				align : 'center'
-			} ] ],
-			toolbar : '#toolbar',
-			onBeforeLoad : function(param) {
-				parent.$.messager.progress({
-					text : '数据加载中....'
+		grid = $('#grid').datagrid(
+				{
+					url : 'getAcceptSendCarDatas',
+					pagePosition : 'bottom',
+					pagination : true,
+					striped : true,
+					singleSelect : true,
+					rownumbers : true,
+					idField : 'id',
+					pageSize : 20,
+					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+					columns : [ [ {
+						field : 'dispatcher',
+						title : '调度员',
+						resizable : true,
+						width : "15%",
+						align : 'center'
+					}, {
+						field : 'startAcceptTime',
+						title : '开始受理时刻',
+						width : "15%",
+						align : 'center',
+						sortable : true
+					}, {
+						field : 'sendCarTime',
+						title : '派车时刻',
+						resizable : true,
+						width : "15%",
+						align : 'center'
+					}, {
+						field : 'acceptType',
+						title : '受理类型',
+						width : "10%",
+						align : 'center'
+					}, {
+						field : 'ringPhone',
+						title : '呼救电话',
+						resizable : true,
+						width : "13%",
+						align : 'center'
+					}, {
+						field : 'sendCarTimes',
+						title : '派车时长',
+						width : "14%",
+						resizable : true,
+						align : 'center'
+					}, {
+						field : 'remark',
+						title : '受理备注',
+						resizable : true,
+						width : "14%",
+						align : 'center'
+					}, {
+						field : '',
+						title : '详情',
+						width : "10%",
+						resizable : true,
+						align : 'center'
+					} ] ],
+					toolbar : '#toolbar',
+					onBeforeLoad : function(param) {
+						var varify = cxw.checkStartTimeBeforeEndTime(
+								'#startTime', '#endTime');
+						if (varify) {
+							parent.$.messager.progress({
+								text : '数据加载中....'
+							});
+						} else {
+							$.messager.alert('警告', '结束时间要大于开始时间', 'warning');
+						}
+					},
+					onLoadSuccess : function(data) {
+						parent.$.messager.progress('close');
+						cxw.mergeCellsByField("grid", "dispatcher,");
+					}
 				});
-			},
-			onLoadSuccess : function(data) {
-				parent.$.messager.progress('close');
-				cxw.mergeCellsByField("grid", "dispatcher,");
-			}
-		});
 	}
 
 	$(document).ready(function() {
@@ -115,17 +122,14 @@
 						<table>
 							<tr>
 								<td>调度员:</td>
-								<td><input style="width: 100em" id="dispatcher"
+								<td><input style="width: 80em" id="dispatcher"
 									name="dispatcher" /></td>
-								<td>超时时长:</td>
-								<td><input type="text" style="width: 100px" value="120"
+								<td>超时时长(秒):</td>
+								<td><input type="text" style="width: 90px" value="120"
 									id="overtimes" name="overtimes" /></td>
 								<td>查询时间</td>
-								<td><input id="startTime" name="startTime" class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-									style="width: 150em;" />-<input id="endTime" name="endTime"
-									class="Wdate"
-									onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+								<td><input id="startTime" name="startTime"
+									style="width: 150em;" />至<input id="endTime" name="endTime"
 									style="width: 150em;" /></td>
 								<td><a href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
