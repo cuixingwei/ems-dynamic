@@ -81,7 +81,7 @@
 			},
 			onLoadSuccess : function(data) {
 				parent.$.messager.progress('close');
-				$(this).datagrid("autoMergeCells");
+				cxw.mergeCellsByField("grid", "department,");
 			}
 		});
 	}

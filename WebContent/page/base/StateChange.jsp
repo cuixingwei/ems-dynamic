@@ -57,12 +57,12 @@
 			}, {
 				field : 'startTime',
 				title : '开始时间',
-				width : "20%",
+				width : "19%",
 				align : 'center'
 			}, {
 				field : 'endTime',
 				title : '结束时间',
-				width : "20%",
+				width : "19%",
 				align : 'center'
 			}] ],
 			toolbar : '#toolbar',
@@ -73,6 +73,7 @@
 			},
 			onLoadSuccess : function(data) {
 				parent.$.messager.progress('close');
+				cxw.mergeCellsByField("grid", "dispatcher,");
 			}
 		});
 	}

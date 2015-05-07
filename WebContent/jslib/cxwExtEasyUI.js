@@ -236,7 +236,8 @@ cxw.loadFilter = {
 				tmpMap[data[i][idField]] = data[i];
 			}
 			for (i = 0, l = data.length; i < l; i++) {
-				if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
+				if (tmpMap[data[i][parentField]]
+						&& data[i][idField] != data[i][parentField]) {
 					if (!tmpMap[data[i][parentField]]['children'])
 						tmpMap[data[i][parentField]]['children'] = [];
 					data[i]['text'] = data[i][textField];
@@ -275,7 +276,8 @@ $.extend($.fn.treegrid.defaults, {
 				tmpMap[data[i][idField]] = data[i];
 			}
 			for (i = 0, l = data.length; i < l; i++) {
-				if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
+				if (tmpMap[data[i][parentField]]
+						&& data[i][idField] != data[i][parentField]) {
 					if (!tmpMap[data[i][parentField]]['children'])
 						tmpMap[data[i][parentField]]['children'] = [];
 					data[i]['text'] = data[i][treeField];
@@ -311,7 +313,9 @@ cxw.modalDialog = function(options) {
 	}, options);
 	opts.modal = true;// 强制此dialog为模式化，无视传递过来的modal参数
 	if (options.url) {
-		opts.content = '<iframe id="" src="' + options.url + '" allowTransparency="true" scrolling="auto" width="100%" height="98%" frameBorder="0" name=""></iframe>';
+		opts.content = '<iframe id="" src="'
+				+ options.url
+				+ '" allowTransparency="true" scrolling="auto" width="100%" height="98%" frameBorder="0" name=""></iframe>';
 	}
 	return $('<div/>').dialog(opts);
 };
@@ -326,7 +330,8 @@ cxw.modalDialog = function(options) {
 cxw.changeTheme = function(themeName) {
 	var $easyuiTheme = $('#easyuiTheme');
 	var url = $easyuiTheme.attr('href');
-	var href = url.substring(0, url.indexOf('themes')) + 'themes/' + themeName + '/easyui.css';
+	var href = url.substring(0, url.indexOf('themes')) + 'themes/' + themeName
+			+ '/easyui.css';
 	$easyuiTheme.attr('href', href);
 
 	var $iframe = $('iframe');
@@ -350,110 +355,20 @@ cxw.changeTheme = function(themeName) {
 };
 
 /**
- * 滚动条
- * 
  * @author 崔兴伟
- * @requires jQuery,EasyUI
+ * @date 2014-11-5
+ * @datagrid 合并单元格扩展 合并所有字段
+ * 
  */
-cxw.progressBar = function(options) {
-	if (typeof options == 'string') {
-		if (options == 'close') {
-			$('#syProgressBarDiv').dialog('destroy');
-		}
-	} else {
-		if ($('#syProgressBarDiv').length < 1) {
-			var opts = $.extend({
-				title : '&nbsp;',
-				closable : false,
-				width : 300,
-				height : 60,
-				modal : true,
-				content : '<div id="syProgressBar" class="easyui-progressbar" data-options="value:0"></div>'
-			}, options);
-			$('<div id="syProgressBarDiv"/>').dialog(opts);
-			$.parser.parse('#syProgressBarDiv');
-		} else {
-			$('#syProgressBarDiv').dialog('open');
-		}
-		if (options.value) {
-			$('#syProgressBar').progressbar('setValue', options.value);
-		}
-	}
-};
-var cardview = $.extend({}, $.fn.datagrid.defaults.view, {   
-    renderRow: function(target, fields, frozen, rowIndex, rowData){
-        var cc = [];   
-        cc.push('<td colspan=' + fields.length + ' style="padding:5px;border:0;">');   
-        if (!frozen){   
-            cc.push('<img src="' +cxw.contextPath+ rowData.image + '" style="width:200px;height:200px;float:left">');   
-            cc.push('<div style="float:left;width:100px;">');   
-            for(var i=0; i<fields.length; i++){
-            	if(i==2){
-            		cc.push('<span style="height:80px;display:block">' + fields[i] + '</span>');  
-            	}
-            	else if(i==0){
-            		cc.push('<span style="visibility:hidden;height:20px;display:block">' + fields[i] + '</span>');  
-            	}
-            	else if(i==7){
-            		cc.push('<span style="height:40px;display:block;">' + '</span>');  
-            	}
-            	else{
-            		cc.push('<span style="height:20px;display:block">' + fields[i] + '</span>');  
-            	}
-            }   
-            cc.push('</div>');   
-            cc.push('<div style="float:left;width:500px;">');   
-            for(var i=0; i<fields.length; i++){
-            	if(i==2){
-            		cc.push('<span style="height:80px;display:block">' +  rowData[fields[i]] + '</span>'); 
-            	}
-            	else if(i==0){
-            		cc.push('<span style="visibility:hidden;height:20px;display:block">' +rowData[fields[i]] + '</span>');  
-            	}
-            	else if (i==7){
-            		cc.push('<span style="height:40px;display:block;">' +  '</span>'); 
-            	}
-            	else{
-            		cc.push('<span style="height:20px;display:block">' +  rowData[fields[i]] + '</span>'); 
-            	}
-            }   
-            cc.push('</div>'); 
-            cc.push('<div style="float:left;width:200px;">');   
-            for(var i=0; i<fields.length; i++){
-            	if(i==2)
-            		cc.push('<span style="height:80px;display:block">'  + '</span>');
-            	else if(i==7){
-            		cc.push('<span style="height:20px;display:block">' +  fields[i] + '</span>'); 
-            		cc.push('<span style="height:20px;display:block">' +'$'+  rowData[fields[i]] + '</span>'); 
-            	}
-            	else{
-            		cc.push('<span style="height:20px;display:block">' +   '</span>'); 
-            	}
-            }   
-            cc.push('</div>'); 
-        }   
-        cc.push('</td>');   
-        return cc.join('');   
-    }   
-});  
-
-/**
- * author ____崔兴伟
- * create date 2014-11-5
- * datagrid 合并单元格扩展
- *
- **/
 $.extend($.fn.datagrid.methods, {
-	autoMergeCells : function (jq, fields) {
-		return jq.each(function () {
+	autoMergeCells : function(jq, fields) {
+		return jq.each(function() {
 			var target = $(this);
 			if (!fields) {
 				fields = target.datagrid("getColumnFields");
 			}
 			var rows = target.datagrid("getRows");
-			var i = 0,
-			j = 0,
-			temp = {};
+			var i = 0, j = 0, temp = {};
 			for (i; i < rows.length; i++) {
 				var row = rows[i];
 				j = 0;
@@ -462,25 +377,23 @@ $.extend($.fn.datagrid.methods, {
 					var tf = temp[field];
 					if (!tf) {
 						tf = temp[field] = {};
-						tf[row[field]] = [i];
+						tf[row[field]] = [ i ];
 					} else {
 						var tfv = tf[row[field]];
 						if (tfv) {
 							tfv.push(i);
 						} else {
-							tfv = tf[row[field]] = [i];
+							tfv = tf[row[field]] = [ i ];
 						}
 					}
 				}
 			}
-			$.each(temp, function (field, colunm) {
-				$.each(colunm, function () {
+			$.each(temp, function(field, colunm) {
+				$.each(colunm, function() {
 					var group = this;
-					
+
 					if (group.length > 1) {
-						var before,
-						after,
-						megerIndex = group[0];
+						var before, after, megerIndex = group[0];
 						for (var i = 0; i < group.length; i++) {
 							before = group[i];
 							after = group[i + 1];
@@ -505,3 +418,48 @@ $.extend($.fn.datagrid.methods, {
 		});
 	}
 });
+
+/**
+ * EasyUI DataGrid根据字段动态合并单元格
+ * 
+ * @param tableID
+ *            要合并table的id
+ * @param colList
+ *            要合并的列,用逗号分隔(例如："name,department,office");
+ */
+cxw.mergeCellsByField = function(tableID, colList) {
+	var ColArray = colList.split(",");
+	var tTable = $('#' + tableID);
+	var TableRowCnts = tTable.datagrid("getRows").length;
+	var tmpA;
+	var tmpB;
+	var PerTxt = "";
+	var CurTxt = "";
+	var alertStr = "";
+	for (j = ColArray.length - 1; j >= 0; j--) {
+		PerTxt = "";
+		tmpA = 1;
+		tmpB = 0;
+
+		for (i = 0; i <= TableRowCnts; i++) {
+			if (i == TableRowCnts) {
+				CurTxt = "";
+			} else {
+				CurTxt = tTable.datagrid("getRows")[i][ColArray[j]];
+			}
+			if (PerTxt == CurTxt) {
+				tmpA += 1;
+			} else {
+				tmpB += tmpA;
+				tTable.datagrid('mergeCells', {
+					index : i - tmpA,
+					field : ColArray[j],
+					rowspan : tmpA,
+					colspan : null
+				});
+				tmpA = 1;
+			}
+			PerTxt = CurTxt;
+		}
+	}
+}

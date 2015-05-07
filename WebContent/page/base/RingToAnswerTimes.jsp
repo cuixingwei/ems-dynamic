@@ -84,6 +84,7 @@
 			},
 			onLoadSuccess : function(data) {
 				parent.$.messager.progress('close');
+				cxw.mergeCellsByField("grid", "dispatcher,");
 			}
 		});
 	}

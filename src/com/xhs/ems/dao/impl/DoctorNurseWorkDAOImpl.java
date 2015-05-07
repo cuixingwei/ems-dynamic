@@ -77,7 +77,7 @@ public class DoctorNurseWorkDAOImpl implements DoctorNurseWorkDAO {
 				+ "from #temp3 tt3 left outer join #temp4 tt4 on tt3.分站编码=tt4.分站编码 and tt3.随车护士=tt4.name	"
 				+ "left outer join AuSp120.tb_Station s on s.分站编码=tt4.分站编码";
 		String sqlEnd = " drop table #temp1,#temp2,#temp3,#temp4";
-		if (parameter.getStation() != null) {
+		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
 			sql7 += " where tt4.分站编码 = :station and tt4.分站编码 is not null ";
 			sql8 += " where tt4.分站编码 = :station and tt4.分站编码 is not null";
 		}
@@ -91,7 +91,7 @@ public class DoctorNurseWorkDAOImpl implements DoctorNurseWorkDAO {
 
 		String sql = "";
 		String doctorOrNurse = "1";
-		if (parameter.getDoctorOrNurse() != null) {
+		if (!CommonUtil.isNullOrEmpty(parameter.getDoctorOrNurse())) {
 			doctorOrNurse = parameter.getDoctorOrNurse();
 		}
 		logger.info(doctorOrNurse);
@@ -119,8 +119,9 @@ public class DoctorNurseWorkDAOImpl implements DoctorNurseWorkDAO {
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");
-		for(DoctorNurseWork result:results){
-			result.setAverateCureTimes(CommonUtil.formatSecond(result.getAverateCureTimes()));
+		for (DoctorNurseWork result : results) {
+			result.setAverateCureTimes(CommonUtil.formatSecond(result
+					.getAverateCureTimes()));
 		}
 		Grid grid = new Grid();
 		int fromIndex = (page - 1) * rows;
