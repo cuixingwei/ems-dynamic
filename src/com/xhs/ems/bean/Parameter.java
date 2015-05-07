@@ -88,6 +88,19 @@ public class Parameter {
 	 * 急救站晚出诊统计(出诊时长最大值)
 	 */
 	private String outCarTimesMax;
+	/**
+	 * 医生护士工作统计（1代表医生，2代表护士）
+	 */
+	private String doctorOrNurse;
+	
+
+	public String getDoctorOrNurse() {
+		return doctorOrNurse;
+	}
+
+	public void setDoctorOrNurse(String doctorOrNurse) {
+		this.doctorOrNurse = doctorOrNurse;
+	}
 
 	public String getOutCarTimesMin() {
 		return outCarTimesMin;
