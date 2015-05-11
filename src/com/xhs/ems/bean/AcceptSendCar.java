@@ -7,6 +7,10 @@ package com.xhs.ems.bean;
  */
 public class AcceptSendCar {
 	/**
+	 * 受理表ID
+	 */
+	private String id;
+	/**
 	 * 调度员
 	 */
 	private String dispatcher;
@@ -91,9 +95,18 @@ public class AcceptSendCar {
 		this.remark = remark;
 	}
 
-	public AcceptSendCar(String dispatcher, String startAcceptTime,
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public AcceptSendCar(String id, String dispatcher, String startAcceptTime,
 			String sendCarTime, String acceptType, String ringPhone,
 			String sendCarTimes, String remark) {
+		this.id = id;
 		this.dispatcher = dispatcher;
 		this.startAcceptTime = startAcceptTime;
 		this.sendCarTime = sendCarTime;

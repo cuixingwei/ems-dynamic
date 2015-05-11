@@ -33,6 +33,7 @@ public class LoginController {
 
 	/**
 	 * 返回菜单
+	 * 
 	 * @author CUIXINGWEI
 	 * 
 	 * @return
@@ -53,6 +54,7 @@ public class LoginController {
 
 	/**
 	 * 登录方法
+	 * 
 	 * @author CUIXINGWEI
 	 * 
 	 * @param userId
@@ -88,9 +90,10 @@ public class LoginController {
 		}
 		return json;
 	}
-	
+
 	/**
 	 * 注销系统
+	 * 
 	 * @author CUIXINGWEI
 	 * 
 	 * @return
@@ -98,7 +101,7 @@ public class LoginController {
 	@RequestMapping(value = "/logOut", method = RequestMethod.POST)
 	public @ResponseBody Json logOut(HttpSession session) {
 		logger.info("注销");
-		if(session!=null){
+		if (session != null) {
 			session.invalidate();
 			logger.info("注销成功");
 		}
@@ -106,6 +109,5 @@ public class LoginController {
 		json.setSuccess(true);
 		return json;
 	}
-	
 
 }

@@ -56,7 +56,7 @@
 					case "error":
 						$("#validationSummary").text("密码错误");
 						break;
-					case "success":						
+					case "success":
 						window.location.replace("page/main.jsp");
 						break;
 					default:

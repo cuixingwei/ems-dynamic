@@ -3,6 +3,7 @@ package com.xhs.ems.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xhs.ems.bean.AcceptSendCarDetail;
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
 import com.xhs.ems.dao.AcceptSendCarDAO;
@@ -25,6 +26,11 @@ public class AcceptSendCarServiceImpl implements AcceptSendCarService {
 	@Override
 	public Grid getData(Parameter parameter) {
 		return acceptSendCarDAO.getData(parameter);
+	}
+
+	@Override
+	public AcceptSendCarDetail getDetail(String id) {
+		return acceptSendCarDAO.getDetail(id);
 	}
 
 }

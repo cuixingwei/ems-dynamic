@@ -92,7 +92,25 @@ public class Parameter {
 	 * 医生护士工作统计（1代表医生，2代表护士）
 	 */
 	private String doctorOrNurse;
-	
+	/**
+	 * 事件详情查询（受理表的ID）
+	 */
+	private String id;
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getDoctorOrNurse() {
 		return doctorOrNurse;

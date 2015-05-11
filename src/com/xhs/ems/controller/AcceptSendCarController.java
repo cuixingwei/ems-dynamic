@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.xhs.ems.bean.AcceptSendCarDetail;
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
 import com.xhs.ems.service.AcceptSendCarService;
 
 /**
  * @author 崔兴伟
- * @datetime 2015年5月7日  下午3:21:21
+ * @datetime 2015年5月7日 下午3:21:21
  */
 @Controller
 @RequestMapping(value = "/page/base")
@@ -28,6 +29,12 @@ public class AcceptSendCarController {
 	public @ResponseBody Grid getData(Parameter parameter) {
 		logger.info("开始受理到派车大于X秒统计");
 		return acceptSendCarService.getData(parameter);
+	}
+
+	@RequestMapping(value = "/getDetail", method = RequestMethod.POST)
+	public @ResponseBody AcceptSendCarDetail getDetail(Parameter parameter) {
+		logger.info("事件详情查询");
+		return acceptSendCarService.getDetail(parameter.getId());
 	}
 
 	@RequestMapping(value = "/exportAcceptSendCarDatas", method = RequestMethod.POST)
