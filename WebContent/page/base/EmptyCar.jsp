@@ -12,7 +12,13 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-
+		var url = "exportEmptyCarData?startTime="
+				+ $('#startTime').datetimebox('getValue') + "&endTime="
+				+ $('#endTime').datetimebox('getValue') + "&station="
+				+ $('#station').combobox('getValue') + "&emptyReason="
+				+ $('#emptyReason').combobox('getValue') + "&dispatcher="
+				+ $('#dispatcher').combobox('getValue');
+		window.location.href = url;
 	};
 	/* 初始化页面标签 */
 	function init() {
@@ -128,6 +134,8 @@
 								<td>&nbsp;空车原因:</td>
 								<td><input style="width: 120em;" id="emptyReason"
 									name="emptyReason" /></td>
+							</tr>
+							<tr>
 								<td>&nbsp;查询时间:</td>
 								<td colspan="3"><input id="startTime" name="startTime"
 									style="width: 150em;" />至<input id="endTime" name="endTime"

@@ -12,7 +12,12 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-
+		var url = "exportCarStateChangeDatas?startTime="
+				+ $('#startTime').datetimebox('getValue') + "&endTime="
+				+ $('#endTime').datetimebox('getValue') + "&eventName="
+				+ $('#eventName').val() + "&carCode="
+				+ $('#carCode').combobox('getValue');
+		window.location.href = url;
 	};
 	/* 初始化页面标签 */
 	function init() {
@@ -103,7 +108,7 @@
 					},
 					onLoadSuccess : function(data) {
 						parent.$.messager.progress('close');
-						cxw.mergeCellsByField("grid", "eventName,");
+						$(this).datagrid("autoMergeCells", [ 'eventName' ]);
 					}
 				});
 	}
@@ -123,7 +128,8 @@
 						<table>
 							<tr>
 								<td>事件名称:</td>
-								<td><input style="width: 150px;" id="eventName" name="eventName" /></td>
+								<td><input style="width: 150px;" id="eventName"
+									name="eventName" /></td>
 								<td>&nbsp;车辆:</td>
 								<td><input style="width: 100em;" id="carCode"
 									name="carCode" /></td>

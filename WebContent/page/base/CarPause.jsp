@@ -12,7 +12,14 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-
+		var url = "exportCarPauseDatas?startTime="
+				+ $('#startTime').datetimebox('getValue') + "&endTime="
+				+ $('#endTime').datetimebox('getValue') + "&station="
+				+ $('#station').combobox('getValue') + "&pauseReason="
+				+ $('#pauseReason').combobox('getValue') + "&carCode="
+				+ $('#carCode').combobox('getValue') + "&dispatcher="
+				+ $('#dispatcher').combobox('getValue');
+		window.location.href = url;
 	};
 	/* 初始化页面标签 */
 	function init() {
@@ -100,7 +107,7 @@
 						align : 'center'
 					}, {
 						field : 'pauseReason',
-						title : '暂停原因	',
+						title : '暂停原因',
 						resizable : true,
 						width : "13%",
 						align : 'center',

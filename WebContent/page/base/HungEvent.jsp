@@ -12,7 +12,12 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-
+		var url = "exporthungEventData?startTime="
+				+ $('#startTime').datetimebox('getValue') + "&endTime="
+				+ $('#endTime').datetimebox('getValue') + "&dispatcher="
+				+ $('#dispatcher').combobox('getValue') + "&hungReason="
+				+ $('#hungReason').combobox('getValue');
+		window.location.href = url;
 	};
 	/* 初始化页面标签 */
 	function init() {

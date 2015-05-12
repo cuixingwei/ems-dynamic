@@ -12,7 +12,12 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-
+		var url = "exportAcceptSendCarDatas?startTime="
+				+ $('#startTime').datetimebox('getValue') + "&endTime="
+				+ $('#endTime').datetimebox('getValue') + "&overtimes="
+				+ $('#overtimes').val() + "&dispatcher="
+				+ $('#dispatcher').combobox('getValue');
+		window.location.href = url;
 	};
 	var showFun = function(id) {
 		var dialog = parent.cxw.modalDialog({
@@ -34,6 +39,9 @@
 			valueField : 'employeeId',
 			textField : 'name',
 			method : 'get'
+		});
+		$('#overtimes').numberbox({
+			min : 0
 		});
 		grid = $('#grid')
 				.datagrid(
@@ -106,8 +114,9 @@
 										formatter : function(value, row) {
 											var str = '';
 											str += cxw
-													.formatString('<button onclick="showFun(\'{0}\');">详情</button>',row.id
-															);
+													.formatString(
+															'<button onclick="showFun(\'{0}\');">详情</button>',
+															row.id);
 											return str;
 										}
 									} ] ],
@@ -126,7 +135,8 @@
 							},
 							onLoadSuccess : function(data) {
 								parent.$.messager.progress('close');
-								cxw.mergeCellsByField("grid", "dispatcher,");
+								$(this).datagrid("autoMergeCells",
+										[ 'dispatcher' ]);
 							}
 						});
 	}

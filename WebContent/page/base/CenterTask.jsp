@@ -12,7 +12,11 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-
+		var url = "exportCenterTaskDatas?startTime="
+				+ $('#startTime').datetimebox('getValue') + "&endTime="
+				+ $('#endTime').datetimebox('getValue') + "&station="
+				+ $('#station').combobox('getValue');
+		window.location.href = url;
 	};
 	/* 初始化页面标签 */
 	function init() {
@@ -173,8 +177,7 @@
 						<table>
 							<tr>
 								<td>分站:</td>
-								<td><input style="width: 80em;" id="station"
-									name="station" /></td>
+								<td><input style="width: 120em;" id="station" name="station" /></td>
 								<td>查询时间</td>
 								<td><input id="startTime" name="startTime"
 									style="width: 150em;" />至<input id="endTime" name="endTime"

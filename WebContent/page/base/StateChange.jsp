@@ -12,7 +12,11 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-
+		var url = "exportStateChangeDatas?startTime="
+				+ $('#startTime').datetimebox('getValue') + "&endTime="
+				+ $('#endTime').datetimebox('getValue') + "&dispatcher="
+				+ $('#dispatcher').combobox('getValue');
+		window.location.href = url;
 	};
 	/* 初始化页面标签 */
 	function init() {
@@ -80,7 +84,7 @@
 					},
 					onLoadSuccess : function(data) {
 						parent.$.messager.progress('close');
-						cxw.mergeCellsByField("grid", "dispatcher,");
+						$(this).datagrid("autoMergeCells", [ 'dispatcher' ]);
 					}
 				});
 	}

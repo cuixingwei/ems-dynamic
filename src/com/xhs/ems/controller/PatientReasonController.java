@@ -1,5 +1,8 @@
 package com.xhs.ems.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
+import com.xhs.ems.excelTools.ExcelUtils;
+import com.xhs.ems.excelTools.JsGridReportBase;
+import com.xhs.ems.excelTools.TableData;
 import com.xhs.ems.service.PatientReasonService;
 
 /**
@@ -29,9 +35,21 @@ public class PatientReasonController {
 		return patientReasonService.getData(parameter);
 	}
 
-	@RequestMapping(value = "exportPatientReasonData", method = RequestMethod.POST)
-	public void export() {
+	@RequestMapping(value = "exportPatientReasonData", method = RequestMethod.GET)
+	public void export(Parameter parameter, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		logger.info("导出疾病原因统计到Excel");
+		response.setContentType("application/msexcel;charset=UTF-8");
+
+		String title = "疾病原因统计";
+		String[] headers = new String[] { "病因名称", "接诊人数", "比率" };
+		String[] fields = new String[] { "patientReason",
+				"receivePeopleNumbers", "rate" };
+		TableData td = ExcelUtils.createTableData(
+				patientReasonService.getData(parameter).getRows(),
+				ExcelUtils.createTableHeader(headers), fields);
+		JsGridReportBase report = new JsGridReportBase(request, response);
+		report.exportToExcel(title, "admin", td);
 	}
 
 }

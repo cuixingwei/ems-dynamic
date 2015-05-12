@@ -65,9 +65,6 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 		paramMap.put("endTime", parameter.getEndTime());
 		paramMap.put("overtimes", parameter.getOvertimes());
 
-		int page = (int) parameter.getPage();
-		int rows = (int) parameter.getRows();
-
 		List<AcceptSendCar> results = this.npJdbcTemplate.query(sql, paramMap,
 				new RowMapper<AcceptSendCar>() {
 					@Override
@@ -90,11 +87,19 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 					.getSendCarTimes()));
 		}
 		Grid grid = new Grid();
-		int fromIndex = (page - 1) * rows;
-		int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
-				* rows) ? results.size() : page * rows;
-		grid.setRows(results.subList(fromIndex, toIndex));
-		grid.setTotal(results.size());
+		if ((int) parameter.getPage() > 0) {
+			int page = (int) parameter.getPage();
+			int rows = (int) parameter.getRows();
+
+			int fromIndex = (page - 1) * rows;
+			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
+					* rows) ? results.size() : page * rows;
+			grid.setRows(results.subList(fromIndex, toIndex));
+			grid.setTotal(results.size());
+
+		} else {
+			grid.setRows(results);
+		}
 		return grid;
 	}
 

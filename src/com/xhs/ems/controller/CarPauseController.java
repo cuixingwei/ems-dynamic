@@ -1,5 +1,8 @@
 package com.xhs.ems.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,11 +12,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
+import com.xhs.ems.excelTools.ExcelUtils;
+import com.xhs.ems.excelTools.JsGridReportBase;
+import com.xhs.ems.excelTools.TableData;
 import com.xhs.ems.service.CarPauseService;
 
 /**
  * @author 崔兴伟
- * @datetime 2015年4月13日  下午4:44:44
+ * @datetime 2015年4月13日 下午4:44:44
  */
 @Controller
 @RequestMapping(value = "/page/base")
@@ -29,10 +35,23 @@ public class CarPauseController {
 		logger.info("车辆暂停调用原因查询");
 		return carPauseService.getData(parameter);
 	}
-	
-	@RequestMapping(value = "/exportCarPauseDatas", method = RequestMethod.POST)
-	public  void export(Parameter parameter) {
+
+	@RequestMapping(value = "/exportCarPauseDatas", method = RequestMethod.GET)
+	public void export(Parameter parameter, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		logger.info("导出车辆暂停调用原因数据到excel");
+		response.setContentType("application/msexcel;charset=UTF-8");
+
+		String title = "车辆暂停调用原因";
+		String[] headers = new String[] { "车辆", "司机", "暂停时长", "暂停时刻", "结束时刻",
+				"操作人", "暂停原因" };
+		String[] fields = new String[] { "carCode", "driver", "pauseTimes",
+				"pauseTime", "endTime", "dispatcher", "pauseReason" };
+		TableData td = ExcelUtils.createTableData(
+				carPauseService.getData(parameter).getRows(),
+				ExcelUtils.createTableHeader(headers), fields);
+		JsGridReportBase report = new JsGridReportBase(request, response);
+		report.exportToExcel(title, "admin", td);
 	}
 
 }

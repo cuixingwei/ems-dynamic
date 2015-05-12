@@ -86,9 +86,6 @@ public class DoctorNurseWorkDAOImpl implements DoctorNurseWorkDAO {
 		paramMap.put("endTime", parameter.getEndTime());
 		paramMap.put("station", parameter.getStation());
 
-		int page = (int) parameter.getPage();
-		int rows = (int) parameter.getRows();
-
 		String sql = "";
 		String doctorOrNurse = "1";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDoctorOrNurse())) {
@@ -124,11 +121,18 @@ public class DoctorNurseWorkDAOImpl implements DoctorNurseWorkDAO {
 					.getAverateCureTimes()));
 		}
 		Grid grid = new Grid();
-		int fromIndex = (page - 1) * rows;
-		int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
-				* rows) ? results.size() : page * rows;
-		grid.setRows(results.subList(fromIndex, toIndex));
-		grid.setTotal(results.size());
+		if ((int) parameter.getPage() > 0) {
+			int page = (int) parameter.getPage();
+			int rows = (int) parameter.getRows();
+			int fromIndex = (page - 1) * rows;
+			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
+					* rows) ? results.size() : page * rows;
+			grid.setRows(results.subList(fromIndex, toIndex));
+			grid.setTotal(results.size());
+
+		} else {
+			grid.setRows(results);
+		}
 		return grid;
 	}
 }

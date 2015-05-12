@@ -70,9 +70,6 @@ public class CarPauseDAOImpl implements CarPauseDAO {
 		paramMap.put("carCode", parameter.getCarCode());
 		paramMap.put("pauseReason", parameter.getPauseReason());
 
-		int page = (int) parameter.getPage();
-		int rows = (int) parameter.getRows();
-
 		List<CarPause> results = this.npJdbcTemplate.query(sql, paramMap,
 				new RowMapper<CarPause>() {
 					@Override
@@ -88,15 +85,23 @@ public class CarPauseDAOImpl implements CarPauseDAO {
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");
-		for(CarPause result:results){
+		for (CarPause result : results) {
 			result.setPauseTimes(CommonUtil.formatSecond(result.getPauseTimes()));
 		}
 		Grid grid = new Grid();
-		int fromIndex = (page - 1) * rows;
-		int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
-				* rows) ? results.size() : page * rows;
-		grid.setRows(results.subList(fromIndex, toIndex));
-		grid.setTotal(results.size());
+		if ((int) parameter.getPage() > 0) {
+			int page = (int) parameter.getPage();
+			int rows = (int) parameter.getRows();
+
+			int fromIndex = (page - 1) * rows;
+			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
+					* rows) ? results.size() : page * rows;
+			grid.setRows(results.subList(fromIndex, toIndex));
+			grid.setTotal(results.size());
+
+		} else {
+			grid.setRows(results);
+		}
 		return grid;
 	}
 

@@ -54,9 +54,6 @@ public class AcceptTimeDAOImpl implements AcceptTimeDAO {
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
 
-		int page = (int) parameter.getPage();
-		int rows = (int) parameter.getRows();
-
 		List<AcceptTime> results = this.npJdbcTemplate.query(sql, paramMap,
 				new RowMapper<AcceptTime>() {
 					@Override
@@ -71,18 +68,26 @@ public class AcceptTimeDAOImpl implements AcceptTimeDAO {
 								.getString("leaveTime"));
 					}
 				});
-		for(AcceptTime result:results){
+		for (AcceptTime result : results) {
 			result.setReadyTime(CommonUtil.formatSecond(result.getReadyTime()));
 			result.setLeaveTime(CommonUtil.formatSecond(result.getLeaveTime()));
 		}
 		logger.info("一共有" + results.size() + "条数据");
 
 		Grid grid = new Grid();
-		int fromIndex = (page - 1) * rows;
-		int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
-				* rows) ? results.size() : page * rows;
-		grid.setRows(results.subList(fromIndex, toIndex));
-		grid.setTotal(results.size());
+		if ((int) parameter.getPage() > 0) {
+			int page = (int) parameter.getPage();
+			int rows = (int) parameter.getRows();
+
+			int fromIndex = (page - 1) * rows;
+			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
+					* rows) ? results.size() : page * rows;
+			grid.setRows(results.subList(fromIndex, toIndex));
+			grid.setTotal(results.size());
+
+		} else {
+			grid.setRows(results);
+		}
 		return grid;
 	}
 

@@ -29,28 +29,15 @@
 	}
 
 	setInterval(show, 500);
-	$(document)
-			.ready(
-					function() {
-						/* 注销系统 */
-						$("#logOut").click(
-								function() {
-									$.post('logOut', function(result) {
-										location.replace(cxw.contextPath
-												+ '/index.jsp');
-									}, 'json');
-								});
+	$(document).ready(function() {
+		/* 注销系统 */
+		$("#logOut").click(function() {
+			$.post('logOut', function(result) {
+				location.replace(cxw.contextPath + '/index.jsp');
+			}, 'json');
+		});
 
-						/*  帮助 */
-						$("#helpUse")
-								.click(
-										function() {
-											window
-													.open("base/helpUse.jsp",
-															"newwin",
-															"location=no,toolbar=no,menubar=no,z-look=yes,resizable=no,scrollbars=yes");
-										});
-					});
+	});
 </script>
 <div class="hBgG"
 	style="width: 100%; height: 69px; background-color: #44ACFB;">
@@ -84,8 +71,6 @@
 	<div style="width: 220px; height: 38px; float: right; color: blue;">
 		<a onclick="$('#passwordDialog').dialog('open');"
 			style="width: 70px; height: 36px; line-height: 36px; text-align: center; vertical-align: middle; padding-left: 10px; background: url(../style/image/topmid_spilter.png) left center no-repeat;">修改密码</a>
-		<a id="helpUse"
-			style="width: 30px; height: 36px; line-height: 36px; vertical-align: middle; padding-left: 10px; background: url(../style/image/topmid_spilter.png) left center no-repeat;">帮助</a>
 		<a id="logOut"
 			style="width: 30px; height: 36px; line-height: 36px; vertical-align: middle; padding-left: 10px; background: url(../style/image/topmid_spilter.png) left center no-repeat;">退出</a>
 	</div>

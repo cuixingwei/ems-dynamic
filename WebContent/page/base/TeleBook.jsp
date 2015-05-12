@@ -13,7 +13,8 @@
 	var grid;
 	/* 导出数据 */
 	var exportData = function() {
-
+		var url = "exportTeleBookDatas";
+		window.location.href = url;
 	};
 	/* 合并单元格 */
 	/* 初始化页面标签 */
@@ -66,7 +67,7 @@
 				align : 'center'
 			}, {
 				field : 'remark',
-				title : '备注 ',
+				title : '备注',
 				width : "19.9%",
 				resizable : true,
 				align : 'center'
@@ -81,7 +82,7 @@
 			},
 			onLoadSuccess : function(data) {
 				parent.$.messager.progress('close');
-				cxw.mergeCellsByField("grid", "department,");
+				$(this).datagrid("autoMergeCells", [ 'department' ]);
 			}
 		});
 	}

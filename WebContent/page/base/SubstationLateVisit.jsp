@@ -12,7 +12,13 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-
+		var url = "exportSubstationLateVisitDatas?startTime="
+				+ $('#startTime').datetimebox('getValue') + "&endTime="
+				+ $('#endTime').datetimebox('getValue') + "&outCarTimesMax="
+				+ $('#outCarTimesMax').val() + "&station="
+				+ $('#station').combobox('getValue') + "&outCarTimesMin="
+				+ $('#outCarTimesMin').val();
+		window.location.href = url;
 	};
 	/* 初始化页面标签 */
 	function init() {

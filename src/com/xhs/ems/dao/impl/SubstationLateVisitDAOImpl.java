@@ -83,9 +83,6 @@ public class SubstationLateVisitDAOImpl implements SubstationLateVisitDAO {
 				+ "from #temp2 t2 left outer join #temp1 t1 on t1.eventCode=t2.eventCode "
 				+ "drop table #temp1,#temp2";
 
-		int page = (int) parameter.getPage();
-		int rows = (int) parameter.getRows();
-
 		List<SubstationLateVisit> results = this.namedParameterJdbcTemplate
 				.query(sql, paramMap, new RowMapper<SubstationLateVisit>() {
 					@Override
@@ -113,11 +110,18 @@ public class SubstationLateVisitDAOImpl implements SubstationLateVisitDAO {
 		}
 
 		Grid grid = new Grid();
-		int fromIndex = (page - 1) * rows;
-		int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
-				* rows) ? results.size() : page * rows;
-		grid.setRows(results.subList(fromIndex, toIndex));
-		grid.setTotal(results.size());
+		if ((int) parameter.getPage() > 0) {
+			int page = (int) parameter.getPage();
+			int rows = (int) parameter.getRows();
+			int fromIndex = (page - 1) * rows;
+			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
+					* rows) ? results.size() : page * rows;
+			grid.setRows(results.subList(fromIndex, toIndex));
+			grid.setTotal(results.size());
+
+		} else {
+			grid.setRows(results);
+		}
 		return grid;
 
 	}

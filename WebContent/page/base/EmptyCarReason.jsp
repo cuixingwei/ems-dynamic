@@ -12,7 +12,12 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-
+		var url = "exportEmptyCarReasonDatas?startTime="
+				+ $('#startTime').datetimebox('getValue') + "&endTime="
+				+ $('#endTime').datetimebox('getValue') + "&station="
+				+ $('#station').combobox('getValue') + "&emptyReason="
+				+ $('#emptyReason').combobox('getValue');
+		window.location.href = url;
 	};
 	/* 初始化页面标签 */
 	function init() {

@@ -78,9 +78,6 @@ public class DriverWorkDAOImpl implements DriverWorkDAO {
 		paramMap.put("endTime", parameter.getEndTime());
 		paramMap.put("startTime", parameter.getStartTime());
 
-		int page = (int) parameter.getPage();
-		int rows = (int) parameter.getRows();
-
 		List<DriverWork> results = this.npJdbcTemplate.query(sql, paramMap,
 				new RowMapper<DriverWork>() {
 					@Override
@@ -109,11 +106,18 @@ public class DriverWorkDAOImpl implements DriverWorkDAO {
 		}
 
 		Grid grid = new Grid();
-		int fromIndex = (page - 1) * rows;
-		int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
-				* rows) ? results.size() : page * rows;
-		grid.setRows(results.subList(fromIndex, toIndex));
-		grid.setTotal(results.size());
+		if ((int) parameter.getPage() > 0) {
+			int page = (int) parameter.getPage();
+			int rows = (int) parameter.getRows();
+			int fromIndex = (page - 1) * rows;
+			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
+					* rows) ? results.size() : page * rows;
+			grid.setRows(results.subList(fromIndex, toIndex));
+			grid.setTotal(results.size());
+
+		} else {
+			grid.setRows(results);
+		}
 		return grid;
 	}
 

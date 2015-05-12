@@ -68,9 +68,6 @@ public class EmptyCarDAOImpl implements EmptyCarDAO {
 		paramMap.put("station", parameter.getStation());
 		paramMap.put("emptyCarReason", parameter.getEmptyReason());
 
-		int page = (int) parameter.getPage();
-		int rows = (int) parameter.getRows();
-
 		List<EmptyCar> results = this.namedParameterJdbcTemplate.query(sql,
 				paramMap, new RowMapper<EmptyCar>() {
 					@Override
@@ -92,11 +89,19 @@ public class EmptyCarDAOImpl implements EmptyCarDAO {
 		}
 
 		Grid grid = new Grid();
-		int fromIndex = (page - 1) * rows;
-		int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
-				* rows) ? results.size() : page * rows;
-		grid.setRows(results.subList(fromIndex, toIndex));
-		grid.setTotal(results.size());
+		if ((int) parameter.getPage() > 0) {
+			int page = (int) parameter.getPage();
+			int rows = (int) parameter.getRows();
+
+			int fromIndex = (page - 1) * rows;
+			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
+					* rows) ? results.size() : page * rows;
+			grid.setRows(results.subList(fromIndex, toIndex));
+			grid.setTotal(results.size());
+
+		} else {
+			grid.setRows(results);
+		}
 		return grid;
 
 	}

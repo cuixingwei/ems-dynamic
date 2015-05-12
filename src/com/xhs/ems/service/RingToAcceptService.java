@@ -11,4 +11,5 @@ public interface RingToAcceptService {
 	 * @return
 	 */
 	public Grid getData(Parameter parameter);
+
 }

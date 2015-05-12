@@ -12,7 +12,15 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-
+		var url = "exportStopTaskDatas?startTime="
+				+ $('#startTime').datetimebox('getValue') + "&endTime="
+				+ $('#endTime').datetimebox('getValue') + "&station="
+				+ $('#station').combobox('getValue') + "&stopReason="
+				+ $('#stopReason').combobox('getValue') + "&carCode="
+				+ $('#carCode').combobox('getValue') + "&dispatcher="
+				+ $('#dispatcher').combobox('getValue') + "&emptyRunTime="
+				+ $('#emptyRunTime').val();
+		window.location.href = url;
 	};
 	/* 初始化页面标签 */
 	function init() {
@@ -100,7 +108,7 @@
 						align : 'center'
 					}, {
 						field : 'emptyRunTime',
-						title : '空跑时长	',
+						title : '空跑时长',
 						resizable : true,
 						width : "10%",
 						align : 'center',

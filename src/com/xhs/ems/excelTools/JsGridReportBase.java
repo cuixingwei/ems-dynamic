@@ -536,6 +536,7 @@ public class JsGridReportBase {
 	 */
 	@SuppressWarnings("unchecked")
 	public void exportToExcel(ZipOutputStream zout, ExcelBean bean)throws Exception {
+		@SuppressWarnings("rawtypes")
 		List list = bean.getList();
 
 		HSSFWorkbook wb = new HSSFWorkbook();// 创建新的Excel 工作簿

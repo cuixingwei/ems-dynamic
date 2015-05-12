@@ -12,7 +12,11 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-
+		var url = "exportDriverWorkDatas?startTime="
+				+ $('#startTime').datetimebox('getValue') + "&endTime="
+				+ $('#endTime').datetimebox('getValue') + "&station="
+				+ $('#station').combobox('getValue');
+		window.location.href = url;
 	};
 	/* 初始化页面标签 */
 	function init() {
@@ -115,7 +119,7 @@
 					},
 					onLoadSuccess : function(data) {
 						parent.$.messager.progress('close');
-						cxw.mergeCellsByField("grid", "station,");
+						$(this).datagrid("autoMergeCells", [ 'station' ]);
 					}
 				});
 	}

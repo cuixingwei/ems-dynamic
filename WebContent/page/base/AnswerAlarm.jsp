@@ -12,7 +12,13 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-
+		var url = "exportAnswerAlarmDatas?startTime="
+				+ $('#startTime').datetimebox('getValue') + "&endTime="
+				+ $('#endTime').datetimebox('getValue') + "&alarmPhone="
+				+ $('#alarmPhone').val() + "&dispatcher="
+				+ $('#dispatcher').combobox('getValue') + "&siteAddress="
+				+ $('#siteAddress').val();
+		window.location.href = url;
 	};
 	/* 初始化页面标签 */
 	function init() {

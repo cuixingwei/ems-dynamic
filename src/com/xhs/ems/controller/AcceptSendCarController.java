@@ -1,5 +1,8 @@
 package com.xhs.ems.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.xhs.ems.bean.AcceptSendCarDetail;
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
+import com.xhs.ems.excelTools.ExcelUtils;
+import com.xhs.ems.excelTools.JsGridReportBase;
+import com.xhs.ems.excelTools.TableData;
 import com.xhs.ems.service.AcceptSendCarService;
 
 /**
@@ -37,8 +43,23 @@ public class AcceptSendCarController {
 		return acceptSendCarService.getDetail(parameter.getId());
 	}
 
-	@RequestMapping(value = "/exportAcceptSendCarDatas", method = RequestMethod.POST)
-	public void export(Parameter parameter) {
+	@RequestMapping(value = "/exportAcceptSendCarDatas", method = RequestMethod.GET)
+	public void export(Parameter parameter, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		logger.info("开始受理到派车大于X秒统计");
+		response.setContentType("application/msexcel;charset=UTF-8");
+
+		String title = "开始受理到派车大于X秒统计";
+		String[] headers = new String[] { "调度员", "开始受理时刻", "派车时刻", "受理类型",
+				"呼救号码", "派车时长", "受理备注" };
+		String[] fields = new String[] { "dispatcher", "startAcceptTime",
+				"sendCarTime", "acceptType", "ringPhone", "sendCarTimes",
+				"remark" };
+		int spanCount = 1; // 需要合并的列数。从第1列开始到指定列。
+		TableData td = ExcelUtils.createTableData(
+				acceptSendCarService.getData(parameter).getRows(),
+				ExcelUtils.createTableHeader(headers, spanCount), fields);
+		JsGridReportBase report = new JsGridReportBase(request, response);
+		report.exportToExcel(title, "admin", td);
 	}
 }

@@ -77,9 +77,6 @@ public class CarWorkDAOImpl implements CarWorkDAO {
 		paramMap.put("station", parameter.getStation());
 		paramMap.put("carCode", parameter.getCarCode());
 
-		int page = (int) parameter.getPage();
-		int rows = (int) parameter.getRows();
-
 		List<CarWork> results = this.npJdbcTemplate.query(sql, paramMap,
 				new RowMapper<CarWork>() {
 					@Override
@@ -102,11 +99,18 @@ public class CarWorkDAOImpl implements CarWorkDAO {
 					.getAverageOutCarTimes()));
 		}
 		Grid grid = new Grid();
-		int fromIndex = (page - 1) * rows;
-		int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
-				* rows) ? results.size() : page * rows;
-		grid.setRows(results.subList(fromIndex, toIndex));
-		grid.setTotal(results.size());
+		if ((int) parameter.getPage() > 0) {
+			int page = (int) parameter.getPage();
+			int rows = (int) parameter.getRows();
+			int fromIndex = (page - 1) * rows;
+			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
+					* rows) ? results.size() : page * rows;
+			grid.setRows(results.subList(fromIndex, toIndex));
+			grid.setTotal(results.size());
+
+		} else {
+			grid.setRows(results);
+		}
 		return grid;
 	}
 
