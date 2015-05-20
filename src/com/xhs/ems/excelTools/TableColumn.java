@@ -178,11 +178,11 @@ public class TableColumn {
 
 	public String getColumnStringType(int columnType) {
 		String stringType = "string";
-		if (columnType == this.COLUMN_TYPE_INTEGER) {
+		if (columnType == TableColumn.COLUMN_TYPE_INTEGER) {
 			stringType = "int";
-		} else if (columnType == this.COLUMN_TYPE_FLOAT_2) {
+		} else if (columnType == TableColumn.COLUMN_TYPE_FLOAT_2) {
 			stringType = "float";
-		} else if (columnType == this.COLUMN_TYPE_FLOAT_3) {
+		} else if (columnType == TableColumn.COLUMN_TYPE_FLOAT_3) {
 			stringType = "float";
 		}
 		return stringType;

@@ -16,6 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.beanutils.converters.CalendarConverter;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
@@ -38,6 +40,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.core.io.ClassPathResource;
 
 import com.xhs.ems.bean.DataCount;
+import com.xhs.ems.bean.Parameter;
 
 public class JsGridReportBase {
 	public SimpleDateFormat timeFormat = new SimpleDateFormat(
@@ -54,9 +57,9 @@ public class JsGridReportBase {
 	/**
 	 * 大数据量导出静态变量
 	 */
-	public static int EXCEL_MAX_CNT = 100000; //每个excel文件多少条数据
-	public static int SHEET_MAX_CNT = 20000; //每个sheet多少条数据
-	
+	public static int EXCEL_MAX_CNT = 100000; // 每个excel文件多少条数据
+	public static int SHEET_MAX_CNT = 20000; // 每个sheet多少条数据
+
 	public JsGridReportBase() {
 	}
 
@@ -211,38 +214,50 @@ public class JsGridReportBase {
 			}
 		}
 	}
-	
+
 	/**
 	 * 写入工作表
-	 * @param wb Excel工作簿
-	 * @param title Sheet工作表名称
-	 * @param styles 表头样式
-	 * @param creator 创建人
-	 * @param tableData 表格数据
+	 * 
+	 * @param wb
+	 *            Excel工作簿
+	 * @param title
+	 *            Sheet工作表名称
+	 * @param styles
+	 *            表头样式
+	 * @param creator
+	 *            创建人
+	 * @param tableData
+	 *            表格数据
 	 * @throws Exception
 	 */
-	public HSSFWorkbook writeSheet(HSSFWorkbook wb, String title, HashMap<String, HSSFCellStyle> styles, String creator, TableData tableData) throws Exception {
+	public HSSFWorkbook writeSheet(HSSFWorkbook wb, String title,
+			HashMap<String, HSSFCellStyle> styles, String creator,
+			TableData tableData, Parameter parameter) throws Exception {
 
 		TableHeaderMetaData headerMetaData = tableData.getTableHeader();// 获得HTML的表头元素
-		
-		SimpleDateFormat formater = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
-		String create_time = formater.format(new Date());
-		
+
+		SimpleDateFormat formater = new SimpleDateFormat(
+				"yyyy年MM月dd日 HH时mm分ss秒");
+		String startTime = formater.format(new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss").parse(parameter.getStartTime()));
+		String endTime = formater.format(new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss").parse(parameter.getEndTime()));
+
 		HSSFSheet sheet = wb.createSheet(title);// 在Excel工作簿中建一工作表
 		sheet.setDisplayGridlines(false);// 设置表标题是否有表格边框
 
-		//创建标题
+		// 创建标题
 		HSSFRow row = sheet.createRow(0);// 创建新行
 		HSSFCell cell = row.createCell(0);// 创建新列
 		int rownum = 0;
 		cell.setCellValue(new HSSFRichTextString(title));
-		HSSFCellStyle style = styles.get("TITLE");//设置标题样式
+		HSSFCellStyle style = styles.get("TITLE");// 设置标题样式
 		if (style != null)
 			cell.setCellStyle(style);
 		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headerMetaData
-				.getColumnCount() - 1));//合并标题行：起始行号，终止行号， 起始列号，终止列号
-		
-		//创建副标题
+				.getColumnCount() - 1));// 合并标题行：起始行号，终止行号， 起始列号，终止列号
+
+		// 创建副标题
 		row = sheet.createRow(1);
 		cell = row.createCell(0);
 		cell.setCellValue(new HSSFRichTextString("创建人:"));
@@ -257,14 +272,20 @@ public class JsGridReportBase {
 			cell.setCellStyle(style);
 
 		cell = row.createCell(2);
-		cell.setCellValue(new HSSFRichTextString("创建时间:"));
+		cell.setCellValue(new HSSFRichTextString("统计时间:"));
 		style = styles.get("SUB_TITLE");
 		if (style != null)
 			cell.setCellStyle(style);
 
 		cell = row.createCell(3);
 		style = styles.get("SUB_TITLE2");
-		cell.setCellValue(new HSSFRichTextString(create_time));
+		cell.setCellValue(new HSSFRichTextString(startTime+"  至"));
+		if (style != null)
+			cell.setCellStyle(style);
+
+		cell = row.createCell(4);
+		style = styles.get("SUB_TITLE2");
+		cell.setCellValue(new HSSFRichTextString(endTime));
 		if (style != null)
 			cell.setCellStyle(style);
 
@@ -327,102 +348,113 @@ public class JsGridReportBase {
 			rownum++;
 		}
 
-		stopGrouping(sheet, word, counter, 0, index, rownum, styles
-				.get("STRING"));
+		stopGrouping(sheet, word, counter, 0, index, rownum,
+				styles.get("STRING"));
 		// 设置前两列根据数据自动列宽
 		for (int c = 0; c < headerMetaData.getColumns().size(); c++) {
 			sheet.autoSizeColumn((short) c);
 			String t = headerMetaData.getColumns().get(c).getDisplay();
-			if(sheet.getColumnWidth(c)<t.length()*256*3)
-				sheet.setColumnWidth(c, t.length()*256*3);
+			if (sheet.getColumnWidth(c) < t.length() * 256 * 3)
+				sheet.setColumnWidth(c, t.length() * 256 * 3);
 		}
 		sheet.setGridsPrinted(true);
-		
+
 		return wb;
 	}
-	
+
 	/**
 	 * 写入工作表
-	 * @param wb Excel工作簿
-	 * @param title Sheet工作表名称
-	 * @param styles 表头样式
-	 * @param creator 创建人
-	 * @param tableData 表格数据
+	 * 
+	 * @param wb
+	 *            Excel工作簿
+	 * @param title
+	 *            Sheet工作表名称
+	 * @param styles
+	 *            表头样式
+	 * @param creator
+	 *            创建人
+	 * @param tableData
+	 *            表格数据
 	 * @throws Exception
 	 */
-	public HSSFWorkbook writeSheet(HSSFWorkbook wb, HashMap<String, HSSFCellStyle> styles, String creator, List<TableData> tableDataLst) throws Exception {
-		
+	public HSSFWorkbook writeSheet(HSSFWorkbook wb,
+			HashMap<String, HSSFCellStyle> styles, String creator,
+			List<TableData> tableDataLst) throws Exception {
+
 		SimpleDateFormat formater = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 		String create_time = formater.format(new Date());
-		
+
 		int cnt = 1;
-		for(TableData tableData : tableDataLst){
+		for (TableData tableData : tableDataLst) {
 			String sheetTitle = tableData.getSheetTitle();
-			sheetTitle = sheetTitle==null||sheetTitle.equals("")?"sheet"+cnt:sheetTitle;
+			sheetTitle = sheetTitle == null || sheetTitle.equals("") ? "sheet"
+					+ cnt : sheetTitle;
 			cnt++;
-	
+
 			TableHeaderMetaData headerMetaData = tableData.getTableHeader();// 获得HTML的表头元素
 			HSSFSheet sheet = wb.createSheet(sheetTitle);// 在Excel工作簿中建一工作表
 			sheet.setDisplayGridlines(false);// 设置表标题是否有表格边框
 			wb.cloneSheet(0);
-			
-			//创建标题
+
+			// 创建标题
 			HSSFRow row = sheet.createRow(0);// 创建新行
 			HSSFCell cell = row.createCell(0);// 创建新列
 			int rownum = 0;
 			cell.setCellValue(new HSSFRichTextString(sheetTitle));
-			HSSFCellStyle style = styles.get("TITLE");//设置标题样式
+			HSSFCellStyle style = styles.get("TITLE");// 设置标题样式
 			if (style != null)
 				cell.setCellStyle(style);
 			sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headerMetaData
-					.getColumnCount() - 1));//合并标题行：起始行号，终止行号， 起始列号，终止列号
-			
-			//创建副标题
+					.getColumnCount() - 1));// 合并标题行：起始行号，终止行号， 起始列号，终止列号
+
+			// 创建副标题
 			row = sheet.createRow(1);
 			cell = row.createCell(0);
 			cell.setCellValue(new HSSFRichTextString("创建人:"));
 			style = styles.get("SUB_TITLE");
 			if (style != null)
 				cell.setCellStyle(style);
-			
+
 			cell = row.createCell(1);
 			cell.setCellValue(new HSSFRichTextString(creator));
 			style = styles.get("SUB_TITLE2");
 			if (style != null)
 				cell.setCellStyle(style);
-			
+
 			cell = row.createCell(2);
 			cell.setCellValue(new HSSFRichTextString("创建时间:"));
 			style = styles.get("SUB_TITLE");
 			if (style != null)
 				cell.setCellStyle(style);
-			
+
 			cell = row.createCell(3);
 			style = styles.get("SUB_TITLE2");
 			cell.setCellValue(new HSSFRichTextString(create_time));
 			if (style != null)
 				cell.setCellStyle(style);
-			
+
 			rownum = 3;// 如果rownum = 1，则去掉创建人、创建时间等副标题；如果rownum = 0， 则把标题也去掉
-			
+
 			HSSFCellStyle headerstyle = styles.get("TABLE_HEADER");
-			
+
 			int colnum = 0;
 			for (int i = 0; i < headerMetaData.getOriginColumns().size(); i++) {
 				TableColumn tc = headerMetaData.getOriginColumns().get(i);
 				if (i != 0) {
-					colnum += headerMetaData.getOriginColumns().get(i - 1).getLength();
+					colnum += headerMetaData.getOriginColumns().get(i - 1)
+							.getLength();
 				}
-				generateColumn(sheet, tc, headerMetaData.maxlevel, rownum, colnum, headerstyle);
+				generateColumn(sheet, tc, headerMetaData.maxlevel, rownum,
+						colnum, headerstyle);
 			}
 			rownum += headerMetaData.maxlevel;
-			
+
 			List<TableDataRow> dataRows = tableData.getRows();
-			
+
 			int index = 0;
 			for (TableDataRow dataRow : dataRows) {
 				row = sheet.createRow(rownum);
-				
+
 				List<TableDataCell> dataCells = dataRow.getCells();
 				int size = headerMetaData.getColumns().size();
 				index = -1;
@@ -431,7 +463,7 @@ public class JsGridReportBase {
 					if (!tc.isVisible())
 						continue;
 					index++;
-					
+
 					createCell(row, tc, dataCells, i, index, styles);
 				}
 				rownum++;
@@ -440,12 +472,12 @@ public class JsGridReportBase {
 			for (int c = 0; c < headerMetaData.getColumns().size(); c++) {
 				sheet.autoSizeColumn((short) c);
 				String t = headerMetaData.getColumns().get(c).getDisplay();
-				if(sheet.getColumnWidth(c)<t.length()*256*3)
-					sheet.setColumnWidth(c, t.length()*256*3);
+				if (sheet.getColumnWidth(c) < t.length() * 256 * 3)
+					sheet.setColumnWidth(c, t.length() * 256 * 3);
 			}
 			sheet.setGridsPrinted(true);
 		}
-		
+
 		return wb;
 	}
 
@@ -463,14 +495,14 @@ public class JsGridReportBase {
 	 *         bgcolor:#FFFFFF; </style> <style name="row1"> import(parent);
 	 *         bgcolor:#CAEAFE; </style>
 	 */
-	public void exportToExcel(String title, String creator, TableData tableData)
-			throws Exception {
+	public void exportToExcel(String title, String creator,
+			TableData tableData, Parameter parameter) throws Exception {
 
 		HSSFWorkbook wb = new HSSFWorkbook();// 创建新的Excel 工作簿
-		
+
 		HashMap<String, HSSFCellStyle> styles = initStyles(wb);// 根据模板文件，初始化表头样式
-		
-		wb = writeSheet(wb,title,styles,creator,tableData);//写入工作表
+
+		wb = writeSheet(wb, title, styles, creator, tableData, parameter);// 写入工作表
 
 		String sFileName = title + ".xls";
 		response.setHeader("Content-Disposition", "attachment;filename="
@@ -480,7 +512,7 @@ public class JsGridReportBase {
 
 		wb.write(response.getOutputStream());
 	}
-	
+
 	/**
 	 * 导出Excel(多工作表)
 	 * 
@@ -495,29 +527,31 @@ public class JsGridReportBase {
 	 *         bgcolor:#FFFFFF; </style> <style name="row1"> import(parent);
 	 *         bgcolor:#CAEAFE; </style>
 	 */
-	public void exportToExcel(String title, String creator, List<TableData> tableDataLst)
-		throws Exception {
-		
+	public void exportToExcel(String title, String creator,
+			List<TableData> tableDataLst, Parameter parameter) throws Exception {
+
 		HSSFWorkbook wb = new HSSFWorkbook();// 创建新的Excel 工作簿
 		HashMap<String, HSSFCellStyle> styles = initStyles(wb);// 初始化表头样式
 
 		int i = 1;
-		for(TableData tableData : tableDataLst){
+		for (TableData tableData : tableDataLst) {
 			String sheetTitle = tableData.getSheetTitle();
-			sheetTitle = sheetTitle==null||sheetTitle.equals("")?"sheet"+i:sheetTitle;
-			wb = writeSheet(wb,tableData.getSheetTitle(),styles,creator,tableData);//写入工作表
+			sheetTitle = sheetTitle == null || sheetTitle.equals("") ? "sheet"
+					+ i : sheetTitle;
+			wb = writeSheet(wb, tableData.getSheetTitle(), styles, creator,
+					tableData, parameter);// 写入工作表
 			i++;
 		}
-		
+
 		String sFileName = title + ".xls";
 		response.setHeader("Content-Disposition", "attachment;filename="
 				.concat(String.valueOf(URLEncoder.encode(sFileName, "UTF-8"))));
 		response.setHeader("Connection", "close");
 		response.setHeader("Content-Type", "application/vnd.ms-excel");
-		
+
 		wb.write(response.getOutputStream());
 	}
-	
+
 	/**
 	 * 大数据量ZIP包导出Excel(多文件、多工作表)
 	 * 
@@ -535,23 +569,24 @@ public class JsGridReportBase {
 	 *         bgcolor:#CAEAFE; </style>
 	 */
 	@SuppressWarnings("unchecked")
-	public void exportToExcel(ZipOutputStream zout, ExcelBean bean)throws Exception {
+	public void exportToExcel(ZipOutputStream zout, ExcelBean bean)
+			throws Exception {
 		@SuppressWarnings("rawtypes")
 		List list = bean.getList();
 
 		HSSFWorkbook wb = new HSSFWorkbook();// 创建新的Excel 工作簿
 		HashMap<String, HSSFCellStyle> styles = initStyles(wb);// 初始化表头样式
-		
+
 		int excel_num = list.size() / EXCEL_MAX_CNT; // 此数据分几个excel
 		if (list.size() % EXCEL_MAX_CNT > 0) {
 			excel_num += 1;
 		}
-		int start=0,end=0;//xls文件的开始记录和结束记录索引
-		int _start=0,_end=0;//sheet的开始记录和结束记录索引
+		int start = 0, end = 0;// xls文件的开始记录和结束记录索引
+		int _start = 0, _end = 0;// sheet的开始记录和结束记录索引
 		for (int i = 1; i <= excel_num; i++) {
-			start = (i-1) * EXCEL_MAX_CNT;
+			start = (i - 1) * EXCEL_MAX_CNT;
 			end = i * EXCEL_MAX_CNT - 1;
-			end = end>list.size()?list.size():end;
+			end = end > list.size() ? list.size() : end;
 			List<DataCount> sublist = list.subList(start, end);
 			System.out.println("正在导出第 " + i + " 个文件！");
 			int sheet_num = sublist.size() / SHEET_MAX_CNT; // 此excel文件分几个sheet
@@ -559,31 +594,41 @@ public class JsGridReportBase {
 				sheet_num += 1;
 			}
 
-	        List<TableData> tds = new ArrayList<TableData>();
-	        TableData td = null;
-			for(int j = 1; j <= sheet_num; j++){
-				_start = (j-1) * SHEET_MAX_CNT;
+			List<TableData> tds = new ArrayList<TableData>();
+			TableData td = null;
+			for (int j = 1; j <= sheet_num; j++) {
+				_start = (j - 1) * SHEET_MAX_CNT;
 				_end = j * SHEET_MAX_CNT - 1;
-				_end = _end>sublist.size()?sublist.size():_end;
-				System.out.println("正在导出第"+j+"个sheet：第"+(start+_start+1)+"~"+(start+_start+_end+1)+"条记录");
+				_end = _end > sublist.size() ? sublist.size() : _end;
+				System.out.println("正在导出第" + j + "个sheet：第"
+						+ (start + _start + 1) + "~"
+						+ (start + _start + _end + 1) + "条记录");
 				List<DataCount> sheetLst = sublist.subList(_start, _end);
-				if(bean.getChildren()!=null && bean.getChildren().length>0)
-					td = ExcelUtils.createTableData(sheetLst, ExcelUtils.createTableHeader(bean.getHearders(),bean.getChildren()),bean.getFields());
+				if (bean.getChildren() != null && bean.getChildren().length > 0)
+					td = ExcelUtils.createTableData(sheetLst, ExcelUtils
+							.createTableHeader(bean.getHearders(),
+									bean.getChildren()), bean.getFields());
 				else
-					td = ExcelUtils.createTableData(sheetLst, ExcelUtils.createTableHeader(bean.getHearders()),bean.getFields());
-		        td.setSheetTitle("第"+(start+_start+1)+"~"+(start+_start+_end+1)+"条记录");
-		        tds.add(td);
+					td = ExcelUtils.createTableData(sheetLst,
+							ExcelUtils.createTableHeader(bean.getHearders()),
+							bean.getFields());
+				td.setSheetTitle("第" + (start + _start + 1) + "~"
+						+ (start + _start + _end + 1) + "条记录");
+				tds.add(td);
 			}
-			wb = writeSheet(wb,styles,bean.getCreator(),tds);//写入工作表
-			
+			wb = writeSheet(wb, styles, bean.getCreator(), tds);// 写入工作表
+
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			wb.write(baos);
 			baos.flush();
 			byte[] aa = baos.toByteArray();
 
-			String sFileName = bean.getTitle() + "(" + (start+1) + "~" + (end+1) + ")" + ".xls";
-//			fileNames = java.net.URLEncoder.encode(sFileName, "UTF-8");// 处理中文文件名的问题
-//			fileNames = new String(sFileName.getBytes("UTF-8"), "GBK"); // 处理中文文件名的问题
+			String sFileName = bean.getTitle() + "(" + (start + 1) + "~"
+					+ (end + 1) + ")" + ".xls";
+			// fileNames = java.net.URLEncoder.encode(sFileName, "UTF-8");//
+			// 处理中文文件名的问题
+			// fileNames = new String(sFileName.getBytes("UTF-8"), "GBK"); //
+			// 处理中文文件名的问题
 			downloadFile = new ByteArrayInputStream(aa, 0, aa.length);
 			ZipEntry entry = new ZipEntry(sFileName); // 实例化条目列表
 			zout.putNextEntry(entry); // 将ZIP条目列表写入输出流
@@ -663,39 +708,40 @@ public class JsGridReportBase {
 	}
 
 	/**
-	 * 根据模板初始化样式
-	 * 		注意：module.xls模板文件跟该类同一路径
+	 * 根据模板初始化样式 注意：module.xls模板文件跟该类同一路径
+	 * 
 	 * @param wb
 	 * @return
 	 */
 	private HashMap<String, HSSFCellStyle> initStyles(HSSFWorkbook wb) {
 		HashMap<String, HSSFCellStyle> ret = new HashMap<String, HSSFCellStyle>();
 		try {
-			ClassPathResource res = new ClassPathResource("module.xls", this.getClass());//注意：module.xls模板文件跟该类同一路径
+			ClassPathResource res = new ClassPathResource("module.xls",
+					this.getClass());// 注意：module.xls模板文件跟该类同一路径
 			InputStream is = res.getInputStream();
 			POIFSFileSystem fs = new POIFSFileSystem(is);
-			
+
 			HSSFWorkbook src = new HSSFWorkbook(fs);
 			HSSFSheet sheet = src.getSheetAt(0);
 
-			buildStyle(wb, src, sheet, 0, ret, "TITLE");//标题样式
-			buildStyle(wb, src, sheet, 1, ret, "SUB_TITLE");//副标题样式
-			buildStyle(wb, src, sheet, 2, ret, "SUB_TITLE2");//副标题2样式
+			buildStyle(wb, src, sheet, 0, ret, "TITLE");// 标题样式
+			buildStyle(wb, src, sheet, 1, ret, "SUB_TITLE");// 副标题样式
+			buildStyle(wb, src, sheet, 2, ret, "SUB_TITLE2");// 副标题2样式
 
-			buildStyle(wb, src, sheet, 4, ret, "TABLE_HEADER");//表头样式
-			buildStyle(wb, src, sheet, 5, ret, "STRING");//字符串单元格样式
-			buildStyle(wb, src, sheet, 6, ret, "INT");//整数单元格样式
-			buildStyle(wb, src, sheet, 7, ret, "D2");//2位小数单元格样式
-			buildStyle(wb, src, sheet, 8, ret, "D3");//3位小数单元格样式
+			buildStyle(wb, src, sheet, 4, ret, "TABLE_HEADER");// 表头样式
+			buildStyle(wb, src, sheet, 5, ret, "STRING");// 字符串单元格样式
+			buildStyle(wb, src, sheet, 6, ret, "INT");// 整数单元格样式
+			buildStyle(wb, src, sheet, 7, ret, "D2");// 2位小数单元格样式
+			buildStyle(wb, src, sheet, 8, ret, "D3");// 3位小数单元格样式
 
-			buildStyle(wb, src, sheet, 10, ret, "STRING_C");//字符串单元格样式（带背景色）
-			buildStyle(wb, src, sheet, 11, ret, "INT_C");//整数单元格样式（带背景色）
-			buildStyle(wb, src, sheet, 12, ret, "D2_C");//2位小数单元格样式（带背景色）
-			buildStyle(wb, src, sheet, 13, ret, "D3_C");//3位小数单元格样式（带背景色）
+			buildStyle(wb, src, sheet, 10, ret, "STRING_C");// 字符串单元格样式（带背景色）
+			buildStyle(wb, src, sheet, 11, ret, "INT_C");// 整数单元格样式（带背景色）
+			buildStyle(wb, src, sheet, 12, ret, "D2_C");// 2位小数单元格样式（带背景色）
+			buildStyle(wb, src, sheet, 13, ret, "D3_C");// 3位小数单元格样式（带背景色）
 
-			buildStyle(wb, src, sheet, 15, ret, "RED_BG");//红色单元格背景
-			buildStyle(wb, src, sheet, 16, ret, "YELLOW_BG");//黄色单元格背景
-			buildStyle(wb, src, sheet, 17, ret, "GREEN_BG");//绿色单元格背景
+			buildStyle(wb, src, sheet, 15, ret, "RED_BG");// 红色单元格背景
+			buildStyle(wb, src, sheet, 16, ret, "YELLOW_BG");// 黄色单元格背景
+			buildStyle(wb, src, sheet, 17, ret, "GREEN_BG");// 绿色单元格背景
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

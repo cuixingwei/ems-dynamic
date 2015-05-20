@@ -5,8 +5,6 @@
 	String contextPath = request.getContextPath();
 	SessionInfo sessionInfo = (SessionInfo) session
 			.getAttribute("sessionInfo");
-	String stationName = "未知分站";
-	String userName = "未知人员";
 %>
 <script type="text/javascript" charset="utf-8">
 	function GetTimes(tCount) {
@@ -50,16 +48,10 @@
 		style="width: 150px; height: 38px; float: left;"></div>
 	<div
 		style="width: 220px; height: 38px; float: left; background: url(../style/image/topmid_spilter.png) right center no-repeat;">
-		<%
-			if (sessionInfo != null) {
-				stationName = sessionInfo.getUser().getStationName();
-				userName = sessionInfo.getUser().getName();
-			}
-		%>
 		<span
-			style="background: url(../style/image/curretperon.png) left center no-repeat; padding-left: 20px; margin-top: 12px; margin-left: 10px; display: inline-block;"><%=stationName%></span>
+			style="background: url(../style/image/curretperon.png) left center no-repeat; padding-left: 20px; margin-top: 12px; margin-left: 10px; display: inline-block;"><%=sessionInfo.getUser().getStationName()%></span>
 		<span
-			style="background: url(../style/image/station.png) left center no-repeat; padding-left: 20px; margin-left: 10px;"><%=userName%></span>
+			style="background: url(../style/image/station.png) left center no-repeat; padding-left: 20px; margin-left: 10px;"><%=sessionInfo.getUser().getName()%></span>
 	</div>
 
 	<span id="a"

@@ -2,6 +2,7 @@ package com.xhs.ems.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
+import com.xhs.ems.bean.SessionInfo;
 import com.xhs.ems.excelTools.ExcelUtils;
 import com.xhs.ems.excelTools.JsGridReportBase;
 import com.xhs.ems.excelTools.TableData;
@@ -49,7 +51,16 @@ public class CallSpotTypeController {
 				callSpotTypeService.getData(parameter).getRows(),
 				ExcelUtils.createTableHeader(headers), fields);
 		JsGridReportBase report = new JsGridReportBase(request, response);
-		report.exportToExcel(title, "admin", td);
+		
+		HttpSession session = request.getSession();
+		SessionInfo sessionInfo = (SessionInfo) session
+				.getAttribute("sessionInfo");
+		if (null != sessionInfo) {
+			report.exportToExcel(title, sessionInfo.getUser().getName(), td,
+					parameter);
+		} else {
+			report.exportToExcel(title, "", td, parameter);
+		}
 	}
 
 }

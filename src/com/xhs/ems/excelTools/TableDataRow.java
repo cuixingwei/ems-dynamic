@@ -60,6 +60,7 @@ public class TableDataRow {
 		addCell(cell);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void addCell(Object value) {
 		if (value instanceof String) {
 			addCell((String) value);

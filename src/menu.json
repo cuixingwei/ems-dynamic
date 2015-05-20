@@ -6,7 +6,7 @@
     			"url":""
     		},
     	"checked":false,
-    	"iconCls":"ext-icon-world",
+    	"iconCls":"ext-icon-application_side_tree",
     	"id":"0",
     	"state":"open",
     	"text":"调度统计"
@@ -122,9 +122,9 @@
     			"url":""
     		},
     	"checked":false,
-    	"iconCls":"ext-icon-world",
+    	"iconCls":"ext-icon-application_side_tree",
     	"id":"1",
-    	"state":"open",
+    	"state":"closed",
     	"text":"工作统计"
     },
     {
@@ -290,9 +290,9 @@
     			"url":""
     		},
     	"checked":false,
-    	"iconCls":"ext-icon-world",
+    	"iconCls":"ext-icon-application_side_tree",
     	"id":"2",
-    	"state":"open",
+    	"state":"closed",
     	"text":"分站统计"
     },
     {
@@ -380,9 +380,9 @@
     			"url":""
     		},
     	"checked":false,
-    	"iconCls":"ext-icon-world",
+    	"iconCls":"ext-icon-application_side_tree",
     	"id":"3",
-    	"state":"open",
+    	"state":"closed",
     	"text":"医务统计"
     },
     {

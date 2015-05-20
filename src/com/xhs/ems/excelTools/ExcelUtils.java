@@ -195,6 +195,7 @@ public class ExcelUtils {
 		return new ZipOutputStream(os); 
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static void copySheetStyle(HSSFWorkbook destwb, HSSFSheet dest,
 			HSSFWorkbook srcwb, HSSFSheet src) {
 		if (src == null || dest == null)
@@ -473,6 +474,7 @@ public class ExcelUtils {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void copyRow(HSSFWorkbook destwb, HSSFRow dest,
 			HSSFWorkbook srcwb, HSSFRow src) {
 		if (src == null || dest == null)

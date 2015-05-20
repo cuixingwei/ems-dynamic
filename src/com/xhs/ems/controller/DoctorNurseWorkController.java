@@ -2,6 +2,7 @@ package com.xhs.ems.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
+import com.xhs.ems.bean.SessionInfo;
 import com.xhs.ems.excelTools.ExcelUtils;
 import com.xhs.ems.excelTools.JsGridReportBase;
 import com.xhs.ems.excelTools.TableData;
@@ -52,10 +54,24 @@ public class DoctorNurseWorkController {
 				.getData(parameter).getRows(), ExcelUtils.createTableHeader(
 				headers, spanCount), fields);
 		JsGridReportBase report = new JsGridReportBase(request, response);
-		if (Integer.parseInt(parameter.getDoctorOrNurse()) == 1) {
-			report.exportToExcel(title1, "admin", td);
+
+		HttpSession session = request.getSession();
+		SessionInfo sessionInfo = (SessionInfo) session
+				.getAttribute("sessionInfo");
+		if (null != sessionInfo) {
+			if (Integer.parseInt(parameter.getDoctorOrNurse()) == 1) {
+				report.exportToExcel(title1, sessionInfo.getUser().getName(),
+						td, parameter);
+			} else {
+				report.exportToExcel(title2, sessionInfo.getUser().getName(),
+						td, parameter);
+			}
 		} else {
-			report.exportToExcel(title2, "admin", td);
+			if (Integer.parseInt(parameter.getDoctorOrNurse()) == 1) {
+				report.exportToExcel(title1, "", td, parameter);
+			} else {
+				report.exportToExcel(title2, "", td, parameter);
+			}
 		}
 	}
 }
