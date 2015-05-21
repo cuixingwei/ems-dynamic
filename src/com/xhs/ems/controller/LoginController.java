@@ -77,15 +77,19 @@ public class LoginController {
 			json.setMsg("error");
 			User usertemp = list.get(0);
 			if (usertemp.getPassword().equalsIgnoreCase(password)) {
-				json.setSuccess(true);
-				json.setMsg("success");
-				if (CommonUtil.isNullOrEmpty(usertemp.getStationName())) {
-					usertemp.setStationName("未知分站");
+				if (3 != usertemp.getIsValid()) {
+					json.setSuccess(true);
+					json.setMsg("success");
+					if (CommonUtil.isNullOrEmpty(usertemp.getStationName())) {
+						usertemp.setStationName("未知分站");
+					}
+					HttpSession session = request.getSession();
+					SessionInfo sessionInfo = new SessionInfo();
+					sessionInfo.setUser(usertemp);
+					session.setAttribute("sessionInfo", sessionInfo);
+				} else {
+					json.setMsg("noPermission");
 				}
-				HttpSession session = request.getSession();
-				SessionInfo sessionInfo = new SessionInfo();
-				sessionInfo.setUser(usertemp);
-				session.setAttribute("sessionInfo", sessionInfo);
 			}
 		}
 		return json;
@@ -107,6 +111,23 @@ public class LoginController {
 		}
 		Json json = new Json();
 		json.setSuccess(true);
+		return json;
+	}
+
+	@RequestMapping(value = "/changePwd", method = RequestMethod.POST)
+	public @ResponseBody Json changePwd(String dataPwd, HttpSession session) {
+		logger.info("修改密码");
+		SessionInfo sessionInfo = (SessionInfo) session
+				.getAttribute("sessionInfo");
+		User user = sessionInfo.getUser();
+		user.setPassword(dataPwd);
+		Json json = new Json();
+		logger.info(userService.changePwd(user));
+		if (1 == userService.changePwd(user)) {
+			json.setSuccess(true);
+		} else {
+			json.setSuccess(false);
+		}
 		return json;
 	}
 

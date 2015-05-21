@@ -13,7 +13,7 @@ import com.xhs.ems.service.UserService;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDAO userDAO;
-	
+
 	@Override
 	public List<User> validateMrUser(User user) {
 		return userDAO.validateMrUser(user);
@@ -22,6 +22,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> getAvailableDispatcher() {
 		return userDAO.getAvailableDispatcher();
+	}
+
+	@Override
+	public int changePwd(User user) {
+		return userDAO.changePwd(user);
 	}
 
 }

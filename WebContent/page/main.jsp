@@ -31,11 +31,14 @@
 				text : '修改',
 				handler : function() {
 					if ($('#passwordDialog form').form('validate')) {
-						$.post('', {
-							'data.pwd' : $('#pwd').val()
+						$.post('changePwd', {
+							'dataPwd' : $('#pwd').val()
 						}, function(result) {
 							if (result.success) {
 								$.messager.alert('提示', '密码修改成功！', 'info');
+								$('#passwordDialog').dialog('close');
+							} else {
+								$.messager.alert('提示', '密码修改失败！', 'info');
 								$('#passwordDialog').dialog('close');
 							}
 						}, 'json');
@@ -175,8 +178,9 @@
 </script>
 </head>
 <body id="mainLayout" class="easyui-layout">
-	<div data-options="region:'north',href:'<%=contextPath%>/page/north.jsp',border:false"
-				style="height: 110px; overflow: hidden;"></div>
+	<div
+		data-options="region:'north',href:'<%=contextPath%>/page/north.jsp',border:false"
+		style="height: 110px; overflow: hidden;"></div>
 	<div data-options="region:'west',href:'',split:true" title="导航"
 		style="width: 250px; padding: 10px;">
 		<ul id="mainMenu"></ul>
@@ -199,7 +203,7 @@
 			<table class="table">
 				<tr>
 					<th>新密码</th>
-					<td><input id="pwd" name="data.pwd" type="password"
+					<td><input id="pwd" name="dataPwd" type="password"
 						class="easyui-validatebox" data-options="required:true" /></td>
 				</tr>
 				<tr>

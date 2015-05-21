@@ -56,6 +56,9 @@
 					case "error":
 						$("#validationSummary").text("密码错误");
 						break;
+					case "noPermission":
+						$.messager.alert('警告', '你没有权限登录', 'info');
+						break;
 					case "success":
 						window.location.replace("page/main.jsp");
 						break;

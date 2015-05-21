@@ -21,4 +21,12 @@ public interface UserService {
 	 * @return
 	 */
 	public List<User> getAvailableDispatcher();
+
+	/**
+	 * @author 崔兴伟
+	 * @datetime 2015年5月21日 上午9:29:40
+	 * @param user
+	 * @return 1代表修改成功 0代表修改失败
+	 */
+	public int changePwd(User user);
 }

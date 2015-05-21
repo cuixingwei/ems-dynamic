@@ -3,7 +3,9 @@ package com.xhs.ems.dao.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -40,6 +42,12 @@ public class UserDAOImpl implements UserDAO {
 						user.setName(rs.getString("姓名"));
 						user.setPassword(rs.getString("密码"));
 						user.setStationName(rs.getString("部门名称"));
+						if (!(rs.getString("人员类型").equals("1") || rs.getString(
+								"人员类型").equals("0"))) {
+							user.setIsValid(3);
+						} else {
+							user.setIsValid(0);
+						}
 						results.add(user);
 					}
 				});
@@ -57,5 +65,15 @@ public class UserDAOImpl implements UserDAO {
 			}
 		});
 		return results;
+	}
+
+	@Override
+	public int changePwd(User user) {
+		String sql = "update AuSp120.tb_MrUser set 密码=:password where 工号=:id";
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("password", user.getPassword());
+		paramMap.put("id", user.getEmployeeId());
+		this.npJdbcTemplate.update(sql, paramMap);
+		return this.npJdbcTemplate.update(sql, paramMap);
 	}
 }
