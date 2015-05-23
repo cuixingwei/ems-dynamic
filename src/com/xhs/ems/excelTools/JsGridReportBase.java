@@ -16,7 +16,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.beanutils.converters.CalendarConverter;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
@@ -246,6 +244,8 @@ public class JsGridReportBase {
 		HSSFSheet sheet = wb.createSheet(title);// 在Excel工作簿中建一工作表
 		sheet.setDisplayGridlines(false);// 设置表标题是否有表格边框
 
+		int columns = tableData.getTableHeader().getColumnCount();
+
 		// 创建标题
 		HSSFRow row = sheet.createRow(0);// 创建新行
 		HSSFCell cell = row.createCell(0);// 创建新列
@@ -271,25 +271,53 @@ public class JsGridReportBase {
 		if (style != null)
 			cell.setCellStyle(style);
 
-		cell = row.createCell(2);
-		cell.setCellValue(new HSSFRichTextString("统计时间:"));
-		style = styles.get("SUB_TITLE");
-		if (style != null)
-			cell.setCellStyle(style);
+		/**
+		 * 避免表格列数太少，造成副标题超出表格范围，副标题占5列
+		 */
+		if (columns < 5) {
+			row = sheet.createRow(2);
+			cell = row.createCell(0);
+			cell.setCellValue(new HSSFRichTextString("统计时间:"));
+			style = styles.get("SUB_TITLE");
+			if (style != null)
+				cell.setCellStyle(style);
 
-		cell = row.createCell(3);
-		style = styles.get("SUB_TITLE2");
-		cell.setCellValue(new HSSFRichTextString(startTime+"  至"));
-		if (style != null)
-			cell.setCellStyle(style);
+			cell = row.createCell(1);
+			style = styles.get("SUB_TITLE2");
+			cell.setCellValue(new HSSFRichTextString(startTime + "  至"));
+			if (style != null)
+				cell.setCellStyle(style);
 
-		cell = row.createCell(4);
-		style = styles.get("SUB_TITLE2");
-		cell.setCellValue(new HSSFRichTextString(endTime));
-		if (style != null)
-			cell.setCellStyle(style);
+			cell = row.createCell(2);
+			style = styles.get("SUB_TITLE2");
+			cell.setCellValue(new HSSFRichTextString(endTime));
+			if (style != null)
+				cell.setCellStyle(style);
+		} else {
+			cell = row.createCell(2);
+			cell.setCellValue(new HSSFRichTextString("统计时间:"));
+			style = styles.get("SUB_TITLE");
+			if (style != null)
+				cell.setCellStyle(style);
 
-		rownum = 3;// 如果rownum = 1，则去掉创建人、创建时间等副标题；如果rownum = 0， 则把标题也去掉
+			cell = row.createCell(3);
+			style = styles.get("SUB_TITLE2");
+			cell.setCellValue(new HSSFRichTextString(startTime + "  至"));
+			if (style != null)
+				cell.setCellStyle(style);
+
+			cell = row.createCell(4);
+			style = styles.get("SUB_TITLE2");
+			cell.setCellValue(new HSSFRichTextString(endTime));
+			if (style != null)
+				cell.setCellStyle(style);
+		}
+
+		if (columns <= 3) {
+			rownum = 4;// 如果rownum = 1，则去掉创建人、创建时间等副标题；如果rownum = 0， 则把标题也去掉
+		} else {
+			rownum = 3;// 如果rownum = 1，则去掉创建人、创建时间等副标题；如果rownum = 0， 则把标题也去掉
+		}
 
 		HSSFCellStyle headerstyle = styles.get("TABLE_HEADER");
 

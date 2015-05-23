@@ -1,5 +1,6 @@
 package com.xhs.ems.controller;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -40,9 +41,11 @@ public class AcceptSendCarController {
 	}
 
 	@RequestMapping(value = "/getDetail", method = RequestMethod.POST)
-	public @ResponseBody AcceptSendCarDetail getDetail(Parameter parameter) {
+	public @ResponseBody AcceptSendCarDetail getDetail(Parameter parameter,
+			HttpServletRequest request) {
 		logger.info("事件详情查询");
-		return acceptSendCarService.getDetail(parameter.getId());
+		
+		return acceptSendCarService.getDetail(parameter.getId(),request);
 	}
 
 	@RequestMapping(value = "/exportAcceptSendCarDatas", method = RequestMethod.GET)
@@ -62,7 +65,6 @@ public class AcceptSendCarController {
 				acceptSendCarService.getData(parameter).getRows(),
 				ExcelUtils.createTableHeader(headers, spanCount), fields);
 		JsGridReportBase report = new JsGridReportBase(request, response);
-
 
 		HttpSession session = request.getSession();
 		SessionInfo sessionInfo = (SessionInfo) session

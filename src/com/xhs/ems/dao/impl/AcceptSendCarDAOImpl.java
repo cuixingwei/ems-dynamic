@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
@@ -104,7 +106,7 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 	}
 
 	@Override
-	public AcceptSendCarDetail getDetail(String id) {
+	public AcceptSendCarDetail getDetail(String id, HttpServletRequest request) {
 		String sql = "select det.NameM eventType,den.NameM eventNature,e.呼救电话 callPhone,a.现场地址 callAddress,a.病人需求 patientNeed,"
 				+ "a.初步判断 preJudgment,dis.NameM sickCondition,a.特殊要求 specialNeeds,a.救治人数 humanNumbers,"
 				+ "a.患者姓名 sickName,	a.年龄 age,a.性别 gender,di.NameM identitys,a.联系人 contactMan,"
@@ -117,7 +119,7 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 				+ "isnull(a.入院人数,0) toHospitalNumbers,convert(varchar(20),t.离开现场时刻,120) leaveSpotTime,"
 				+ "ISNULL(a.死亡人数,0) deathNumbers,	ISNULL(a.留观人数,0) stayHospitalNumbers,"
 				+ "'0' backHospitalNumbers,convert(varchar(20),t.完成时刻,120) completeTime,m.姓名 stationDispatcher,"
-				+ "t.任务序号 outCarNumbers	from AuSp120.tb_AcceptDescriptV a "
+				+ "t.任务序号 outCarNumbers,e.录音文件名 record from AuSp120.tb_AcceptDescriptV a "
 				+ "left outer  join AuSp120.tb_EventV e on a.事件编码=e.事件编码	"
 				+ "left outer join AuSp120.tb_TaskV t on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
 				+ "left outer join AuSp120.tb_DEventType det on det.Code=e.事件类型编码	"
@@ -188,11 +190,29 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 										.getString("backHospitalNumbers"), rs
 										.getString("completeTime"), rs
 										.getString("stationDispatcher"), rs
-										.getString("outCarNumbers"));
+										.getString("outCarNumbers"), rs
+										.getString("record"));
 						return acceptSendCarDetail;
 					}
-
 				});
+		ServletContext sct = request.getServletContext();
+		String recordIP = (String) sct.getAttribute("RecordServerIP");
+		String year, day, month;
+		if (result.getRecord() != null) {
+			String recordName = result.getRecord().trim();
+			int n = recordName.indexOf("_");
+			if (n != -1) {
+				String[] name = recordName.subSequence(0, n).toString()
+						.split("-");
+				year = name[0];
+				month = name[1];
+				day = name[2];
+				String recordPath = recordIP + year + month + "/" + year
+						+ month + day + "/" + recordName;
+				logger.info("录音文件绝对路径为:" + recordPath);
+				result.setRecord(recordPath);
+			}
+		}
 		return result;
 	}
 }

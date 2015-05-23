@@ -1,5 +1,7 @@
 package com.xhs.ems.service.impl;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +31,8 @@ public class AcceptSendCarServiceImpl implements AcceptSendCarService {
 	}
 
 	@Override
-	public AcceptSendCarDetail getDetail(String id) {
-		return acceptSendCarDAO.getDetail(id);
+	public AcceptSendCarDetail getDetail(String id, HttpServletRequest request) {
+		return acceptSendCarDAO.getDetail(id, request);
 	}
 
 }

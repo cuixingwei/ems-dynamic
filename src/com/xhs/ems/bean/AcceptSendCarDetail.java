@@ -29,6 +29,7 @@ public class AcceptSendCarDetail {
 	private String remark; // 备注
 	private String isOrNoLitter; // 是否担架
 	private String acceptNumber; // 受理序号
+
 	/**
 	 * 受理表
 	 */
@@ -59,6 +60,8 @@ public class AcceptSendCarDetail {
 	private String completeTime; // 完成时刻
 	private String stationDispatcher; // 分站调度员
 	private String outCarNumbers; // 出车次数
+
+	private String record; // 录音文件名
 
 	public String getEventType() {
 		return eventType;
@@ -94,14 +97,6 @@ public class AcceptSendCarDetail {
 
 	public String getPatientNeed() {
 		return patientNeed;
-	}
-
-	public String getCancelReason() {
-		return cancelReason;
-	}
-
-	public void setCancelReason(String cancelReason) {
-		this.cancelReason = cancelReason;
 	}
 
 	public void setPatientNeed(String patientNeed) {
@@ -260,6 +255,14 @@ public class AcceptSendCarDetail {
 		this.endAcceptTime = endAcceptTime;
 	}
 
+	public String getCancelReason() {
+		return cancelReason;
+	}
+
+	public void setCancelReason(String cancelReason) {
+		this.cancelReason = cancelReason;
+	}
+
 	public String getSendCarTime() {
 		return sendCarTime;
 	}
@@ -412,6 +415,14 @@ public class AcceptSendCarDetail {
 		this.outCarNumbers = outCarNumbers;
 	}
 
+	public String getRecord() {
+		return record;
+	}
+
+	public void setRecord(String record) {
+		this.record = record;
+	}
+
 	public AcceptSendCarDetail(String eventType, String eventNature,
 			String callPhone, String callAddress, String patientNeed,
 			String preJudgment, String sickCondition, String specialNeeds,
@@ -427,7 +438,7 @@ public class AcceptSendCarDetail {
 			String toHospitalNumbers, String leaveSpotTime,
 			String deathNumbers, String stayHospitalNumbers,
 			String backHospitalNumbers, String completeTime,
-			String stationDispatcher, String outCarNumbers) {
+			String stationDispatcher, String outCarNumbers, String record) {
 		this.eventType = eventType;
 		this.eventNature = eventNature;
 		this.callPhone = callPhone;
@@ -472,6 +483,7 @@ public class AcceptSendCarDetail {
 		this.completeTime = completeTime;
 		this.stationDispatcher = stationDispatcher;
 		this.outCarNumbers = outCarNumbers;
+		this.record = record;
 	}
 
 }

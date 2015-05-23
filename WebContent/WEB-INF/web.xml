@@ -86,6 +86,11 @@
 		<session-timeout>15</session-timeout>
 	</session-config>
 
+	<!-- 初始化配置信息的监听器 -->
+	<listener>
+		<listener-class>com.xhs.ems.filter.CofigListener</listener-class>
+	</listener>
+
 	<!-- 配置错误页面 -->
 	<error-page>
 		<error-code>404</error-code>
