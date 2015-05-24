@@ -1,13 +1,10 @@
-.class
+*.class
 .git
-build
+build/
 target
-.settings
+.settings/
 .project
 .classpath
 bin
 /doc
-=======
-build/
-.settings/
 
