@@ -53,7 +53,7 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 				+ "left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码	"
 				+ "left outer join AuSp120.tb_MrUser m on t.调度员编码=m.工号	"
 				+ "left outer join AuSp120.tb_DAcceptDescriptType dat on dat.Code=a.类型编码	"
-				+ "where e.事件性质编码=1  and m.人员类型=0 and a.开始受理时刻<a.派车时刻  and a.开始受理时刻 between :startTime and :endTime ";
+				+ "where e.事件性质编码=1  and m.人员类型=0 and a.类型编码 not in(3,10)  and a.开始受理时刻 between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
 			sql = sql + " and t.调度员编码=:dispatcher ";
 		}
