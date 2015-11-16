@@ -43,13 +43,16 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select distinct e.事件编码 eventCode,e.分站名称 station,m.姓名 dispatcher into #temp1	"
+		String sql = "select distinct t.事件编码,t.分站编码,s.分站名称 station  into #temp2 	"
+				+ "from AuSp120.tb_TaskV t left outer join AuSp120.tb_Station s on s.分站编码=t.分站编码 "
+				+ "select distinct e.事件编码 eventCode,m.姓名 dispatcher into #temp1	"
 				+ "from AuSp120.tb_EventV e	left outer join AuSp120.tb_MrUser m on m.工号=e.调度员编码	"
 				+ "where e.事件性质编码=1 and m.人员类型=0 "
 				+ "select a.ID id,convert(varchar(20),a.开始受理时刻,120) answerAlarmTime,a.呼救电话 alarmPhone,"
-				+ "a.联系电话 relatedPhone,a.现场地址 siteAddress,	a.初步判断 judgementOnPhone, station,"
-				+ "convert(varchar(20),a.派车时刻,120) sendCarTime, dispatcher	from #temp1 t	"
-				+ "left outer join AuSp120.tb_AcceptDescriptV a on t.eventCode=a.事件编码	"
+				+ "a.联系电话 relatedPhone,a.现场地址 siteAddress,	a.初步判断 judgementOnPhone, t2.station,"
+				+ "convert(varchar(20),a.派车时刻,120) sendCarTime, t.dispatcher	from #temp1 t	"
+				+ "left outer join AuSp120.tb_AcceptDescriptV a on t.eventCode=a.事件编码 "
+				+ "left outer join #temp2 t2 on t2.事件编码=t.eventCode	"
 				+ "where a.开始受理时刻 between :startTime and :endTime  ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
 			sql = sql + "and a.调度员编码= :dispatcher ";

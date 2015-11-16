@@ -64,20 +64,20 @@
 						width : "14%",
 						align : 'center',
 					}, {
-						field : 'dispatcher',
-						title : '操作人',
+						field : 'hungReason',
+						title : '挂起原因',
 						resizable : true,
 						width : "14%",
 						align : 'center'
 					}, {
-						field : 'hungTime',
-						title : '挂起时刻',
+						field : 'dispatcher',
+						title : '操作人',
 						resizable : true,
 						width : "14%",
 						align : 'center',
 					}, {
-						field : 'hungReason',
-						title : '挂起原因',
+						field : 'hungTime',
+						title : '挂起时刻',
 						resizable : true,
 						width : "14%",
 						align : 'center'

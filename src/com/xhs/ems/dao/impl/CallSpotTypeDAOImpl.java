@@ -45,9 +45,11 @@ public class CallSpotTypeDAOImpl implements CallSpotTypeDAO {
 	@Override
 	public Grid getData(Parameter parameter) {
 		String sql = "select dly.NameM name,COUNT(pc.送往地点类型编码) times,'' rate	"
-				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_EventV e on e.事件编码=pc.事件编码  "
+				+ "from AuSp120.tb_PatientCase pc "
+				+ "left outer join AuSp120.tb_TaskV t on t.任务编码=pc.任务编码 and t.任务序号=pc.序号	"
+				+ "left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码  "
 				+ "left outer join AuSp120.tb_DLocaleType dly on dly.Code=pc.现场地点类型编码	"
-				+ "where e.事件性质编码=1 and pc.任务时刻 between :startTime and :endTime "
+				+ "where e.事件性质编码=1 and e.受理时刻 between :startTime and :endTime "
 				+ "and pc.送往地点类型编码 is not null	group by dly.NameM";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());

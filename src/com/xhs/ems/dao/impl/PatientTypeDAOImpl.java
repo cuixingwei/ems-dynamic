@@ -46,7 +46,7 @@ public class PatientTypeDAOImpl implements PatientTypeDAO {
 		String sql = "select ddcs.NameM patientClass,COUNT(*) receivePeopleNumbers,'' rate	"
 				+ "from AuSp120.tb_DDiseaseClassState ddcs	"
 				+ "left outer join AuSp120.tb_PatientCase pc  on ddcs.Code=pc.分类统计编码 "
-				+ "where pc.任务时刻  between :startTime and :endTime	group by  ddcs.NameM ";
+				+ "where pc.记录时刻  between :startTime and :endTime	group by  ddcs.NameM ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());

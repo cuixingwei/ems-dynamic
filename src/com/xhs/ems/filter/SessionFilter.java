@@ -47,7 +47,7 @@ public class SessionFilter implements javax.servlet.Filter{
 				logger.info("进入session过滤器->访问路径为[" + servletPath + "]");
 
 				if (request.getSession().getAttribute("sessionInfo") == null) {// session不存在需要拦截
-					request.setAttribute("msg", "您还没有登录或登录已超时，请重新登录，然后再刷新本功能！");
+					request.setAttribute("msg", "您还没有登录或登录已超时，<br/>请重新登录，然后再刷新本功能！");
 					request.getRequestDispatcher("/error/noSession.jsp").forward(request, response);
 					return;
 				}

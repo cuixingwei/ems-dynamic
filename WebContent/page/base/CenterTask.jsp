@@ -39,6 +39,7 @@
 					pagePosition : 'bottom',
 					pagination : true,
 					striped : true,
+					nowrap : false,
 					singleSelect : true,
 					rownumbers : true,
 					idField : 'ringTime',
@@ -66,18 +67,18 @@
 						field : 'phone',
 						title : '呼救电话',
 						rowspan : 2,
-						width : "5%",
+						width : "8%",
 						align : 'center'
 					}, {
 						field : 'acceptTime',
 						title : '受理时间',
 						rowspan : 2,
-						width : "9%",
+						width : "7%",
 						align : 'center'
 					}, {
 						field : 'sendCarTime',
 						title : '派车时间',
-						width : "9%",
+						width : "7%",
 						rowspan : 2,
 						resizable : true,
 						align : 'center'
@@ -177,7 +178,8 @@
 						<table>
 							<tr>
 								<td>分站:</td>
-								<td><input style="width: 120em;" id="station" name="station" /></td>
+								<td><input style="width: 120em;" id="station"
+									name="station" /></td>
 								<td>查询时间</td>
 								<td><input id="startTime" name="startTime"
 									style="width: 150em;" />至<input id="endTime" name="endTime"

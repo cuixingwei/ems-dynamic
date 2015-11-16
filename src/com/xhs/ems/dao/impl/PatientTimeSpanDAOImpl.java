@@ -42,9 +42,9 @@ public class PatientTimeSpanDAOImpl implements PatientTimeSpanDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select  DATENAME(HOUR,pc.任务时刻) span,pc.分类统计编码 code into #temp1	"
+		String sql = "select  DATENAME(HOUR,pc.记录时刻) span,pc.分类统计编码 code into #temp1	"
 				+ "from  AuSp120.tb_PatientCase pc	"
-				+ "where pc.任务时刻  between :startTime and :endTime "
+				+ "where pc.记录时刻  between :startTime and :endTime "
 				+ "select ddcs.NameM patientType,COUNT(*) summary,	"
 				+ "SUM(case when tt.span>=0 and tt.span<1 then 1 else 0 end) span0_1,	"
 				+ "SUM(case when tt.span>=1 and tt.span<2 then 1 else 0 end) span1_2,	"
