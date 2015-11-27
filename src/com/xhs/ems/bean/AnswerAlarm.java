@@ -41,6 +41,42 @@ public class AnswerAlarm {
 	 * 调度员
 	 */
 	private String dispatcher;
+	/**
+	 * 通话结果
+	 */
+	private String result;
+	/**
+	 * 通话类型
+	 */
+	private String recordType;
+	/**
+	 * 录音名称
+	 */
+	private String recordPath;
+
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+
+	public String getRecordType() {
+		return recordType;
+	}
+
+	public void setRecordType(String recordType) {
+		this.recordType = recordType;
+	}
+
+	public String getRecordPath() {
+		return recordPath;
+	}
+
+	public void setRecordPath(String recordPath) {
+		this.recordPath = recordPath;
+	}
 
 	public String getId() {
 		return id;
@@ -114,6 +150,17 @@ public class AnswerAlarm {
 		this.dispatcher = dispatcher;
 	}
 
+	/**
+	 * @param id
+	 * @param answerAlarmTime
+	 * @param alarmPhone
+	 * @param relatedPhone
+	 * @param siteAddress
+	 * @param judgementOnPhone
+	 * @param station
+	 * @param sendCarTime
+	 * @param dispatcher
+	 */
 	public AnswerAlarm(String id, String answerAlarmTime, String alarmPhone,
 			String relatedPhone, String siteAddress, String judgementOnPhone,
 			String station, String sendCarTime, String dispatcher) {
@@ -126,6 +173,10 @@ public class AnswerAlarm {
 		this.station = station;
 		this.sendCarTime = sendCarTime;
 		this.dispatcher = dispatcher;
+	}
+
+	public AnswerAlarm() {
+		super();
 	}
 
 }

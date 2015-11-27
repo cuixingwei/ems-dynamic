@@ -16,6 +16,7 @@ import com.xhs.ems.common.ConfigReader;
  */
 public class CofigListener implements ServletContextListener {
 	private static final Logger logger = Logger.getLogger(ConfigReader.class);
+	public static String recordIP;
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
@@ -31,6 +32,7 @@ public class CofigListener implements ServletContextListener {
 			if (CommonUtil.isNullOrEmpty(key))
 				continue;
 			sce.getServletContext().setAttribute(key, map.get(key));
+			CofigListener.recordIP=(String) sce.getServletContext().getAttribute("RecordServerIP");
 			logger.info(key + ":" + map.get(key));
 		}
 	}

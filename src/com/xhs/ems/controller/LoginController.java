@@ -23,7 +23,7 @@ import com.xhs.ems.common.CommonUtil;
 import com.xhs.ems.service.UserService;
 
 @Controller
-@RequestMapping(value = "/page")
+@RequestMapping(value = "")
 public class LoginController {
 	private static final Logger logger = Logger
 			.getLogger(LoginController.class);
@@ -38,7 +38,7 @@ public class LoginController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/getMenu", method = RequestMethod.POST)
+	@RequestMapping(value = { "/page/getMenu", "/getMenu" }, method = RequestMethod.POST)
 	public @ResponseBody String getMenu() {
 		logger.info("获取菜单");
 		URL url = LoginController.class.getClassLoader().getResource(
@@ -62,7 +62,7 @@ public class LoginController {
 	 * @param request
 	 * @return 登录结果result:fail代表用户不存在,error表示用户名错误,success表示登录成功
 	 */
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/page/login", method = RequestMethod.POST)
 	public @ResponseBody Json login(
 			@RequestParam(value = "userId") String userId,
 			@RequestParam(value = "password") String password,
@@ -102,7 +102,7 @@ public class LoginController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/logOut", method = RequestMethod.POST)
+	@RequestMapping(value = "/page/logOut", method = RequestMethod.POST)
 	public @ResponseBody Json logOut(HttpSession session) {
 		logger.info("注销");
 		if (session != null) {
@@ -114,7 +114,7 @@ public class LoginController {
 		return json;
 	}
 
-	@RequestMapping(value = "/changePwd", method = RequestMethod.POST)
+	@RequestMapping(value = "/page/changePwd", method = RequestMethod.POST)
 	public @ResponseBody Json changePwd(String dataPwd, HttpSession session) {
 		logger.info("修改密码");
 		SessionInfo sessionInfo = (SessionInfo) session

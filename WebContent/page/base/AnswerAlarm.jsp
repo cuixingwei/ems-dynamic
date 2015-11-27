@@ -43,13 +43,14 @@
 					striped : true,
 					singleSelect : true,
 					rownumbers : true,
+					nowrap : false,
 					idField : 'id',
 					pageSize : 20,
 					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 					columns : [ [ {
 						field : 'answerAlarmTime',
 						title : '接诊时间',
-						width : "15%",
+						width : "14%",
 						align : 'center'
 					}, {
 						field : 'alarmPhone',
@@ -60,22 +61,22 @@
 					}, {
 						field : 'relatedPhone',
 						title : '相关电话',
-						width : "10%",
+						width : "7%",
 						align : 'center'
 					}, {
 						field : 'siteAddress',
 						title : '报警地址',
-						width : "15%",
+						width : "11%",
 						align : 'center'
 					}, {
 						field : 'judgementOnPhone',
 						title : '电话判断',
-						width : "15%",
+						width : "11%",
 						align : 'center'
 					}, {
 						field : 'station',
 						title : '出车急救站',
-						width : "10%",
+						width : "11%",
 						resizable : true,
 						align : 'center'
 					}, {
@@ -86,7 +87,7 @@
 					}, {
 						field : 'dispatcher',
 						title : '调度员',
-						width : "10%",
+						width : "12%",
 						resizable : true,
 						align : 'center'
 					} ] ],
@@ -94,16 +95,9 @@
 					onBeforeLoad : function(param) {
 						var varify = cxw.checkStartTimeBeforeEndTime(
 								'#startTime', '#endTime');
-						if (varify) {
-							parent.$.messager.progress({
-								text : '数据加载中....'
-							});
-						} else {
+						if (!varify) {
 							$.messager.alert('警告', '结束时间要大于开始时间', 'warning');
 						}
-					},
-					onLoadSuccess : function(data) {
-						parent.$.messager.progress('close');
 					}
 				});
 	}

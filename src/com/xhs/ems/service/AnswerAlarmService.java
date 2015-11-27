@@ -15,4 +15,14 @@ public interface AnswerAlarmService {
 	 * @return 中心接警情况统计
 	 */
 	public Grid getData(Parameter parameter);
+
+	/**
+	 * 通话记录表
+	 * 
+	 * @datetime 2015年11月26日 下午8:55:40
+	 * @author 崔兴伟
+	 * @param parameter
+	 * @return
+	 */
+	public Grid getPhoneRecord(Parameter parameter);
 }

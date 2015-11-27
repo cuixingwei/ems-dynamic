@@ -283,6 +283,19 @@
     	"state":"open",
     	"text":"中心接警情况统计"
     },
+     {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"PhoneRecord.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"111",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"电话流水记录表"
+    },
     {
     	"attributes":
     		{

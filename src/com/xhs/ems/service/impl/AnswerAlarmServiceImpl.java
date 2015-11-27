@@ -27,4 +27,9 @@ public class AnswerAlarmServiceImpl implements AnswerAlarmService {
 		return answerAlarmDAO.getData(parameter);
 	}
 
+	@Override
+	public Grid getPhoneRecord(Parameter parameter) {
+		return answerAlarmDAO.getPhoneRecord(parameter);
+	}
+
 }
