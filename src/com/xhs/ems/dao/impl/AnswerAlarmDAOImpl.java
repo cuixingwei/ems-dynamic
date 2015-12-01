@@ -91,25 +91,6 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");
-		// for (AnswerAlarm reAlarm : results) {
-		// String recordIP = CofigListener.recordIP;
-		// String year, day, month;
-		// if (reAlarm.getRecordPath() != null) {
-		// String recordName = reAlarm.getRecordPath().trim();
-		// int n = recordName.indexOf("_");
-		// if (n != -1) {
-		// String[] name = recordName.subSequence(0, n).toString()
-		// .split("-");
-		// year = name[0];
-		// month = name[1];
-		// day = name[2];
-		// String recordPath = recordIP + year + month + "/" + year
-		// + month + day + "/" + recordName;
-		// logger.info("录音文件绝对路径为:" + recordPath);
-		// reAlarm.setRecordPath(recordPath);
-		// }
-		// }
-		// }
 		Grid grid = new Grid();
 		if ((int) parameter.getPage() > 0) {
 			int page = (int) parameter.getPage();
@@ -175,9 +156,18 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 				if (n != -1) {
 					String[] name = recordName.subSequence(0, n).toString()
 							.split("-");
-					year = name[0];
-					month = name[1];
-					day = name[2];
+					logger.info("name:"
+							+ recordName.subSequence(0, n).toString()
+							+ ";数组的长度:" + name.length);
+					if (name.length == 4) {
+						year = name[1];
+						month = name[2];
+						day = name[3];
+					} else {
+						year = name[0];
+						month = name[1];
+						day = name[2];
+					}
 					String recordPath = recordIP + year + month + "/" + year
 							+ month + day + "/" + recordName;
 					logger.info("录音文件绝对路径为:" + recordPath);
