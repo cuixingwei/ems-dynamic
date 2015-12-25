@@ -24,6 +24,19 @@ public class CommonUtil {
 		String mDateTime = formatter.format(cal.getTime());
 		return mDateTime;
 	}
+	
+	/**
+	 * 获取当天凌晨时间
+	 * @datetime 2015年12月25日 下午6:17:54
+	 * @author 崔兴伟
+	 * @return
+	 */
+	public static  String getStartTime(){
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+08:00"));
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+		String mDateTime = formatter.format(cal.getTime());
+		return mDateTime;
+	}
 
 	/**
 	 * 判断字符串是否为空
