@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -43,10 +44,15 @@ public class PatientTypeDAOImpl implements PatientTypeDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select ddcs.NameM patientClass,COUNT(*) receivePeopleNumbers,'' rate	"
+		String sql = "select distinct t.生成任务时刻,t.任务编码 into #task from AuSp120.tb_Task t "
+				+ "select ddcs.NameM patientClass,COUNT(*) receivePeopleNumbers,'' rate,'1' orders	 	"
 				+ "from AuSp120.tb_DDiseaseClassState ddcs	"
 				+ "left outer join AuSp120.tb_PatientCase pc  on ddcs.Code=pc.分类统计编码 "
-				+ "where pc.记录时刻  between :startTime and :endTime	group by  ddcs.NameM ";
+				+ "left outer join #task t on  pc.任务编码=t.任务编码 "
+				+ "where t.生成任务时刻  between :startTime and :endTime	group by  ddcs.NameM union "
+				+ "select '合计' patientClass,COUNT(*) receivePeopleNumbers,'' rate,'2' orders	"
+				+ "from AuSp120.tb_DDiseaseClassState ddcs	left outer join AuSp120.tb_PatientCase pc  on ddcs.Code=pc.分类统计编码	"
+				+ "left outer join #task t on  pc.任务编码=t.任务编码	where t.生成任务时刻  between :startTime and :endTime	order by orders drop table #task";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
@@ -66,7 +72,9 @@ public class PatientTypeDAOImpl implements PatientTypeDAO {
 		int totaltimes = 0;
 		// 计算总终止次数
 		for (PatientType result : results) {
-			totaltimes += Integer.parseInt(result.getReceivePeopleNumbers());
+			if(!StringUtils.equals("合计", result.getPatientClass())){
+				totaltimes += Integer.parseInt(result.getReceivePeopleNumbers());
+			}
 		}
 		// 计算比率
 		for (PatientType result : results) {

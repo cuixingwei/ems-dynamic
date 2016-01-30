@@ -64,9 +64,9 @@ public class CarWorkDAOImpl implements CarWorkDAO {
 				+ "sum(case when t.到达现场时刻 is not null then 1 else 0 end) arriveSpotNumbers into #temp5	"
 				+ "from #temp2 t group by t.station,t.carCode "
 				+ "select s.分站名称 station,t5.carCode,outCarNumbers,averageOutCarTimes,arriveSpotNumbers,"
-				+ "averageArriveSpotTimes,pauseNumbers 	from AuSp120.tb_Station s "
-				+ "left outer join #temp1 t1  on t1.station=s.分站编码	"
-				+ "left outer join #temp5 t5 on t1.station=t5.station and t1.carCode=t5.carCode	"
+				+ "averageArriveSpotTimes,isnull(pauseNumbers,0) pauseNumbers 	from AuSp120.tb_Station s "
+				+ "left outer join #temp5 t5 on t5.station=s.分站编码	"
+				+ "left outer join #temp1 t1  on t1.station=t5.station and t1.carCode=t5.carCode	"
 				+ "left outer join #temp3 t3  on t3.station=t5.station and t3.carCode=t5.carCode	"
 				+ "left outer join #temp4 t4  on t3.station=t4.station and t3.carCode=t4.carCode	"
 				+ "where t5.carCode is not null	order by s.显示顺序 "
@@ -92,6 +92,7 @@ public class CarWorkDAOImpl implements CarWorkDAO {
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");
+		logger.info(sql);
 		for (CarWork result : results) {
 			result.setAverageArriveSpotTimes(CommonUtil.formatSecond(result
 					.getAverageArriveSpotTimes()));

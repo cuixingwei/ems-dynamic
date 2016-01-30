@@ -42,9 +42,11 @@ public class PatientTimeSpanDAOImpl implements PatientTimeSpanDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select  DATENAME(HOUR,pc.记录时刻) span,pc.分类统计编码 code into #temp1	"
+		String sql = "select distinct t.生成任务时刻,t.任务编码 into #task from AuSp120.tb_Task t "
+				+ "select  DATENAME(HOUR,t.生成任务时刻) span,pc.分类统计编码 code into #temp1	"
 				+ "from  AuSp120.tb_PatientCase pc	"
-				+ "where pc.记录时刻  between :startTime and :endTime "
+				+ "left outer join #task t on  pc.任务编码=t.任务编码 "
+				+ "where t.生成任务时刻  between :startTime and :endTime "
 				+ "select ddcs.NameM patientType,COUNT(*) summary,	"
 				+ "SUM(case when tt.span>=0 and tt.span<1 then 1 else 0 end) span0_1,	"
 				+ "SUM(case when tt.span>=1 and tt.span<2 then 1 else 0 end) span1_2,	"
@@ -71,7 +73,7 @@ public class PatientTimeSpanDAOImpl implements PatientTimeSpanDAO {
 				+ "SUM(case when tt.span>=22 and tt.span<23 then 1 else 0 end) span22_23,	"
 				+ "SUM(case when tt.span>=23 and tt.span<24 then 1 else 0 end) span23_24	"
 				+ "from #temp1 tt left outer join AuSp120.tb_DDiseaseClassState ddcs on ddcs.Code=tt.code	"
-				+ "group by ddcs.NameM drop table #temp1 ";
+				+ "group by ddcs.NameM drop table #temp1,#task ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());

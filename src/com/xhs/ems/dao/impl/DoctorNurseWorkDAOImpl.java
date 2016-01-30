@@ -44,10 +44,11 @@ public class DoctorNurseWorkDAOImpl implements DoctorNurseWorkDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql1 = "select  pc.任务编码,pc.随车医生,pc.随车护士,pc.分站编码 into #temp1	"
-				+ "from AuSp120.tb_PatientCase pc where pc.任务编码<>'' and pc.记录时刻 between :startTime and :endTime ";
+		String sql1 = " select distinct t.生成任务时刻,t.任务编码 into #task from AuSp120.tb_Task t "
+				+ "select  pc.任务编码,pc.随车医生,pc.随车护士,pc.分站编码 into #temp1	"
+				+ "from AuSp120.tb_PatientCase pc left outer join #task t on  pc.任务编码=t.任务编码 where pc.任务编码<>'' and t.生成任务时刻 between :startTime and :endTime ";
 		String sql2 = "select distinct pc.任务编码,pc.随车医生,pc.随车护士,pc.分站编码 into #temp2	"
-				+ "from AuSp120.tb_PatientCase pc where pc.任务编码<>'' and pc.记录时刻 between :startTime and :endTime ";
+				+ "from AuSp120.tb_PatientCase pc left outer join #task t on  pc.任务编码=t.任务编码 where pc.任务编码<>'' and t.生成任务时刻 between :startTime and :endTime ";
 		String sql3 = "select tt.分站编码,tt.随车医生,COUNT(*) doctorCureNumbers into #temp3 "
 				+ "from #temp1 tt 	where tt.随车医生<>'' and tt.任务编码<>'' group by tt.分站编码,tt.随车医生  ";
 		String sql4 = "select tt.分站编码,tt.随车护士,COUNT(*) nurseCureNumbers into #temp3 "
@@ -76,7 +77,7 @@ public class DoctorNurseWorkDAOImpl implements DoctorNurseWorkDAO {
 				+ "tt4.stopNumbers,	tt3.nurseCureNumbers curePeopleNumbers,tt4.averateCureTimes	"
 				+ "from #temp3 tt3 left outer join #temp4 tt4 on tt3.分站编码=tt4.分站编码 and tt3.随车护士=tt4.name	"
 				+ "left outer join AuSp120.tb_Station s on s.分站编码=tt4.分站编码";
-		String sqlEnd = " drop table #temp1,#temp2,#temp3,#temp4";
+		String sqlEnd = " drop table #temp1,#temp2,#temp3,#temp4,#task";
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
 			sql7 += " where tt4.分站编码 = :station and tt4.分站编码 is not null ";
 			sql8 += " where tt4.分站编码 = :station and tt4.分站编码 is not null";

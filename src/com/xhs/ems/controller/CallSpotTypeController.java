@@ -27,7 +27,7 @@ import com.xhs.ems.service.CallSpotTypeService;
 @RequestMapping(value = "/page/base")
 public class CallSpotTypeController {
 	private static final Logger logger = Logger
-			.getLogger(EmptyCarReasonController.class);
+			.getLogger(CallSpotTypeController.class);
 
 	@Autowired
 	private CallSpotTypeService callSpotTypeService;

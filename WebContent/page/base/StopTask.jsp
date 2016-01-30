@@ -73,25 +73,23 @@
 					columns : [ [ {
 						field : 'acceptTime',
 						title : '受理时间',
-						resizable : true,
 						width : "10%",
-						align : 'center'
+						align : 'center',
+						nowrap : false
 					}, {
 						field : 'sickAddress',
 						title : '患者地址',
-						resizable : true,
 						width : "10%",
 						align : 'center',
+						nowrap : false
 					}, {
 						field : 'phone',
 						title : '呼救电话',
-						resizable : true,
 						width : "10%",
 						align : 'center'
 					}, {
 						field : 'dispatcher',
 						title : '调度员',
-						resizable : true,
 						width : "10%",
 						align : 'center'
 					}, {
@@ -103,9 +101,9 @@
 					}, {
 						field : 'drivingTime',
 						title : '出车时间',
-						resizable : true,
 						width : "10%",
-						align : 'center'
+						align : 'center',
+						nowrap : false
 					}, {
 						field : 'emptyRunTime',
 						title : '空跑时长',
@@ -135,16 +133,9 @@
 					onBeforeLoad : function(param) {
 						var varify = cxw.checkStartTimeBeforeEndTime(
 								'#startTime', '#endTime');
-						if (varify) {
-							parent.$.messager.progress({
-								text : '数据加载中....'
-							});
-						} else {
+						if (!varify)  {
 							$.messager.alert('警告', '结束时间要大于开始时间', 'warning');
 						}
-					},
-					onLoadSuccess : function(data) {
-						parent.$.messager.progress('close');
 					}
 				});
 	}
@@ -189,10 +180,6 @@
 									class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
 									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a></td>
-								<td colspan="2">&nbsp;<a href="javascript:void(0);"
-									class="easyui-linkbutton"
-									data-options="iconCls:'ext-icon-zoom_out',plain:true"
-									onclick="$('#searchForm input').val('');grid.datagrid('load',{});">重置查询</a></td>
 							</tr>
 						</table>
 					</form>
