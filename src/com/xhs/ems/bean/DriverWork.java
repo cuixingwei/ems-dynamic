@@ -128,20 +128,8 @@ public class DriverWork {
 		this.refuseNumbers = refuseNumbers;
 	}
 
-	public DriverWork(String station, String driver, String outCarNumbers,
-			String nomalNumbers, String stopNumbers, String emptyNumbers,
-			String pauseNumbers, String averageOutCarTimes,
-			String refuseNumbers, String averageArriveSpotTimes) {
-		this.station = station;
-		this.driver = driver;
-		this.outCarNumbers = outCarNumbers;
-		this.nomalNumbers = nomalNumbers;
-		this.stopNumbers = stopNumbers;
-		this.emptyNumbers = emptyNumbers;
-		this.pauseNumbers = pauseNumbers;
-		this.averageOutCarTimes = averageOutCarTimes;
-		this.refuseNumbers = refuseNumbers;
-		this.averageArriveSpotTimes = averageArriveSpotTimes;
+	public DriverWork() {
 	}
+
 
 }

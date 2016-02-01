@@ -65,8 +65,8 @@ public class DriverWorkDAOImpl implements DriverWorkDAO {
 				+ "isnull(AVG(DATEDIFF(Second,t.出车时刻,t.到达现场时刻)),0) averageArriveSpotTimes	into #temp5	"
 				+ "from #temp1 t "
 				+ "where t.出车时刻<t.到达现场时刻 and t.出车时刻 is not null group by t.分站编码,t.司机  "
-				+ "select s.分站名称 station,t3.driver,outCarNumbers,nomalNumbers,stopNumbers,emptyNumbers,refuseNumbers,	"
-				+ "pauseNumbers,averageOutCarTimes,isnull(averageArriveSpotTimes,0) averageArriveSpotTimes	"
+				+ "select s.分站名称 station,t3.driver,outCarNumbers,nomalNumbers,stopNumbers,emptyNumbers,isnull(refuseNumbers,0) refuseNumbers,	"
+				+ "isnull(pauseNumbers,0) pauseNumbers,averageOutCarTimes,isnull(averageArriveSpotTimes,0) averageArriveSpotTimes	"
 				+ "from AuSp120.tb_Station s left outer join #temp3 t3 on t3.分站编码=s.分站编码	"
 				+ "left outer join #temp2 t2 on t3.分站编码=t2.分站编码 and t3.driver=t2.司机	"
 				+ "left outer join #temp4 t4 on t3.分站编码=t4.分站编码 and t3.driver=t4.driver	"
@@ -77,23 +77,25 @@ public class DriverWorkDAOImpl implements DriverWorkDAO {
 		paramMap.put("station", parameter.getStation());
 		paramMap.put("endTime", parameter.getEndTime());
 		paramMap.put("startTime", parameter.getStartTime());
+		logger.info(sql);
 
 		List<DriverWork> results = this.npJdbcTemplate.query(sql, paramMap,
 				new RowMapper<DriverWork>() {
 					@Override
 					public DriverWork mapRow(ResultSet rs, int index)
 							throws SQLException {
-
-						return new DriverWork(rs.getString("station"), rs
-								.getString("driver"), rs
-								.getString("outCarNumbers"), rs
-								.getString("nomalNumbers"), rs
-								.getString("stopNumbers"), rs
-								.getString("emptyNumbers"), rs
-								.getString("refuseNumbers"), rs
-								.getString("pauseNumbers"), rs
-								.getString("averageOutCarTimes"), rs
-								.getString("averageArriveSpotTimes"));
+						DriverWork driverWork = new DriverWork();
+						driverWork.setAverageArriveSpotTimes(rs.getString("averageArriveSpotTimes"));
+						driverWork.setAverageOutCarTimes(rs.getString("averageOutCarTimes"));
+						driverWork.setDriver(rs.getString("driver"));
+						driverWork.setEmptyNumbers(rs.getString("emptyNumbers"));
+						driverWork.setNomalNumbers(rs.getString("nomalNumbers"));
+						driverWork.setOutCarNumbers(rs.getString("outCarNumbers"));
+						driverWork.setPauseNumbers(rs.getString("pauseNumbers"));
+						driverWork.setRefuseNumbers(rs.getString("refuseNumbers"));
+						driverWork.setStation(rs.getString("station"));
+						driverWork.setStopNumbers(rs.getString("stopNumbers"));
+						return driverWork;
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");

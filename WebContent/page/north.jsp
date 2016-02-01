@@ -57,8 +57,7 @@
 	<span id="a"
 		style="color: #FF0000; float: left; width: 600px; height: 25px; margin-top: 10px; margin-left: 10px; display: inline-block;"></span>
 
-	<div class="hleftRight"
-		style="width: 125px; height: 38px; float: right;"></div>
+	<div class="hleftRight"></div>
 
 	<div style="width: 220px; height: 38px; float: right; color: blue;">
 		<a onclick="$('#passwordDialog').dialog('open');"
