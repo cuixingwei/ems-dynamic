@@ -394,6 +394,24 @@ select det.NameM eventType,den.NameM eventNature,e.呼救电话 callPhone,a.现场地址
 	left outer join AuSp120.tb_DEmptyReason der on der.Code=t.放空车原因编码	
 	left outer join AuSp120.tb_DRefuseReason dtrr on dtrr.Code=t.拒绝出车原因编码	
 	left outer join AuSp120.tb_DStopReason dsr on dsr.Code=t.中止任务原因编码	where a.ID=112
-	
+--疾病类别统计
+select s.分站名称 station,SUM(case when pc.分类统计编码=1 then 1 else 0 end) type1,
+	SUM(case when pc.分类统计编码=2 then 1 else 0 end) type2,SUM(case when pc.分类统计编码=3 then 1 else 0 end) type3,
+	SUM(case when pc.分类统计编码=4 then 1 else 0 end) type4,SUM(case when pc.分类统计编码=5 then 1 else 0 end) type5,
+	SUM(case when pc.分类统计编码=6 then 1 else 0 end) type6,SUM(case when pc.分类统计编码=7 then 1 else 0 end) type7,
+	SUM(case when pc.分类统计编码=8 then 1 else 0 end) type8,SUM(case when pc.分类统计编码=9 then 1 else 0 end) type9,
+	SUM(case when pc.分类统计编码=10 then 1 else 0 end) type10,SUM(case when pc.分类统计编码=11 then 1 else 0 end) type11,
+	SUM(case when pc.分类统计编码=12 then 1 else 0 end) type12,SUM(case when pc.分类统计编码=13 then 1 else 0 end) type13,
+	SUM(case when pc.分类统计编码=14 then 1 else 0 end) type14,SUM(case when pc.分类统计编码=15 then 1 else 0 end) type15,
+	SUM(case when pc.分类统计编码=16 then 1 else 0 end) type16,SUM(case when pc.分类统计编码=17 then 1 else 0 end) type17,
+	SUM(case when pc.分类统计编码=18 then 1 else 0 end) type18,SUM(case when pc.分类统计编码=19 then 1 else 0 end) type19,
+	SUM(case when pc.分类统计编码=20 then 1 else 0 end) type20,SUM(case when pc.分类统计编码=21 then 1 else 0 end) type21,
+	COUNT(*) total
+	from AuSp120.tb_PatientCase pc 
+	left outer join AuSp120.tb_TaskV t on pc.车辆编码=t.车辆编码 and pc.任务编码=t.任务编码
+	left outer join AuSp120.tb_DDiseaseClassState ddcs on ddcs.Code=pc.分类统计编码
+	left outer join AuSp120.tb_Station s on s.分站编码=t.分站编码	
+	where t.生成任务时刻 between '2015-04-04 00:00:00' and '2016-04-04 00:00:00'
+	group by s.分站名称
 	
 	

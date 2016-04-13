@@ -44,9 +44,8 @@ public class PatientTypeController {
 		response.setContentType("application/msexcel;charset=UTF-8");
 
 		String title = "疾病种类统计";
-		String[] headers = new String[] { "疾病种类", "接诊人数", "比率" };
-		String[] fields = new String[] { "patientClass",
-				"receivePeopleNumbers", "rate" };
+		String[] headers = new String[] { "分站", "交通事故外伤", "其他类外伤","烧伤", "电击伤 溺水", "其他外科疾病","心血管系统疾病", "脑血管系统疾病", "呼吸道系统疾病","食物中毒", "药物中毒", "酒精中毒","CO中毒", "其他内科疾病", "妇科 产科","儿科", "气管异物","其他五官科","传染病", "抢救前死亡", "抢救后死亡","其他", "合计" };
+		String[] fields = new String[] { "station", "type1", "type2","type3", "type4", "type5","type6", "type7", "type8","type9", "type10", "type11","type12", "type13", "type14","type15", "type16","type17","type18", "type19", "type20","type21", "total" };
 		TableData td = ExcelUtils.createTableData(
 				patientTypeSerivce.getData(parameter).getRows(),
 				ExcelUtils.createTableHeader(headers), fields);
