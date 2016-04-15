@@ -53,6 +53,18 @@ public class AnswerAlarm {
 	 * 录音名称
 	 */
 	private String recordPath;
+	/**
+	 * 患者姓名
+	 */
+	private String patientName;
+
+	public String getPatientName() {
+		return patientName;
+	}
+
+	public void setPatientName(String patientName) {
+		this.patientName = patientName;
+	}
 
 	public String getResult() {
 		return result;
@@ -150,30 +162,6 @@ public class AnswerAlarm {
 		this.dispatcher = dispatcher;
 	}
 
-	/**
-	 * @param id
-	 * @param answerAlarmTime
-	 * @param alarmPhone
-	 * @param relatedPhone
-	 * @param siteAddress
-	 * @param judgementOnPhone
-	 * @param station
-	 * @param sendCarTime
-	 * @param dispatcher
-	 */
-	public AnswerAlarm(String id, String answerAlarmTime, String alarmPhone,
-			String relatedPhone, String siteAddress, String judgementOnPhone,
-			String station, String sendCarTime, String dispatcher) {
-		this.id = id;
-		this.answerAlarmTime = answerAlarmTime;
-		this.alarmPhone = alarmPhone;
-		this.relatedPhone = relatedPhone;
-		this.siteAddress = siteAddress;
-		this.judgementOnPhone = judgementOnPhone;
-		this.station = station;
-		this.sendCarTime = sendCarTime;
-		this.dispatcher = dispatcher;
-	}
 
 	public AnswerAlarm() {
 		super();

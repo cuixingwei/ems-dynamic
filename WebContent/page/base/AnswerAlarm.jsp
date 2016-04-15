@@ -87,7 +87,13 @@
 					}, {
 						field : 'dispatcher',
 						title : '调度员',
-						width : "12%",
+						width : "10%",
+						resizable : true,
+						align : 'center'
+					}, {
+						field : 'patientName',
+						title : '患者姓名',
+						width : "10%",
 						resizable : true,
 						align : 'center'
 					} ] ],

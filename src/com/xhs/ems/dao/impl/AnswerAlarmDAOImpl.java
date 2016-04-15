@@ -49,12 +49,12 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 				+ "select distinct e.事件编码 eventCode,m.姓名 dispatcher into #temp1	"
 				+ "from AuSp120.tb_EventV e	left outer join AuSp120.tb_MrUser m on m.工号=e.调度员编码	"
 				+ "where e.事件性质编码=1 and m.人员类型=0 "
-				+ "select a.ID id,convert(varchar(20),a.开始受理时刻,120) answerAlarmTime,a.呼救电话 alarmPhone,"
+				+ "select a.ID id,convert(varchar(20),a.电话振铃时刻,120) answerAlarmTime,a.呼救电话 alarmPhone,"
 				+ "a.联系电话 relatedPhone,a.现场地址 siteAddress,	a.初步判断 judgementOnPhone, t2.station,"
-				+ "convert(varchar(20),a.派车时刻,120) sendCarTime, t.dispatcher,et.录音文件名 recordPath	from #temp1 t	"
+				+ "convert(varchar(20),a.派车时刻,120) sendCarTime, t.dispatcher,et.录音文件名 recordPath,a.患者姓名 patientName	from #temp1 t	"
 				+ "left outer join AuSp120.tb_AcceptDescriptV a on t.eventCode=a.事件编码 "
 				+ "left outer join #temp2 t2 on t2.事件编码=t.eventCode	left outer join AuSp120.tb_EventTele et on et.事件编码=t.eventCode "
-				+ "where a.开始受理时刻 between :startTime and :endTime  ";
+				+ "where a.电话振铃时刻 between :startTime and :endTime  ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
 			sql = sql + "and a.调度员编码= :dispatcher ";
 		}
@@ -79,15 +79,17 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 					@Override
 					public AnswerAlarm mapRow(ResultSet rs, int index)
 							throws SQLException {
-						return new AnswerAlarm(rs.getString("id"), rs
-								.getString("answerAlarmTime"), rs
-								.getString("alarmPhone"), rs
-								.getString("relatedPhone"), rs
-								.getString("siteAddress"), rs
-								.getString("judgementOnPhone"), rs
-								.getString("station"), rs
-								.getString("sendCarTime"), rs
-								.getString("dispatcher"));
+						AnswerAlarm alarm = new AnswerAlarm();
+						alarm.setId(rs.getString("id"));
+						alarm.setAlarmPhone(rs.getString("alarmPhone"));
+						alarm.setAnswerAlarmTime(rs.getString("answerAlarmTime"));
+						alarm.setRelatedPhone(rs.getString("relatedPhone"));
+						alarm.setJudgementOnPhone(rs.getString("judgementOnPhone"));
+						alarm.setSendCarTime(rs.getString("sendCarTime"));
+						alarm.setStation(rs.getString("station"));
+						alarm.setDispatcher(rs.getString("dispatcher"));
+						alarm.setPatientName(rs.getString("patientName"));
+						return alarm;
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");

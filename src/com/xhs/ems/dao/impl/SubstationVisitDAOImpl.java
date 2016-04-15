@@ -43,7 +43,10 @@ public class SubstationVisitDAOImpl implements SubstationVisitDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select 分站编码,count( p.车辆编码) as 暂停次数  into #temp1 "
+		String sql = "select s.分站编码,COUNT(*) as 择院次数 into #temp4 from AuSp120.tb_AcceptDescript a 	"
+				+ "left outer join AuSp120.tb_Station s on a.择院需求编码=s.ID	where a.择院需求编码 <> 0 "
+				+ "and a.开始受理时刻 between :startTime and :endTime	"
+				+ "group by s.分站编码 select 分站编码,count( p.车辆编码) as 暂停次数  into #temp1 "
 				+ "from AuSp120.tb_RecordPauseReason p left join AuSp120.tb_Ambulance a on p.车辆编码=a.车辆编码 "
 				+ " where p.操作时刻 between :startTime and :endTime group by (分站编码) "
 				+ "select 任务编码,分站编码,结果编码 into #temp2 from AuSp120.tb_TaskV t "
@@ -57,11 +60,13 @@ public class SubstationVisitDAOImpl implements SubstationVisitDAO {
 				+ "sum(case when t2.结果编码=2 then 1 else 0 end) stopNumbers, '' stopRate,	"
 				+ "sum(case when t2.结果编码=3 then 1 else 0 end) emptyNumbers, '' emptyRate,	"
 				+ "sum(case when t2.结果编码=5 then 1 else 0 end) refuseNumbers, '' refuseRate,	"
-				+ "isnull(t1.暂停次数,0) as pauseNumbers,	isnull(t3.救治人数,0) as treatNumbers  "
+				+ "isnull(t1.暂停次数,0) as pauseNumbers,	isnull(t3.救治人数,0) as treatNumbers,"
+				+ "isnull(t4.择院次数,0) as choiseHosNumbers  "
 				+ "from AuSp120.tb_Station s  left outer join #temp2 t2 on t2.分站编码=s.分站编码  "
-				+ "left outer join	#temp1 t1 on t1.分站编码=s.分站编码  left outer join	#temp3 t3 on t3.分站编码=s.分站编码  "
-				+ "group by s.分站名称,t1.暂停次数,t3.救治人数,s.显示顺序  order by 显示顺序 "
-				+ " drop table #temp1, #temp2,#temp3";
+				+ "left outer join	#temp1 t1 on t1.分站编码=s.分站编码  left outer join	#temp3 t3 on t3.分站编码=s.分站编码 "
+				+ "left outer join #temp4 t4 on t4.分站编码=s.分站编码  "
+				+ "group by s.分站名称,t1.暂停次数,t3.救治人数,t4.择院次数,s.显示顺序  order by 显示顺序 "
+				+ " drop table #temp1, #temp2,#temp3,#temp4";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
@@ -82,10 +87,15 @@ public class SubstationVisitDAOImpl implements SubstationVisitDAO {
 								.getString("refuseNumbers"), rs
 								.getString("refuseRate"), rs
 								.getString("pauseNumbers"), rs
-								.getString("treatNumbers"));
+								.getString("treatNumbers"), rs
+								.getString("choiseHosNumbers"));
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");
+		logger.info(sql);
+
+		// 添加合计
+		SubstationVisit summary = new SubstationVisit("合计", "0", "0", "0", "0", "0", "0", "0", "0", "0","0", "0", "0");
 
 		// 计算比率
 		for (SubstationVisit result : results) {
@@ -101,7 +111,28 @@ public class SubstationVisitDAOImpl implements SubstationVisitDAO {
 			result.setNomalRate(CommonUtil.calculateRate(
 					Integer.parseInt(result.getSendNumbers()),
 					Integer.parseInt(result.getNomalNumbers())));
+			summary.setChoiseHosNumbers((Integer.parseInt(result.getChoiseHosNumbers())+Integer.parseInt(summary.getChoiseHosNumbers()))+"");
+			summary.setEmptyNumbers((Integer.parseInt(result.getEmptyNumbers())+Integer.parseInt(summary.getEmptyNumbers()))+"");
+			summary.setNomalNumbers((Integer.parseInt(result.getNomalNumbers())+Integer.parseInt(summary.getNomalNumbers()))+"");
+			summary.setPauseNumbers((Integer.parseInt(result.getPauseNumbers())+Integer.parseInt(summary.getPauseNumbers()))+"");
+			summary.setRefuseNumbers((Integer.parseInt(result.getRefuseNumbers())+Integer.parseInt(summary.getRefuseNumbers()))+"");
+			summary.setSendNumbers((Integer.parseInt(result.getSendNumbers())+Integer.parseInt(summary.getSendNumbers()))+"");
+			summary.setStopNumbers((Integer.parseInt(result.getStopNumbers())+Integer.parseInt(summary.getStopNumbers()))+"");
+			summary.setTreatNumbers((Integer.parseInt(result.getTreatNumbers())+Integer.parseInt(summary.getTreatNumbers()))+"");
 		}
+		summary.setEmptyRate(CommonUtil.calculateRate(
+				Integer.parseInt(summary.getSendNumbers()),
+				Integer.parseInt(summary.getEmptyNumbers())));
+		summary.setRefuseRate(CommonUtil.calculateRate(
+				Integer.parseInt(summary.getSendNumbers()),
+				Integer.parseInt(summary.getRefuseNumbers())));
+		summary.setStopRate(CommonUtil.calculateRate(
+				Integer.parseInt(summary.getSendNumbers()),
+				Integer.parseInt(summary.getStopNumbers())));
+		summary.setNomalRate(CommonUtil.calculateRate(
+				Integer.parseInt(summary.getSendNumbers()),
+				Integer.parseInt(summary.getNomalNumbers())));
+		results.add(summary);
 
 		Grid grid = new Grid();
 		if ((int) parameter.getPage() > 0) {

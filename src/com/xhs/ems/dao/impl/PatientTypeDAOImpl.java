@@ -8,7 +8,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -25,8 +24,6 @@ import com.xhs.ems.dao.PatientTypeDAO;
  */
 @Repository
 public class PatientTypeDAOImpl implements PatientTypeDAO {
-	private static final Logger logger = Logger
-			.getLogger(PatientTypeDAOImpl.class);
 
 	private NamedParameterJdbcTemplate npJdbcTemplate;
 

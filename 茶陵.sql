@@ -42,13 +42,18 @@ select 分站编码,count( p.车辆编码) as 暂停次数
 into #temp1 
 from AuSp120.tb_RecordPauseReason p 
 left join AuSp120.tb_Ambulance a on p.车辆编码=a.车辆编码
-where p.操作时刻 between '2015-01-19 00:00:00' and '2015-03-20 00:00:00'
+where p.操作时刻  between '2014-01-01 00:00:00' and '2017-01-01 00:00:00'
 group by (分站编码)
 
+select s.分站编码,COUNT(*) as 择院次数 into #temp4 from AuSp120.tb_AcceptDescript a 
+	left outer join AuSp120.tb_Station s on a.择院需求编码=s.ID
+	where a.择院需求编码 <> 0 and a.开始受理时刻 between '2014-01-01 00:00:00' and '2017-01-01 00:00:00'
+	group by s.分站编码
+	
 select 任务编码,分站编码,结果编码 
 into #temp2
 from AuSp120.tb_TaskV t left outer join AuSp120.tb_Event e on t.事件编码=e.事件编码
-where e.事件性质编码=1 and t.生成任务时刻 between '2015-01-19 00:00:00' and '2015-03-20 00:00:00' 
+where e.事件性质编码=1 and t.生成任务时刻 between '2014-01-01 00:00:00' and '2017-01-01 00:00:00'
 
 select 分站编码,count(*) as 救治人数
 into #temp3 
@@ -62,15 +67,17 @@ select s.分站名称 station,sum(case when t2.任务编码 is not null then 1 else 0 en
 	sum(case when t2.结果编码=3 then 1 else 0 end) emptyNumbers, '' emptyRate,
 	sum(case when t2.结果编码=5 then 1 else 0 end) refuseNumbers, '' refuseRate,
 	isnull(t1.暂停次数,0) as pauseNumbers,
-	isnull(t3.救治人数,0) as treatNumbers
+	isnull(t3.救治人数,0) as treatNumbers,
+	isnull(t4.择院次数,0) as choiseHosNumbers
 from AuSp120.tb_Station s
 left outer join #temp2 t2 on t2.分站编码=s.分站编码
 left outer join	#temp1 t1 on t1.分站编码=s.分站编码
 left outer join	#temp3 t3 on t3.分站编码=s.分站编码
-group by s.分站名称,t1.暂停次数,t3.救治人数,s.显示顺序
+left outer join #temp4 t4 on t4.分站编码=s.分站编码
+group by s.分站名称,t1.暂停次数,t3.救治人数,t4.择院次数,s.显示顺序
 order by 显示顺序
 
-drop table #temp1, #temp2,#temp3
+drop table #temp1, #temp2,#temp3,#temp4
 --重大事故
 select 	e.事件编码 eventCode,ac.事发时间 eventTime,e.事件名称 eventName,e.呼救电话 callPhone,m.姓名 dispatcher
 	from AuSp120.tb_AccidentEventLink ael
