@@ -284,15 +284,15 @@ public class JsGridReportBase {
 
 			cell = row.createCell(1);
 			style = styles.get("SUB_TITLE2");
-			cell.setCellValue(new HSSFRichTextString(startTime + "  至"));
+			cell.setCellValue(new HSSFRichTextString(startTime + "  至 " +endTime));
 			if (style != null)
 				cell.setCellStyle(style);
 
-			cell = row.createCell(2);
+			/*cell = row.createCell(2);
 			style = styles.get("SUB_TITLE2");
 			cell.setCellValue(new HSSFRichTextString(endTime));
 			if (style != null)
-				cell.setCellStyle(style);
+				cell.setCellStyle(style);*/
 		} else {
 			cell = row.createCell(2);
 			cell.setCellValue(new HSSFRichTextString("统计时间:"));

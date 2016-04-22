@@ -12,7 +12,7 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-		var url = "exportSubstationVisitDatas?startTime="
+		var url = "exportStationTransferDatas?startTime="
 				+ $('#startTime').datetimebox('getValue') + "&endTime="
 				+ $('#endTime').datetimebox('getValue');
 		window.location.href = url;
@@ -29,7 +29,7 @@
 
 		grid = $('#grid').datagrid(
 				{
-					url : 'getSubstationVisitDatas',
+					url : 'getStationTransferDatas',
 					pagePosition : 'bottom',
 					pagination : true,
 					striped : true,
@@ -40,84 +40,18 @@
 					pageSize : 20,
 					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 					columns : [ [ {
-						field : 'station',
-						title : '分站名称',
+						field : 'name',
+						title : '项目',
 						resizable : true,
-						width : "8%",
+						width : "45%",
 						align : 'center',
 						nowrap : false
 					}, {
-						field : 'sendNumbers',
-						title : '120派诊',
+						field : 'numbers',
+						title : '次数',
 						resizable : true,
-						width : "7%",
+						width : "45%",
 						align : 'center',
-					}, {
-						field : 'nomalNumbers',
-						title : '正常完成',
-						resizable : true,
-						width : "7%",
-						align : 'center'
-					}, {
-						field : 'nomalRate',
-						title : '正常完成比率',
-						resizable : true,
-						width : "9%",
-						align : 'center'
-					}, {
-						field : 'stopNumbers',
-						title : '中止任务',
-						resizable : true,
-						width : "7%",
-						align : 'center',
-					}, {
-						field : 'stopRate',
-						title : '中止任务比率',
-						resizable : true,
-						width : "8%",
-						align : 'center'
-					}, {
-						field : 'emptyNumbers',
-						title : '空车',
-						resizable : true,
-						width : "7%",
-						align : 'center'
-					}, {
-						field : 'emptyRate',
-						title : '空车比率',
-						resizable : true,
-						width : "7%",
-						align : 'center',
-					}, {
-						field : 'refuseNumbers',
-						title : '拒绝出车',
-						resizable : true,
-						width : "7%",
-						align : 'center'
-					}, {
-						field : 'refuseRate',
-						title : '拒绝出车比率',
-						resizable : true,
-						width : "8%",
-						align : 'center'
-					}, {
-						field : 'pauseNumbers',
-						title : '暂停调用',
-						resizable : true,
-						width : "7%",
-						align : 'center',
-					}, {
-						field : 'treatNumbers',
-						title : '救治人数',
-						resizable : true,
-						width : "7%",
-						align : 'center'
-					}, {
-						field : 'choiseHosNumbers',
-						title : '择院次数',
-						resizable : true,
-						width : "7%",
-						align : 'center'
 					} ] ],
 					toolbar : '#toolbar',
 					onBeforeLoad : function(param) {

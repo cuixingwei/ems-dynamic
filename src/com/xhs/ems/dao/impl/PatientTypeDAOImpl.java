@@ -62,7 +62,7 @@ public class PatientTypeDAOImpl implements PatientTypeDAO {
 				+ "SUM(case when pc.分类统计编码=21 then 1 else 0 end) type21,	COUNT(*) total	"
 				+ "from AuSp120.tb_PatientCase pc	"
 				+ "left outer join AuSp120.tb_Ambulance  am on am.实际标识=pc.车辆标识 "
-				+ "left outer join AuSp120.tb_Task t on  pc.任务编码=t.任务编码 and pc.车辆标识=am.实际标识	"
+				+ "left outer join AuSp120.tb_Task t on  pc.任务编码=t.任务编码 and t.车辆编码=am.车辆编码	"
 				+ "left outer join AuSp120.tb_DDiseaseClassState ddcs on ddcs.Code=pc.分类统计编码	"
 				+ "left outer join AuSp120.tb_Station s on s.分站编码=pc.分站编码	"
 				+ "where t.生成任务时刻 between :startTime and :endTime	group by s.分站名称 ";

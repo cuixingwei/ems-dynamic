@@ -48,13 +48,19 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 				+ "from AuSp120.tb_TaskV t left outer join AuSp120.tb_Station s on s.分站编码=t.分站编码 "
 				+ "select distinct e.事件编码 eventCode,m.姓名 dispatcher into #temp1	"
 				+ "from AuSp120.tb_EventV e	left outer join AuSp120.tb_MrUser m on m.工号=e.调度员编码	"
-				+ "where e.事件性质编码=1 and m.人员类型=0 "
+				+ "where e.事件性质编码=1 and m.人员类型=0  select a.事件编码,a.受理序号,pc.姓名 into #pc 	"
+				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.车辆标识	"
+				+ "left outer join AuSp120.tb_Task t on pc.任务编码=t.任务编码 and t.车辆编码=am.车辆编码	"
+				+ "left outer join AuSp120.tb_AcceptDescript a on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
+				+ "select	事件编码,受理序号,姓名 = (stuff((select ',' + 姓名 from #pc where 事件编码 = pc.事件编码 and 受理序号=pc.受理序号 for xml path('')),1,1,''))  into #name	"
+				+ "from #pc pc  group by pc.事件编码,pc.受理序号 "
 				+ "select a.ID id,convert(varchar(20),a.电话振铃时刻,120) answerAlarmTime,a.呼救电话 alarmPhone,"
 				+ "a.联系电话 relatedPhone,a.现场地址 siteAddress,	a.初步判断 judgementOnPhone, t2.station,"
-				+ "convert(varchar(20),a.派车时刻,120) sendCarTime, t.dispatcher,et.录音文件名 recordPath,a.患者姓名 patientName	from #temp1 t	"
+				+ "convert(varchar(20),a.派车时刻,120) sendCarTime, t.dispatcher,et.录音文件名 recordPath,n.姓名 patientName	from #temp1 t	"
 				+ "left outer join AuSp120.tb_AcceptDescriptV a on t.eventCode=a.事件编码 "
 				+ "left outer join #temp2 t2 on t2.事件编码=t.eventCode	left outer join AuSp120.tb_EventTele et on et.事件编码=t.eventCode "
-				+ "where a.电话振铃时刻 between :startTime and :endTime  ";
+				+ "left outer join #name n on n.事件编码=a.事件编码 and a.受理序号=n.受理序号  "
+				+ "where a.电话振铃时刻  between :startTime and :endTime  ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
 			sql = sql + "and a.调度员编码= :dispatcher ";
 		}
@@ -64,7 +70,7 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 		if (!CommonUtil.isNullOrEmpty(parameter.getSiteAddress())) {
 			sql += " and a.现场地址 like :siteAddress";
 		}
-		sql += " drop table #temp1,#temp2";
+		sql += "order by a.电话振铃时刻  drop table #temp1,#temp2,#name,#pc";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
@@ -89,6 +95,7 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 						alarm.setStation(rs.getString("station"));
 						alarm.setDispatcher(rs.getString("dispatcher"));
 						alarm.setPatientName(rs.getString("patientName"));
+						alarm.setSiteAddress(rs.getString("siteAddress"));
 						return alarm;
 					}
 				});
