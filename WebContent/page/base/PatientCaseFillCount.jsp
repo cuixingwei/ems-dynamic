@@ -42,25 +42,25 @@
 						field : 'station',
 						title : '分站名称',
 						resizable : true,
-						width : "25%",
+						width : "23%",
 						align : 'center'
 					}, {
 						field : 'sendNumbers',
 						title : '120派诊数',
 						resizable : true,
-						width : "25%",
+						width : "23%",
 						align : 'center',
 					}, {
 						field : 'fillNumbers',
 						title : '回填数',
 						resizable : true,
-						width : "25%",
+						width : "23%",
 						align : 'center'
 					}, {
 						field : 'rate',
 						title : '回填率',
 						resizable : true,
-						width : "24%",
+						width : "23%",
 						align : 'center'
 					} ] ],
 					toolbar : '#toolbar',
