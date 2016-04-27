@@ -48,10 +48,10 @@ public class DriverWorkController {
 		response.setContentType("application/msexcel;charset=UTF-8");
 		String title = "司机工作情况统计";
 		String[] headers = new String[] { "分站", "司机", "出车次数", "有效出车数", "中止数",
-				" 空车数", "拒绝出车", "暂停调用数", " 平均出车时间", "平均到达时间" };
+				" 空车数", "拒绝出车",  " 平均出车时间", "平均到达时间" };
 		String[] fields = new String[] { "station", "driver", "outCarNumbers",
 				"nomalNumbers", "stopNumbers", "emptyNumbers", "refuseNumbers",
-				"pauseNumbers", "averageOutCarTimes", "averageArriveSpotTimes" };
+				 "averageOutCarTimes", "averageArriveSpotTimes" };
 		int spanCount = 1; // 需要合并的列数。从第1列开始到指定列。
 		TableData td = ExcelUtils.createTableData(
 				driverWorkService.getData(parameter).getRows(),

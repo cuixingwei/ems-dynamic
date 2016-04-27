@@ -45,10 +45,10 @@ public class CarPauseController {
 		response.setContentType("application/msexcel;charset=UTF-8");
 
 		String title = "车辆暂停调用原因";
-		String[] headers = new String[] { "车辆", "司机", "暂停时长", "暂停时刻", "结束时刻",
+		String[] headers = new String[] { "车辆",  "暂停时刻", 
 				"操作人", "暂停原因" };
-		String[] fields = new String[] { "carCode", "driver", "pauseTimes",
-				"pauseTime", "endTime", "dispatcher", "pauseReason" };
+		String[] fields = new String[] { "carCode", 
+				"pauseTime", "dispatcher", "pauseReason" };
 		TableData td = ExcelUtils.createTableData(
 				carPauseService.getData(parameter).getRows(),
 				ExcelUtils.createTableHeader(headers), fields);

@@ -87,6 +87,9 @@ public class CarPause {
 		this.dispatcher = dispatcher;
 		this.pauseReason = pauseReason;
 	}
+	public CarPause() {
+	}
+	
 	
 	
 }

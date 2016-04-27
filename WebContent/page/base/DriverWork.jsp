@@ -87,12 +87,6 @@
 						width : "9%",
 						align : 'center',
 					}, {
-						field : 'pauseNumbers',
-						title : '暂停调用数',
-						resizable : true,
-						width : "10%",
-						align : 'center'
-					}, {
 						field : 'averageOutCarTimes',
 						title : '平均出车时间',
 						resizable : true,

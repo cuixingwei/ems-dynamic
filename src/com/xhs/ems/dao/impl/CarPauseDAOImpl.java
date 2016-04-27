@@ -37,14 +37,14 @@ public class CarPauseDAOImpl implements CarPauseDAO {
 	}
 
 	/**
-	 * @author 崔兴伟
+	 * @author 崔兴伟  洛阳
 	 * @datetime 2015年4月13日 下午4:27:14
 	 * @see com.xhs.ems.dao.CarPauseDAO#getData(com.xhs.ems.bean.Parameter)
 	 */
 	@Override
-	public Grid getData(Parameter parameter) {
-		String sql = "select am.实际标识 carCode,rpr.司机 driver,isnull(DATEDIFF(Second,rpr.操作时刻,rpr.结束时刻),0) pauseTimes,convert(varchar(20),rpr.操作时刻,120) pauseTime,"
-				+ "convert(varchar(20),rpr.结束时刻,120) endTime,m.姓名 dispatcher,rpr.暂停调用原因 pauseReason	"
+	public Grid getData(Parameter parameter) {  //洛阳特色，车辆暂停调用表没有结束时刻和司机
+		String sql = "select am.实际标识 carCode,convert(varchar(20),rpr.操作时刻,120) pauseTime,"
+				+ "m.姓名 dispatcher,rpr.暂停调用原因 pauseReason	"
 				+ "from AuSp120.tb_RecordPauseReason rpr	"
 				+ "left outer join AuSp120.tb_Ambulance am on am.车辆编码=rpr.车辆编码	"
 				+ "left outer join AuSp120.tb_MrUser m on rpr.调度员编码=m.工号  "
@@ -75,13 +75,12 @@ public class CarPauseDAOImpl implements CarPauseDAO {
 					@Override
 					public CarPause mapRow(ResultSet rs, int index)
 							throws SQLException {
-						return new CarPause(rs.getString("carCode"), rs
-								.getString("driver"), rs
-								.getString("pauseTimes"), rs
-								.getString("pauseTime"), rs
-								.getString("endTime"), rs
-								.getString("dispatcher"), rs
-								.getString("pauseReason"));
+						CarPause carPause = new CarPause();
+						carPause.setCarCode(rs.getString("carCode"));
+						carPause.setDispatcher(rs.getString("dispatcher"));
+						carPause.setPauseReason(rs.getString("pauseReason"));
+						carPause.setPauseTime(rs.getString("pauseTime"));
+						return carPause;
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");
