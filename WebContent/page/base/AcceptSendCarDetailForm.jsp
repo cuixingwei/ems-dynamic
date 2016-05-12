@@ -22,7 +22,7 @@
 			parent.$.messager.progress({
 				text : '数据加载中....'
 			});
-			$.post('getDetail', {
+			$.get('getDetail', {
 				id : cxw.id
 			}, function(result) {
 				$('#record').attr('src',result.record);

@@ -1,6 +1,5 @@
 package com.xhs.ems.controller;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -40,7 +39,7 @@ public class AcceptSendCarController {
 		return acceptSendCarService.getData(parameter);
 	}
 
-	@RequestMapping(value = "/getDetail", method = RequestMethod.POST)
+	@RequestMapping(value = "/getDetail", method = RequestMethod.GET)
 	public @ResponseBody AcceptSendCarDetail getDetail(Parameter parameter,
 			HttpServletRequest request) {
 		logger.info("事件详情查询");

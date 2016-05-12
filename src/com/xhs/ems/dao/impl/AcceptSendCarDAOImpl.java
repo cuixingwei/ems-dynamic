@@ -121,7 +121,7 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 				+ "'0' backHospitalNumbers,convert(varchar(20),t.完成时刻,120) completeTime,m.姓名 stationDispatcher,"
 				+ "t.任务序号 outCarNumbers,et.录音文件名 record from AuSp120.tb_AcceptDescriptV a "
 				+ "left outer  join AuSp120.tb_EventV e on a.事件编码=e.事件编码 LEFT outer join AuSp120.tb_EventTele et on et.事件编码=e.事件编码	"
-				+ "left outer join AuSp120.tb_TaskV t on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
+				+ "left outer join AuSp120.tb_Task t on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
 				+ "left outer join AuSp120.tb_DEventType det on det.Code=e.事件类型编码	"
 				+ "left outer join AuSp120.tb_DEventNature den on den.Code=e.事件性质编码	"
 				+ "left outer join AuSp120.tb_DILLState dis on dis.Code=a.病情编码	"
@@ -140,6 +140,7 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("id", id);
 		logger.info("id:" + id);
+		logger.info(sql);
 		AcceptSendCarDetail result = this.npJdbcTemplate.queryForObject(sql,
 				paramMap, new RowMapper<AcceptSendCarDetail>() {
 
@@ -207,8 +208,8 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 				year = name[0];
 				month = name[1];
 				day = name[2];
-				String recordPath = recordIP + year + month + "/" + year
-						+ month + day + "/" + recordName;
+				String recordPath = recordIP +year + month + "/" + year
+						+ month + day + "/" + recordName; 
 				logger.info("录音文件绝对路径为:" + recordPath);
 				result.setRecord(recordPath);
 			}

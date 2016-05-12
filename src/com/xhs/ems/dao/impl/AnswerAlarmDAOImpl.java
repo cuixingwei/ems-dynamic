@@ -178,7 +178,7 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 						day = name[2];
 					}
 					String recordPath = recordIP + year + month + "/" + year
-							+ month + day + "/" + recordName;
+							+ month + day + "/" + recordName; 
 					logger.info("录音文件绝对路径为:" + recordPath);
 					reAlarm.setRecordPath(recordPath);
 				}
