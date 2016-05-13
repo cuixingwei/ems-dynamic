@@ -47,32 +47,32 @@
 					columns : [ [ {
 						field : 'dispatcher',
 						title : '调度员',
-						width : "15%",
+						width : "16%",
 						align : 'center'
 					}, {
 						field : 'averageOffhookTime',
 						title : '平均摘机时长(秒)',
-						width : "15%",
+						width : "16%",
 						align : 'center',
 					}, {
 						field : 'averageOffSendCar',
 						title : '平均派车时长(秒)',
-						width : "10%",
+						width : "16%",
 						align : 'center'
 					}, {
 						field : 'averageAccept',
 						title : '平均受理时长(秒)',
-						width : "20%",
+						width : "16%",
 						align : 'center'
 					}, {
 						field : 'readyTime',
 						title : '就绪时长',
-						width : "19.9%",
+						width : "16%",
 						align : 'center'
 					}, {
 						field : 'leaveTime',
 						title : '离席时长',
-						width : "20%",
+						width : "16%",
 						align : 'center'
 					} ] ],
 					toolbar : '#toolbar',

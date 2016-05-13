@@ -51,10 +51,26 @@ public class AcceptTimeDAOImpl implements AcceptTimeDAO {
 				+ "ISNULL(t4.averageOffSendCar,0) averageOffSendCar	from #temp4 t4 left outer join #temp1 t1 on t1.工号=t4.工号	"
 				+ "left outer join #temp2 t2 on t4.工号=t2.工号	left outer join #temp3 t3 on t4.工号=t3.工号	"
 				+ "left outer join AuSp120.tb_MrUser m on t4.工号=m.工号	where m.人员类型=0";
+		String summary = "select '合计' 工号, avg(datediff(SECOND,sl.开始时刻,sl.结束时刻)) readyTime into #temp1 "
+				+ "from AuSp120.tb_SlinoLog sl	where sl.座席状态='就绪' "
+				+ "and sl.开始时刻 between :startTime and :endTime 	"
+				+ "select '合计' 工号,avg(datediff(SECOND,sl.开始时刻,sl.结束时刻)) leaveTime  into #temp2 "
+				+ "from AuSp120.tb_SlinoLog sl	where sl.座席状态='离席' and sl.开始时刻 between :startTime and :endTime 	"
+				+ "select '合计' 工号,avg(datediff(Second,tr.振铃时刻,tr.通话开始时刻))  averageOffhookTime into #temp3 "
+				+ "from AuSp120.tb_TeleRecord tr	where tr.振铃时刻 between :startTime and :endTime 	"
+				+ "select '合计' 工号,	avg(datediff(Second, a.开始受理时刻, a.派车时刻)) averageOffSendCar,	"
+				+ "avg(datediff(Second, a.开始受理时刻, a.结束受理时刻)) averageAccept into #temp4	from  AuSp120.tb_AcceptDescriptV a		"
+				+ "left outer join AuSp120.tb_Event e on e.事件编码=a.事件编码	where e.事件性质编码=1 "
+				+ "and a.开始受理时刻 between :startTime and :endTime  	"
+				+ "select '合计' dispatcher,ISNULL(t1.readyTime,0) readyTime,ISNULL(t2.leaveTime,0) leaveTime,"
+				+ "ISNULL(t3.averageOffhookTime,0) averageOffhookTime,ISNULL(t4.averageAccept,0) averageAccept,"
+				+ "ISNULL(t4.averageOffSendCar,0) averageOffSendCar	from #temp4 t4 left outer join #temp1 t1 on t1.工号=t4.工号	"
+				+ "left outer join #temp2 t2 on t4.工号=t2.工号	left outer join #temp3 t3 on t4.工号=t3.工号	";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
 			sql = sql + " and t4.工号=:dispatcher ";
 		}
 		sql = sql + " drop table #temp1,#temp2,#temp3,#temp4 ";
+		summary = summary + " drop table #temp1,#temp2,#temp3,#temp4 ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("startTime", parameter.getStartTime());
@@ -74,6 +90,23 @@ public class AcceptTimeDAOImpl implements AcceptTimeDAO {
 								.getString("leaveTime"));
 					}
 				});
+		List<AcceptTime> summaryList = this.npJdbcTemplate.query(summary, paramMap,
+				new RowMapper<AcceptTime>() {
+					@Override
+					public AcceptTime mapRow(ResultSet rs, int index)
+							throws SQLException {
+
+						return new AcceptTime(rs.getString("dispatcher"), rs
+								.getString("averageOffhookTime"), rs
+								.getString("averageOffSendCar"), rs
+								.getString("averageAccept"), rs
+								.getString("readyTime"), rs
+								.getString("leaveTime"));
+					}
+				});
+		for (AcceptTime sm : summaryList) {
+			results.add(sm);
+		}
 		for (AcceptTime result : results) {
 			result.setReadyTime(CommonUtil.formatSecond(result.getReadyTime()));
 			result.setLeaveTime(CommonUtil.formatSecond(result.getLeaveTime()));
