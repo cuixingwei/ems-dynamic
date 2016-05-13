@@ -196,6 +196,29 @@ public class AcceptEventType {
 	public void setRatioComplete(String ratioComplete) {
 		this.ratioComplete = ratioComplete;
 	}
+	public AcceptEventType() {
+	}
+	/**
+	 * @param dispatcher
+	 * @param numbersOfPhone
+	 * @param numbersOfSendCar
+	 * @param numbersOfNormalSendCar
+	 * @param numbersOfNormalHangUp
+	 * @param numbersOfReinforceSendCar
+	 * @param numbersOfReinforceHangUp
+	 * @param numbersOfStopTask
+	 * @param specialEvent
+	 * @param noCar
+	 * @param transmitCenter
+	 * @param refuseSendCar
+	 * @param wakeSendCar
+	 * @param stopTask
+	 * @param ratioStopTask
+	 * @param emptyCar
+	 * @param ratioEmptyCar
+	 * @param nomalComplete
+	 * @param ratioComplete
+	 */
 	public AcceptEventType(String dispatcher, String numbersOfPhone,
 			String numbersOfSendCar, String numbersOfNormalSendCar,
 			String numbersOfNormalHangUp, String numbersOfReinforceSendCar,
@@ -224,5 +247,6 @@ public class AcceptEventType {
 		this.nomalComplete = nomalComplete;
 		this.ratioComplete = ratioComplete;
 	}
+	
 	
 }
