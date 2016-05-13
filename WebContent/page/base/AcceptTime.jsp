@@ -31,7 +31,8 @@
 			url : 'getUsers',
 			valueField : 'employeeId',
 			textField : 'name',
-			method : 'get'
+			method : 'get',
+			editable: false
 		});
 		grid = $('#grid').datagrid(
 				{
