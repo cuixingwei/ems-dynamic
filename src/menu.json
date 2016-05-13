@@ -106,19 +106,6 @@
     	"attributes":
     		{
     			"target":"",
-    			"url":"StateChange.jsp"
-    		},
-    	"checked":false,
-    	"iconCls":"ext-icon-world",
-    	"id":"07",
-    	"pid":"0",
-    	"state":"open",
-    	"text":"状态变化统计"
-    },
-    {
-    	"attributes":
-    		{
-    			"target":"",
     			"url":""
     		},
     	"checked":false,

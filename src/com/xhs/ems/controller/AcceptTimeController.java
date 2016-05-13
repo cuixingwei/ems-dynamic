@@ -42,9 +42,9 @@ public class AcceptTimeController {
 
 		String title = "受理时间统计";
 		String[] headers = new String[] { "调度员", "平均摘机时长(秒)", "平均派车时长(秒)",
-				"平均受理时长(秒)", "就绪时长", "离席时长" };
+				"平均受理时长(秒)" };
 		String[] fields = new String[] { "dispatcher", "averageOffhookTime",
-				"averageOffSendCar", "averageAccept", "readyTime", "leaveTime" };
+				"averageOffSendCar", "averageAccept" };
 		TableData td = ExcelUtils.createTableData(
 				acceptTimeService.getData(parameter).getRows(),
 				ExcelUtils.createTableHeader(headers), fields);

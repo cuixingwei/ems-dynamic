@@ -22,14 +22,6 @@ public class AcceptTime {
 	 * 平均受理时长
 	 */
 	private String averageAccept;
-	/**
-	 * 就绪时长
-	 */
-	private String readyTime;
-	/**
-	 * 离席时长
-	 */
-	private String leaveTime;
 	public String getDispatcher() {
 		return dispatcher;
 	}
@@ -54,27 +46,12 @@ public class AcceptTime {
 	public void setAverageAccept(String averageAccept) {
 		this.averageAccept = averageAccept;
 	}
-	public String getReadyTime() {
-		return readyTime;
-	}
-	public void setReadyTime(String readyTime) {
-		this.readyTime = readyTime;
-	}
-	public String getLeaveTime() {
-		return leaveTime;
-	}
-	public void setLeaveTime(String leaveTime) {
-		this.leaveTime = leaveTime;
-	}
 	public AcceptTime(String dispatcher, String averageOffhookTime,
-			String averageOffSendCar, String averageAccept, String readyTime,
-			String leaveTime) {
+			String averageOffSendCar, String averageAccept) {
 		this.dispatcher = dispatcher;
 		this.averageOffhookTime = averageOffhookTime;
 		this.averageOffSendCar = averageOffSendCar;
 		this.averageAccept = averageAccept;
-		this.readyTime = readyTime;
-		this.leaveTime = leaveTime;
 	}
 	
 }

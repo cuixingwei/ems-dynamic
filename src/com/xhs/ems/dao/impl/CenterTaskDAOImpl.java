@@ -93,6 +93,7 @@ public class CenterTaskDAOImpl implements CenterTaskDAO {
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");
+		logger.info(sql1 + sql2 + sql3);
 
 		Grid grid = new Grid();
 		if ((int) parameter.getPage() > 0) {
