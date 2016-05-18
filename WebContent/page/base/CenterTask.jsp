@@ -55,13 +55,13 @@
 						field : 'sickAddress',
 						title : '患者地址',
 						rowspan : 2,
-						width : "5%",
+						width : "8%",
 						align : 'center',
 					}, {
 						field : 'sickDescription',
 						title : '主诉',
 						rowspan : 2,
-						width : "5%",
+						width : "8%",
 						align : 'center'
 					}, {
 						field : 'phone',
@@ -128,16 +128,16 @@
 						title : '出车结果',
 						rowspan : 2,
 						align : 'center',
-						width : '5%'
+						width : '3%'
 					} ], [ {
 						field : 'doctor',
 						title : '医生',
-						width : "5%",
+						width : "3%",
 						align : 'center'
 					}, {
 						field : 'nurse',
 						title : '护士',
-						width : "5%",
+						width : "3%",
 						align : 'center'
 					}, {
 						field : 'driver',
