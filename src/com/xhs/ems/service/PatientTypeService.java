@@ -1,14 +1,13 @@
-package com.xhs.ems.dao;
+package com.xhs.ems.service;
 
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
 
 /**
- * @datetime 2016年5月18日 下午6:31:13
+ * @datetime 2016年5月18日 下午6:32:43
  * @author 崔兴伟
  */
-public interface PatientTypeDAO {
-
+public interface PatientTypeService {
 	/**
 	 * 疾病类型统计
 	 * @datetime 2016年5月18日 下午6:32:08

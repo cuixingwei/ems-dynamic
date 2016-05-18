@@ -415,7 +415,7 @@
     	"attributes":
     		{
     			"target":"",
-    			"url":"PatientType.jsp"
+    			"url":"PatientClass.jsp"
     		},
     	"checked":false,
     	"iconCls":"ext-icon-world",
@@ -423,6 +423,19 @@
     	"pid":"3",
     	"state":"open",
     	"text":"疾病分类统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"PatientType.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"32",
+    	"pid":"3",
+    	"state":"open",
+    	"text":"疾病种类统计"
     },
     {
     	"attributes":
@@ -436,5 +449,19 @@
     	"pid":"3",
     	"state":"open",
     	"text":"病发时间段统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"PatientSex.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"33",
+    	"pid":"3",
+    	"state":"open",
+    	"text":"患者性别统计"
     }
+    
 ]

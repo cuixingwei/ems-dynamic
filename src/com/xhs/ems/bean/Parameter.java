@@ -96,6 +96,30 @@ public class Parameter {
 	 * 事件详情查询（受理表的ID）
 	 */
 	private String id;
+	/**
+	 * 疾病分类统计编码
+	 */
+	private String patientClassCode;
+	/**
+	 * 疾病类型统计
+	 */
+	private String patientTypeCode;
+
+	public String getPatientTypeCode() {
+		return patientTypeCode;
+	}
+
+	public void setPatientTypeCode(String patientTypeCode) {
+		this.patientTypeCode = patientTypeCode;
+	}
+
+	public String getPatientClassCode() {
+		return patientClassCode;
+	}
+
+	public void setPatientClassCode(String patientClassCode) {
+		this.patientClassCode = patientClassCode;
+	}
 
 	/**
 	 * @return the id

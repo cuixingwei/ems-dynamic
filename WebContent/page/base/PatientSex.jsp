@@ -12,10 +12,9 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-		var url = "exportPatientType?startTime="
+		var url = "exportPatientSex?startTime="
 				+ $('#startTime').datetimebox('getValue') + "&endTime="
-				+ $('#endTime').datetimebox('getValue') + "&patientTypeCode="
-				+ $('#patientTypeCode').combobox('getValue');
+				+ $('#endTime').datetimebox('getValue')+"&patientClassCode="+$('#patientClassCode').combobox('getValue');
 		window.location.href = url;
 	};
 	/* 初始化页面标签 */
@@ -27,8 +26,8 @@
 		$('#endTime').datetimebox({
 			value : getCurrentTime()
 		});
-		$('#patientTypeCode').combobox({
-			url : 'GetPatientType',
+		$('#patientClassCode').combobox({
+			url : 'GetPatientClass',
 			valueField : 'code',
 			textField : 'name',
 			method : 'get',
@@ -36,7 +35,7 @@
 		});
 		grid = $('#grid').datagrid(
 				{
-					url : 'getPatientTypeData',
+					url : 'getPatientSex',
 					pagePosition : 'bottom',
 					pagination : true,
 					striped : true,
@@ -46,22 +45,34 @@
 					pageSize : 20,
 					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 					columns : [ [ {
-						field : 'patientType',
-						title : '疾病种类',
+						field : 'time',
+						title : '时间',
 						resizable : true,
-						width : "32%",
+						width : "19%",
 						align : 'center'
 					}, {
-						field : 'numbers',
-						title : '人数',
+						field : 'male',
+						title : '男',
 						resizable : true,
-						width : "32%",
+						width : "19%",
+						align : 'center',
+					}, {
+						field : 'female',
+						title : '女',
+						resizable : true,
+						width : "19%",
+						align : 'center'
+					}, {
+						field : 'total',
+						title : '总计',
+						resizable : true,
+						width : "19%",
 						align : 'center',
 					}, {
 						field : 'radio',
-						title : '百分比',
+						title : '男:女',
 						resizable : true,
-						width : "32%",
+						width : "19%",
 						align : 'center'
 					} ] ],
 					toolbar : '#toolbar',
@@ -92,9 +103,8 @@
 					<form id="searchForm">
 						<table>
 							<tr>
-								<td>疾病种类</td>
-								<td><input id="patientTypeCode" name="patientTypeCode"
-									style="width: 120em;" /></td>
+								<td>疾病分类</td>
+								<td><input id="patientClassCode" name="patientClassCode" style="width: 120em;"/></td>
 							</tr>
 							<tr>
 								<td>查询时间:</td>

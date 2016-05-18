@@ -127,6 +127,20 @@ public class CommonUtil {
 		return html;
 		
 	}
+	/**
+	 * 计算两者比率
+	 * @datetime 2016年5月18日 下午5:58:03
+	 * @author 崔兴伟
+	 * @param one
+	 * @param second
+	 * @return
+	 */
+	public static String calculateToRate(Object one, Object second) {
+		Double rate = Double.parseDouble(one.toString())
+				/ Double.parseDouble(second.toString());
+		String rateString = String.format("%.2f", rate);
+		return rateString + " : 1";
+	}
 	
 	
 }
