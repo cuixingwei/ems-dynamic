@@ -43,33 +43,29 @@ public class CenterTaskDAOImpl implements CenterTaskDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql1 = "select  pc.姓名 name,病人主诉 sickDescription,送往地点 toAddress,随车医生 doctor,随车护士 nurse,司机 driver,任务编码,家庭住址 sickAddress	into #temp1 	from AuSp120.tb_PatientCase pc "
-				+ "left outer join AuSp120.tb_MrUser on 分站调度员编码=工号"
-				+ " where 人员类型<>1 and 记录时刻 between :startTime and  :endTime ";
-		String sql2 = "select  e.呼救电话 phone,convert(varchar(20),e.受理时刻,120) acceptTime,convert(varchar(20),t.生成任务时刻,120) sendCarTime,	convert(varchar(20),t.出车时刻,120) drivingTime,convert(varchar(20),t.到达现场时刻,120) arrivalTime,"
-				+ "convert(varchar(20),t.到达医院时刻,120) returnHospitalTime,	am.实际标识 carCode,m.姓名 dispatcher,dtr.NameM taskResult,t.任务编码,e.事件编码  into #temp2   	from  AuSp120.tb_TaskV t "
-				+ "left outer join AuSp120.tb_Event e on t.事件编码=e.事件编码	left outer join AuSp120.tb_MrUser m on t.调度员编码=m.工号	"
-				+ "left outer join AuSp120.tb_DTaskResult dtr on t.结果编码=dtr.Code	left outer join AuSp120.tb_Ambulance am on t.车辆编码=am.车辆编码	"
-				+ "where e.事件性质编码=1  and m.人员类型<>1 and t.生成任务时刻 between :startTime and :endTime ";
-		String sql3 = "select * from "
-				+ "(select  name,sickAddress,sickDescription,phone,acceptTime,sendCarTime,drivingTime,arrivalTime,returnHospitalTime,toAddress,carCode,doctor,nurse,driver,dispatcher,taskResult	"
-				+ "from #temp1 a left outer join  #temp2 b on a.任务编码=b.任务编码   "
-				+ "union   "
-				+ "select  name,sickAddress,sickDescription,phone,acceptTime,sendCarTime,drivingTime,arrivalTime,returnHospitalTime,toAddress,carCode,doctor,nurse,driver,dispatcher,taskResult 	"
-				+ "from #temp2 b left outer join #temp1 a on a.任务编码=b.任务编码) t    "
-				+ "where t.acceptTime is not null  order by t.acceptTime   "
-				+ "drop table #temp1,#temp2";
+		String sql = "select pc.姓名 name,pc.家庭住址 sickAddress,pc.病人主诉 sickDescription,e.呼救电话 phone,"
+				+ "convert(varchar(20),e.受理时刻,120) acceptTime, convert(varchar(20),t.生成任务时刻,120) sendCarTime,"
+				+ "convert(varchar(20),t.出车时刻,120) drivingTime,convert(varchar(20),t.到达现场时刻,120) arrivalTime,"
+				+ " convert(varchar(20),t.到达医院时刻,120) returnHospitalTime,pc.送往地点 toAddress,am.实际标识 carCode,"
+				+ "pc.随车医生 doctor,pc.随车护士 nurse, pc.司机 driver,m.姓名 dispatcher,tr.NameM taskResult from AuSp120.tb_EventV  e "
+				+ "left outer join AuSp120.tb_AcceptDescriptV a on a.事件编码=e.事件编码 "
+				+ "left outer join AuSp120.tb_Task t on t.事件编码=a.事件编码 and a.受理序号=t.受理序号 "
+				+ "left outer join AuSp120.tb_Ambulance am on t.车辆编码=am.车辆编码 "
+				+ "left outer join AuSp120.tb_MrUser m on m.工号=t.调度员编码 "
+				+ "left outer join AuSp120.tb_DTaskResult tr on tr.Code=t.结果编码 "
+				+ "full outer join AuSp120.tb_PatientCase pc on am.实际标识=pc.车辆标识 and t.任务编码=pc.任务编码"
+				+ " where e.事件性质编码=1 and a.开始受理时刻 between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
-			sql1 = sql1 + " and 分站编码=:station ";
-			sql2 = sql2 + " and t.分站编码=:station ";
+			sql = sql + " and t.分站编码=:station ";
 		}
+		sql += " order by a.开始受理时刻";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
 		paramMap.put("station", parameter.getStation());
 
-		List<CenterTask> results = this.npJdbcTemplate.query(
-				sql1 + sql2 + sql3, paramMap, new RowMapper<CenterTask>() {
+		List<CenterTask> results = this.npJdbcTemplate.query(sql, paramMap,
+				new RowMapper<CenterTask>() {
 					@Override
 					public CenterTask mapRow(ResultSet rs, int index)
 							throws SQLException {
@@ -93,6 +89,7 @@ public class CenterTaskDAOImpl implements CenterTaskDAO {
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");
+		logger.info(sql);
 
 		Grid grid = new Grid();
 		if ((int) parameter.getPage() > 0) {
