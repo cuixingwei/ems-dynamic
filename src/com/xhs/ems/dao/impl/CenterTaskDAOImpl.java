@@ -46,7 +46,7 @@ public class CenterTaskDAOImpl implements CenterTaskDAO {
 		String sql = "select pc.姓名 name,pc.家庭住址 sickAddress,pc.病人主诉 sickDescription,e.呼救电话 phone,"
 				+ "convert(varchar(20),e.受理时刻,120) acceptTime, convert(varchar(20),t.生成任务时刻,120) sendCarTime,"
 				+ "convert(varchar(20),t.出车时刻,120) drivingTime,convert(varchar(20),t.到达现场时刻,120) arrivalTime,"
-				+ " convert(varchar(20),t.到达医院时刻,120) returnHospitalTime,pc.送往地点 toAddress,am.实际标识 carCode,"
+				+ " convert(varchar(20),t.到达医院时刻,120) returnHospitalTime,a.送往地点 toAddress,am.实际标识 carCode,"
 				+ "pc.随车医生 doctor,pc.随车护士 nurse, pc.司机 driver,m.姓名 dispatcher,tr.NameM taskResult from AuSp120.tb_EventV  e "
 				+ "left outer join AuSp120.tb_AcceptDescriptV a on a.事件编码=e.事件编码 "
 				+ "left outer join AuSp120.tb_Task t on t.事件编码=a.事件编码 and a.受理序号=t.受理序号 "
