@@ -43,7 +43,8 @@ public class UserDAOImpl implements UserDAO {
 						user.setPassword(rs.getString("密码"));
 						user.setStationName(rs.getString("部门名称"));
 						if (!(rs.getString("人员类型").equals("1") || rs.getString(
-								"人员类型").equals("0"))) {
+								"人员类型").equals("0")||rs.getString("人员类型").equals("2") || rs.getString(
+										"人员类型").equals("5"))) {
 							user.setIsValid(3);
 						} else {
 							user.setIsValid(0);
