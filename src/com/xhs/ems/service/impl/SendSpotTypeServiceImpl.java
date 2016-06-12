@@ -27,4 +27,9 @@ public class SendSpotTypeServiceImpl implements SendSpotTypeService {
 		return sendSpotTypeDAO.getData(parameter);
 	}
 
+	@Override
+	public Grid getSendSpotDatas(Parameter parameter) {
+		return sendSpotTypeDAO.getSendSpotDatas(parameter);
+	}
+
 }

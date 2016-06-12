@@ -48,18 +48,19 @@ public class SubstationLateVisitDAOImpl implements SubstationLateVisitDAO {
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
 		paramMap.put("station", parameter.getStation());
-		String sql = "select a.事件编码 eventCode,a.现场地址 siteAddress,convert(varchar(20),a.开始受理时刻,120) acceptTime into #temp1	"
-				+ "from AuSp120.tb_AcceptDescriptV a "
-				+ "select t.事件编码 eventCode,det.NameM eventType,am.实际标识 carCode,"
-				+ "CONVERT(varchar(20),t.生成任务时刻,120) createTaskTime,	CONVERT(varchar(20),t.出车时刻,120) outCarTime,"
-				+ "DATEDIFF(SECOND,t.生成任务时刻,t.出车时刻) outCarTimes,	dtr.NameM taskResult,t.备注 remark,m.姓名 dispatcher	"
-				+ "into #temp2	from AuSp120.tb_TaskV t	left outer join AuSp120.tb_AcceptDescriptV a on a.事件编码=t.事件编码 and t.受理序号=a.受理序号 	"
-				+ "left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码	"
+		String sql = "select a.现场地址 siteAddress,det.NameM eventType,am.实际标识 carCode,"
+				+ "CONVERT(varchar(20),a.开始受理时刻,120) acceptTime,CONVERT(varchar(20),a.派车时刻,120) createTaskTime,	"
+				+ "CONVERT(varchar(20),t.出车时刻,120) outCarTime,DATEDIFF(SECOND,a.派车时刻,t.出车时刻) outCarTimes,"
+				+ "dtr.NameM taskResult,t.备注 remark,m.姓名 dispatcher	from AuSp120.tb_EventV e	"
+				+ "left outer join AuSp120.tb_AcceptDescriptV a on e.事件编码=a.事件编码	"
+				+ "left outer join AuSp120.tb_TaskV t on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
+				+ "left outer join AuSp120.tb_Station s on t.分站编码=s.分站编码	"
 				+ "left outer join AuSp120.tb_DEventType det on det.Code=e.事件类型编码	"
-				+ "left outer join AuSp120.tb_MrUser m on m.工号=t.调度员编码	"
+				+ "left outer join AuSp120.tb_Ambulance am on am.车辆编码=t.车辆编码	"
 				+ "left outer join AuSp120.tb_DTaskResult dtr on dtr.Code=t.结果编码	"
-				+ "left outer join AuSp120.tb_Ambulance am on am.车辆编码=t.车辆编码	 where e.事件性质编码=1 and m.人员类型=0 "
-				+ "and t.出车时刻 is not null	and t.生成任务时刻 between :startTime and :endTime and t.生成任务时刻<t.出车时刻 ";
+				+ "left outer join AuSp120.tb_MrUser m on m.工号=t.调度员编码	"
+				+ "where e.事件性质编码=1 and a.类型编码 not in (2,4)	"
+				+ "and a.开始受理时刻 between :startTime and :endTime and a.开始受理时刻<t.出车时刻 ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
 			sql += " and t.分站编码=:station ";
 		}
@@ -68,20 +69,18 @@ public class SubstationLateVisitDAOImpl implements SubstationLateVisitDAO {
 			second = 60 * Integer.parseInt(parameter.getOutCarTimesMin());
 			String secondMin = second + "";
 			paramMap.put("secondMin", secondMin);
-			sql += " and DATEDIFF(S,t.生成任务时刻,t.出车时刻)>= :secondMin ";
+			sql += " and DATEDIFF(SECOND,a.派车时刻,t.出车时刻)> :secondMin ";
 			logger.info("outCarTimesMin:" + parameter.getOutCarTimesMin());
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getOutCarTimesMax())) {
 			second = 60 * Integer.parseInt(parameter.getOutCarTimesMax());
 			String secondMax = second + "";
 			paramMap.put("secondMax", secondMax);
-			sql += " and DATEDIFF(S,t.生成任务时刻,t.出车时刻)< :secondMax ";
+			sql += " and DATEDIFF(SECOND,a.派车时刻,t.出车时刻) <= :secondMax ";
 			logger.info("outCarTimesMax:" + parameter.getOutCarTimesMax());
 		}
-		sql += " select t1.siteAddress,t2.eventType,t2.carCode,t1.acceptTime,t2.createTaskTime,"
-				+ "t2.outCarTime,t2.outCarTimes,t2.taskResult,t2.remark,t2.dispatcher	"
-				+ "from #temp2 t2 left outer join #temp1 t1 on t1.eventCode=t2.eventCode "
-				+ "drop table #temp1,#temp2";
+		
+		sql += " order by a.开始受理时刻 ";
 
 		List<SubstationLateVisit> results = this.namedParameterJdbcTemplate
 				.query(sql, paramMap, new RowMapper<SubstationLateVisit>() {
