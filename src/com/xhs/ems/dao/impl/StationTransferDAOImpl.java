@@ -32,16 +32,14 @@ public class StationTransferDAOImpl implements StationTransferDAO{
 	}
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "(select s.分站名称+'出车总数' station,count(*) total 	 "
-				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.车辆标识	"
-				+ "left outer join AuSp120.tb_Station s on s.分站编码=pc.分站编码	"
-				+ "left outer join AuSp120.tb_Task t on am.车辆编码=t.车辆编码 and pc.任务编码=t.任务编码	"
-				+ "where t.生成任务时刻 between :startTime and :endTime	group by s.分站名称) union	"
-				+ "(select s.分站名称+'转'+pc.送往地点 station,count(*) total	 from AuSp120.tb_PatientCase pc	"
-				+ "left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.车辆标识	"
-				+ "left outer join AuSp120.tb_Station s on s.分站编码=pc.分站编码	"
-				+ "left outer join AuSp120.tb_Task t on am.车辆编码=t.车辆编码 and pc.任务编码=t.任务编码	"
-				+ "where t.生成任务时刻 between :startTime and :endTime	group by s.分站名称,pc.送往地点)";
+		String sql = "(select s.分站名称+'出车总数' station,count(*) total 	 	"
+				+ "from AuSp120.tb_Task t	left outer join ausp120.tb_AcceptDescriptV a on a.受理序号=t.受理序号 and a.事件编码=t.事件编码 "
+				+ "left outer join AuSp120.tb_Station s on s.分站编码=t.分站编码  "
+				+ "where a.类型编码 not in (2,4) and t.生成任务时刻 between :startTime and :endTime	group by s.分站名称) union	"
+				+ "(select s.分站名称+'转'+a.送往地点 station,count(*) total	 from AuSp120.tb_Task t		"
+				+ "left outer join ausp120.tb_AcceptDescriptV a on a.受理序号=t.受理序号 and a.事件编码=t.事件编码	"
+				+ "left outer join AuSp120.tb_Station s on s.分站编码=t.分站编码	"
+				+ "where a.类型编码 not in (2,4) and t.生成任务时刻 between :startTime and :endTime	group by s.分站名称,a.送往地点)";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("endTime", parameter.getEndTime());
 		paramMap.put("startTime", parameter.getStartTime());

@@ -67,19 +67,6 @@
     	"attributes":
     		{
     			"target":"",
-    			"url":"AcceptTime.jsp"
-    		},
-    	"checked":false,
-    	"iconCls":"ext-icon-world",
-    	"id":"04",
-    	"pid":"0",
-    	"state":"open",
-    	"text":"受理时间统计"
-    },
-    {
-    	"attributes":
-    		{
-    			"target":"",
     			"url":"TeleBook.jsp"
     		},
     	"checked":false,
@@ -101,19 +88,6 @@
     	"pid":"0",
     	"state":"open",
     	"text":"重大紧急事件情况统计"
-    },
-    {
-    	"attributes":
-    		{
-    			"target":"",
-    			"url":"StateChange.jsp"
-    		},
-    	"checked":false,
-    	"iconCls":"ext-icon-world",
-    	"id":"07",
-    	"pid":"0",
-    	"state":"open",
-    	"text":"状态变化统计"
     },
     {
     	"attributes":

@@ -44,48 +44,37 @@ public class DoctorNurseWorkDAOImpl implements DoctorNurseWorkDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql1 = " select distinct t.生成任务时刻,t.任务编码 into #task from AuSp120.tb_Task t "
-				+ "select  pc.任务编码,pc.随车医生,pc.随车护士,pc.分站编码 into #temp1	"
-				+ "from AuSp120.tb_PatientCase pc left outer join #task t on  pc.任务编码=t.任务编码 where pc.任务编码<>'' and t.生成任务时刻 between :startTime and :endTime ";
-		String sql2 = "select distinct pc.任务编码,pc.随车医生,pc.随车护士,pc.分站编码 into #temp2	"
-				+ "from AuSp120.tb_PatientCase pc left outer join #task t on  pc.任务编码=t.任务编码 where pc.任务编码<>'' and t.生成任务时刻 between :startTime and :endTime ";
-		String sql3 = "select tt.分站编码,tt.随车医生,COUNT(*) doctorCureNumbers into #temp3 "
-				+ "from #temp1 tt 	where tt.随车医生<>'' and tt.任务编码<>'' group by tt.分站编码,tt.随车医生  ";
-		String sql4 = "select tt.分站编码,tt.随车护士,COUNT(*) nurseCureNumbers into #temp3 "
-				+ "from #temp1 tt	where tt.随车护士<>'' and tt.任务编码<>'' group by tt.分站编码,tt.随车护士  ";
-		String sql5 = "select t.分站编码 ,tt.随车医生 name,SUM(case when t.结果编码<>5 then 1 else 0 end) outCarNumbers,	"
+		String sql1 = "select s.分站名称 station,t.随车医生 name,COUNT(*) outCarNumbers,	"
 				+ "SUM(case when t.结果编码=4 then 1 else 0 end) validOutCarNumbers,	"
 				+ "SUM(case when t.结果编码 in (2,3) then 1 else 0 end) stopNumbers,	"
-				+ "isnull(AVG(DATEDIFF(Second,t.到达现场时刻,t.完成时刻)),0) averateCureTimes into #temp4 	"
-				+ "from AuSp120.tb_TaskV t left outer join #temp2 tt on t.任务编码=tt.任务编码	"
-				+ "left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码	"
-				+ "where e.事件性质编码=1 and t.结果编码 is not null and tt.随车医生<>'' and t.生成任务时刻  between :startTime and :endTime	"
-				+ "group by  t.分站编码 ,tt.随车医生	order by  t.分站编码 ,tt.随车医生   ";
-		String sql6 = "select t.分站编码 ,tt.随车护士 name,SUM(case when t.结果编码<>5 then 1 else 0 end) outCarNumbers,	"
+				+ "SUM(case when t.结果编码=4 then t.接回人数 else 0 end) curePeopleNumbers,	"
+				+ "AVG(DATEDIFF(S,t.到达现场时刻,t.完成时刻)) averateCureTimes	"
+				+ "from ausp120.tb_EventV e left outer join ausp120.tb_AcceptDescriptV a on e.事件编码=a.事件编码	"
+				+ "left outer join ausp120.tb_TaskV t on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
+				+ "left outer join ausp120.tb_Station s on s.分站编码=t.分站编码	"
+				+ "where e.事件性质编码=1 and a.类型编码 not in (2,4) and t.任务编码 is not null	"
+				+ "and t.出车时刻<t.到达现场时刻 and t.生成任务时刻 between :startTime and :endTime and t.随车医生<>''	 ";
+		String sql2 = "select s.分站名称 station,t.随车护士 name,COUNT(*) outCarNumbers,	"
 				+ "SUM(case when t.结果编码=4 then 1 else 0 end) validOutCarNumbers,	"
 				+ "SUM(case when t.结果编码 in (2,3) then 1 else 0 end) stopNumbers,	"
-				+ "isnull(AVG(DATEDIFF(Second,t.到达现场时刻,t.完成时刻)),0) averateCureTimes into #temp4 	"
-				+ "from AuSp120.tb_TaskV t left outer join #temp2 tt on t.任务编码=tt.任务编码	"
-				+ "left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码	"
-				+ "where e.事件性质编码=1 and t.结果编码 is not null and tt.随车护士<>'' and t.生成任务时刻  between :startTime and :endTime	"
-				+ "group by  t.分站编码 ,tt.随车护士	order by  t.分站编码 ,tt.随车护士   ";
-		String sql7 = "select s.分站名称 station,tt4.name,tt4.outCarNumbers,tt4.validOutCarNumbers,"
-				+ "tt4.stopNumbers,	tt3.doctorCureNumbers curePeopleNumbers,tt4.averateCureTimes	"
-				+ "from #temp3 tt3 left outer join #temp4 tt4 on tt3.分站编码=tt4.分站编码 and tt3.随车医生=tt4.name	"
-				+ "left outer join AuSp120.tb_Station s on s.分站编码=tt4.分站编码";
-		String sql8 = "select s.分站名称 station,tt4.name,tt4.outCarNumbers,tt4.validOutCarNumbers,"
-				+ "tt4.stopNumbers,	tt3.nurseCureNumbers curePeopleNumbers,tt4.averateCureTimes	"
-				+ "from #temp3 tt3 left outer join #temp4 tt4 on tt3.分站编码=tt4.分站编码 and tt3.随车护士=tt4.name	"
-				+ "left outer join AuSp120.tb_Station s on s.分站编码=tt4.分站编码";
-		String sqlEnd = " drop table #temp1,#temp2,#temp3,#temp4,#task";
-		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
-			sql7 += " where tt4.分站编码 = :station and tt4.分站编码 is not null ";
-			sql8 += " where tt4.分站编码 = :station and tt4.分站编码 is not null";
-		}
+				+ "SUM(case when t.结果编码=4 then t.接回人数 else 0 end) curePeopleNumbers,	"
+				+ "AVG(DATEDIFF(S,t.到达现场时刻,t.完成时刻)) averateCureTimes	"
+				+ "from ausp120.tb_EventV e left outer join ausp120.tb_AcceptDescriptV a on e.事件编码=a.事件编码	"
+				+ "left outer join ausp120.tb_TaskV t on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
+				+ "left outer join ausp120.tb_Station s on s.分站编码=t.分站编码	"
+				+ "where e.事件性质编码=1 and a.类型编码 not in (2,4) and t.任务编码 is not null	"
+				+ "and t.出车时刻<t.到达现场时刻 and t.生成任务时刻 between :startTime and :endTime and t.随车护士<>''	 ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
 		paramMap.put("station", parameter.getStation());
+		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
+			sql1 += " and t.分站编码=:station ";
+			sql2 += " and t.分站编码=:station ";
+		}
+		sql1 += "group by s.分站名称,t.随车医生	order by s.分站名称,t.随车医生";
+		sql2 += "group by s.分站名称,t.随车护士	order by s.分站名称,t.随车护士";
+		
 
 		String sql = "";
 		String doctorOrNurse = "1";
@@ -94,10 +83,10 @@ public class DoctorNurseWorkDAOImpl implements DoctorNurseWorkDAO {
 		}
 		logger.info(doctorOrNurse);
 		if ("1".equals(doctorOrNurse)) {
-			sql = sql1 + sql2 + sql3 + sql5 + sql7 + sqlEnd;
+			sql = sql1 ;
 			logger.info("医生");
 		} else if ("2".equals(doctorOrNurse)) {
-			sql = sql1 + sql2 + sql4 + sql6 + sql8 + sqlEnd;
+			sql =  sql2 ;
 			logger.info("护士");
 		}
 
