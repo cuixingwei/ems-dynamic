@@ -40,29 +40,39 @@
 					columns : [ [ {
 						field : 'eventCode',
 						title : '事件编码',
-						width : "20%",
+						width : "14%",
 						align : 'center'
 					}, {
 						field : 'eventTime',
 						title : '事发时间',
-						width : "20%",
+						width : "14%",
 						align : 'center',
 					}, {
 						field : 'eventName',
 						title : '事件名称',
-						width : "20%",
+						width : "14%",
 						align : 'center'
 					}, {
 						field : 'callPhone',
 						title : '呼救电话',
-						width : "20%",
+						width : "13%",
 						align : 'center'
 					}, {
 						field : 'dispatcher',
 						title : '调度员',
-						width : "19.9%",
+						width : "11%",
 						align : 'center'
-					} ] ],
+					} , {
+						field : 'className',
+						title : '事故分类',
+						width : "14%",
+						align : 'center'
+					}, {
+						field : 'type',
+						title : '事故类型',
+						width : "14%",
+						align : 'center'
+					}] ],
 					toolbar : '#toolbar',
 					onBeforeLoad : function(param) {
 						var varify = cxw.checkStartTimeBeforeEndTime(

@@ -34,10 +34,12 @@ public class AccidentDAOImpl implements AccidentDAO {
 	@Override
 	public Grid getData(Parameter parameter) {
 		String sql = "select e.事件编码 eventCode,ac.事发时间 eventTime,e.事件名称 eventName,e.呼救电话 callPhone,"
-				+ "m.姓名 dispatcher	from AuSp120.tb_AccidentEventLink ael	"
+				+ "m.姓名 dispatcher,dgc.NameM className,dgt.NameM type	from AuSp120.tb_AccidentEventLink ael  	"
+				+ "left outer join AuSp120.tb_EventV e  on e.事件编码=ael.事件编码	"
 				+ "left outer join AuSp120.tb_Accident ac on ac.事故编码=ael.事故编码	"
-				+ "left outer join AuSp120.tb_Event e on e.事件编码=ael.事件编码	"
-				+ "left outer join AuSp120.tb_MrUser m on e.调度员编码=m.工号	"
+				+ "left outer join AuSp120.tb_MrUser m on e.调度员编码=m.工号 left outer join "
+				+ "AuSp120.tb_DGroAccidentClass dgc on dgc.Code=ac.事故分类编码 "
+				+ "left outer join AuSp120.tb_DGroAccidentType dgt on dgt.Code=ac.事故类型编码	"
 				+ "where e.事件性质编码=1 and ac.事发时间 between :startTime and :endTime ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
@@ -53,7 +55,7 @@ public class AccidentDAOImpl implements AccidentDAO {
 								.getString("eventTime"), rs
 								.getString("eventName"), rs
 								.getString("callPhone"), rs
-								.getString("dispatcher"));
+								.getString("dispatcher"),rs.getString("className"),rs.getString("type"));
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");

@@ -26,6 +26,8 @@ public class Accident {
 	 * 调度员
 	 */
 	private String dispatcher;
+	private String className;
+	private String type;
 	public String getEventCode() {
 		return eventCode;
 	}
@@ -56,13 +58,39 @@ public class Accident {
 	public void setDispatcher(String dispatcher) {
 		this.dispatcher = dispatcher;
 	}
+	
+	
+	public String getClassName() {
+		return className;
+	}
+	public void setClassName(String className) {
+		this.className = className;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	/**
+	 * @param eventCode
+	 * @param eventTime
+	 * @param eventName
+	 * @param callPhone
+	 * @param dispatcher
+	 * @param className
+	 * @param type
+	 */
 	public Accident(String eventCode, String eventTime, String eventName,
-			String callPhone, String dispatcher) {
+			String callPhone, String dispatcher, String className, String type) {
 		this.eventCode = eventCode;
 		this.eventTime = eventTime;
 		this.eventName = eventName;
 		this.callPhone = callPhone;
 		this.dispatcher = dispatcher;
+		this.className = className;
+		this.type = type;
 	}
+	
 	
 }
