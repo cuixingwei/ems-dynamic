@@ -17,39 +17,39 @@ import com.xhs.ems.bean.SessionInfo;
 import com.xhs.ems.excelTools.ExcelUtils;
 import com.xhs.ems.excelTools.JsGridReportBase;
 import com.xhs.ems.excelTools.TableData;
-import com.xhs.ems.service.PatientTypeService;
+import com.xhs.ems.service.PatientDepartmentService;
 
 /**
- * @datetime 2016年5月18日 下午6:46:36
+ * @datetime 2016年7月27日 下午1:10:42
  * @author 崔兴伟
  */
 @Controller
 @RequestMapping(value = "/page/base")
-public class PatientTypeController {
+public class PatientDepartmentController {
 	private static final Logger logger = Logger
-			.getLogger(PatientTypeController.class);
+			.getLogger(PatientDepartmentController.class);
 	@Autowired
-	private PatientTypeService patientTypeService;
+	private PatientDepartmentService patientDepartmentService;
 
-	@RequestMapping(value = "/getPatientTypeData", method = RequestMethod.POST)
+	@RequestMapping(value = "/getPatientDepartment", method = RequestMethod.POST)
 	public @ResponseBody Grid getData(Parameter parameter) {
-		logger.info("疾病种类统计");
-		return patientTypeService.getData(parameter);
+		logger.info("疾病科别统计");
+		return patientDepartmentService.getData(parameter);
 	}
 
-	@RequestMapping(value = "/exportPatientType", method = RequestMethod.GET)
-	public @ResponseBody void exportPatientType(Parameter parameter,
+	@RequestMapping(value = "/exportPatientDepartment", method = RequestMethod.GET)
+	public @ResponseBody void exportPatientDepartment(Parameter parameter,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		logger.info("导出疾病种类统计到excel");
+		logger.info("导出疾病科别统计到excel");
 		response.setContentType("application/msexcel;charset=UTF-8");
 
-		String title = "疾病种类统计";
-		String[] headers = new String[] { "疾病种类", "人数", "百分比" };
-		String[] fields = new String[] { "patientType", "numbers",
+		String title = "疾病科别统计";
+		String[] headers = new String[] { "疾病科别", "人数", "百分比" };
+		String[] fields = new String[] { "patientDepartment", "numbers",
 				"radio" };
 		TableData td = ExcelUtils.createTableData(
-				patientTypeService.getData(parameter).getRows(),
+				patientDepartmentService.getData(parameter).getRows(),
 				ExcelUtils.createTableHeader(headers), fields);
 		JsGridReportBase report = new JsGridReportBase(request, response);
 		

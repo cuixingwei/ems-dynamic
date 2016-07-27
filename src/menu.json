@@ -467,11 +467,24 @@
     	"attributes":
     		{
     			"target":"",
-    			"url":"PatientTimeSpan.jsp"
+    			"url":"PatientDepartment.jsp"
     		},
     	"checked":false,
     	"iconCls":"ext-icon-world",
     	"id":"33",
+    	"pid":"3",
+    	"state":"open",
+    	"text":"疾病科别统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"PatientTimeSpan.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"34",
     	"pid":"3",
     	"state":"open",
     	"text":"病发时间段统计"
@@ -484,7 +497,7 @@
     		},
     	"checked":false,
     	"iconCls":"ext-icon-world",
-    	"id":"33",
+    	"id":"35",
     	"pid":"3",
     	"state":"open",
     	"text":"患者性别统计"
