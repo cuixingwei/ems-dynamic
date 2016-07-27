@@ -44,15 +44,12 @@ public class PatientCaseFillCountDAOImpl implements PatientCaseFillCountDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select distinct pc.分站编码,pc.任务编码 into #temp1 	"
-				+ "from AuSp120.tb_PatientCase pc	where pc.分站编码<>'' "
-				+ "select s.分站名称 station,COUNT(*) sendNumbers,COUNT(tt.任务编码) fillNumbers,'' rate	"
-				+ "from AuSp120.tb_TaskV t left outer join #temp1 tt on  t.分站编码=tt.分站编码 and t.任务编码=tt.任务编码 	"
+		String sql = "select s.分站名称 station,COUNT(*) sendNumbers,COUNT(tt.任务编码) fillNumbers,'' rate	"
+				+ "from AuSp120.tb_TaskV t left outer join AuSp120.tb_PatientCase  tt on  t.分站编码=tt.分站编码 and t.任务编码=tt.任务编码 and tt.序号=1 	"
 				+ "left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码	"
 				+ "left outer join AuSp120.tb_Station s on s.分站编码=t.分站编码 	"
 				+ "where e.事件性质编码=1 and t.结果编码=4 and t.生成任务时刻 between :startTime and :endTime	"
-				+ "group by s.分站名称,s.显示顺序	order by s.显示顺序"
-				+ " drop table #temp1";
+				+ "group by s.分站名称,s.显示顺序	order by s.显示顺序";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
@@ -71,13 +68,28 @@ public class PatientCaseFillCountDAOImpl implements PatientCaseFillCountDAO {
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");
+		
+		PatientCaseFillCount summary = new PatientCaseFillCount();
+		summary.setStation("合计");
+		summary.setRate("0%");
+		summary.setSendNumbers("0");
+		summary.setFillNumbers("0");
+		Integer total1 = 0,total2 = 0;
 
 		// 计算比率
 		for (PatientCaseFillCount result : results) {
 			result.setRate(CommonUtil.calculateRate(
 					Integer.parseInt(result.getSendNumbers()),
 					Integer.parseInt(result.getFillNumbers())));
+			total1 = Integer.parseInt(result.getSendNumbers()) + total1;
+			total2 = Integer.parseInt(result.getFillNumbers()) + total2;
 		}
+		
+		
+		summary.setSendNumbers(total1 + "");
+		summary.setFillNumbers(total2 + "");
+		summary.setRate(CommonUtil.calculateRate(total1, total2));
+		results.add(summary);
 
 		Grid grid = new Grid();
 		if ((int) parameter.getPage() > 0) {
