@@ -65,10 +65,10 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 			sql = sql + "and a.调度员编码= :dispatcher ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getAlarmPhone())) {
-			sql += " and  a.呼救电话  like :alarmPhone";
+			sql += " and  a.呼救电话  like :alarmPhone ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getSiteAddress())) {
-			sql += " and a.现场地址 like :siteAddress";
+			sql += " and a.现场地址 like :siteAddress ";
 		}
 		sql += "order by a.电话振铃时刻  drop table #temp1,#temp2,#name,#pc";
 		Map<String, String> paramMap = new HashMap<String, String>();
