@@ -46,7 +46,7 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select a.ID id,m.姓名  dispatcher,CONVERT(varchar(20),a.开始受理时刻,120) startAcceptTime,"
+		String sql = "select t.ID id,m.姓名  dispatcher,CONVERT(varchar(20),a.开始受理时刻,120) startAcceptTime,"
 				+ "CONVERT(varchar(20),a.派车时刻,120) sendCarTime,	 "
 				+ "dat.NameM acceptType,a.呼救电话  ringPhone,DATEDIFF(SECOND,a.开始受理时刻,a.派车时刻) sendCarTimes,a.备注  remark from AuSp120.tb_Task t	"
 				+ "left outer join AuSp120.tb_AcceptDescriptV a on a.事件编码=t.事件编码 and a.受理序号=t.受理序号 "
@@ -61,6 +61,7 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 			sql = sql + " and DATEDIFF(SECOND,a.开始受理时刻,a.派车时刻)>=:overtimes ";
 		}
 		sql += " order by m.姓名";
+		logger.info(sql);
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("startTime", parameter.getStartTime());
@@ -136,10 +137,11 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 				+ "left outer join AuSp120.tb_DTaskResult dtr on dtr.Code=t.结果编码	"
 				+ "left outer join AuSp120.tb_DEmptyReason der on der.Code=t.放空车原因编码	"
 				+ "left outer join AuSp120.tb_DRefuseReason dtrr on dtrr.Code=t.拒绝出车原因编码	"
-				+ "left outer join AuSp120.tb_DStopReason dsr on dsr.Code=t.中止任务原因编码	where a.ID= :id ";
+				+ "left outer join AuSp120.tb_DStopReason dsr on dsr.Code=t.中止任务原因编码	where t.ID= :id ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("id", id);
 		logger.info("id:" + id);
+		logger.info(sql);
 		AcceptSendCarDetail result = this.npJdbcTemplate.queryForObject(sql,
 				paramMap, new RowMapper<AcceptSendCarDetail>() {
 
