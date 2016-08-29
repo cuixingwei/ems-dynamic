@@ -81,6 +81,27 @@ public class AcceptEventTypeDAOImpl implements AcceptEventTypeDAO {
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");
+		
+		AcceptEventType summary = new AcceptEventType("合计", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0");
+		for (AcceptEventType result : results) {
+			summary.setEmptyCar(Integer.parseInt(result.getEmptyCar())+Integer.parseInt(summary.getEmptyCar())+"");
+			summary.setNoCar(Integer.parseInt(result.getNoCar())+Integer.parseInt(summary.getNoCar())+"");
+			summary.setNomalComplete(Integer.parseInt(result.getNomalComplete())+Integer.parseInt(summary.getNomalComplete())+"");
+			summary.setNumbersOfNormalHangUp(Integer.parseInt(result.getNumbersOfNormalHangUp())+Integer.parseInt(summary.getNumbersOfNormalHangUp())+"");
+			summary.setNumbersOfNormalSendCar(Integer.parseInt(result.getNumbersOfNormalSendCar())+Integer.parseInt(summary.getNumbersOfNormalSendCar())+"");
+			summary.setNumbersOfPhone(Integer.parseInt(result.getNumbersOfPhone())+Integer.parseInt(summary.getNumbersOfPhone())+"");
+			summary.setNumbersOfReinforceHangUp(Integer.parseInt(result.getNumbersOfReinforceHangUp())+Integer.parseInt(summary.getNumbersOfReinforceHangUp())+"");
+			summary.setNumbersOfReinforceSendCar(Integer.parseInt(result.getNumbersOfReinforceSendCar())+Integer.parseInt(summary.getNumbersOfReinforceSendCar())+"");
+			summary.setNumbersOfSendCar(Integer.parseInt(result.getNumbersOfSendCar())+Integer.parseInt(summary.getNumbersOfSendCar())+"");
+			summary.setNumbersOfStopTask(Integer.parseInt(result.getNumbersOfStopTask())+Integer.parseInt(summary.getNumbersOfStopTask())+"");
+			summary.setRefuseSendCar(Integer.parseInt(result.getRefuseSendCar())+Integer.parseInt(summary.getRefuseSendCar())+"");
+			summary.setSpecialEvent(Integer.parseInt(result.getSpecialEvent())+Integer.parseInt(summary.getSpecialEvent())+"");
+			summary.setStopTask(Integer.parseInt(result.getStopTask())+Integer.parseInt(summary.getStopTask())+"");
+			summary.setTransmitCenter(Integer.parseInt(result.getTransmitCenter())+Integer.parseInt(summary.getTransmitCenter())+"");
+			summary.setWakeSendCar(Integer.parseInt(result.getWakeSendCar())+Integer.parseInt(summary.getWakeSendCar())+"");
+		}
+		results.add(summary);
+		
 		for (AcceptEventType result : results) {
 			result.setRatioStopTask(CommonUtil.calculateRate(
 					Integer.parseInt(result.getNumbersOfSendCar().toString()),

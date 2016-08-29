@@ -142,7 +142,7 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 		paramMap.put("id", id);
 		logger.info("id:" + id);
 		logger.info(sql);
-		AcceptSendCarDetail result = this.npJdbcTemplate.queryForObject(sql,
+		List<AcceptSendCarDetail> resultList = this.npJdbcTemplate.query(sql,
 				paramMap, new RowMapper<AcceptSendCarDetail>() {
 
 					@Override
@@ -197,6 +197,7 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 						return acceptSendCarDetail;
 					}
 				});
+		AcceptSendCarDetail result = resultList.get(0);
 		ServletContext sct = request.getServletContext();
 		String recordIP = (String) sct.getAttribute("RecordServerIP");
 		String year, day, month;
