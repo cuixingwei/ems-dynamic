@@ -48,7 +48,7 @@ public class PatientCaseDetailController {
 		response.setContentType("application/msexcel;charset=UTF-8");
 		String title = "院前病历一览表";
 		String[] headers = new String[] { "接警时间", "接警地址", "到达现场时间", "患者姓名", "年龄",
-				"性别", "初步判断", "既往病史", "到达医院时刻", "治疗措施","送往医院","车牌号码" };
+				"性别", "医生诊断", "既往病史", "到达医院时刻", "治疗措施","送往医院","车牌号码" };
 		String[] fields = new String[] { "alarmTime", "alarmAddr", "arriveSpotTime",
 				"patientName", "age", "sex", "judgementOnPhone",
 				"pastIllness", "arriveHospitalTime", "cureMeasure","sendHospital","plateNo" };

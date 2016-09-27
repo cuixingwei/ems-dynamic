@@ -39,7 +39,7 @@ public class PatientCaseDetailDAOImpl implements PatientCaseDetailDAO {
 	@Override
 	public Grid getData(Parameter parameter) {
 		String sql = "select CONVERT(varchar(20),a.开始受理时刻,120) alarmTime,a.现场地址 alarmAddr,CONVERT(varchar(20),t.到达现场时刻,120) arriveSpotTime,pc.姓名 patientName,	"
-				+ "pc.性别 sex,pc.年龄 age,a.初步判断 judgementOnPhone,pc.既往病史 pastIllness,CONVERT(varchar(20),t.到达医院时刻,120) arriveHospitalTime,	"
+				+ "pc.性别 sex,pc.年龄 age,pc.医生诊断 judgementOnPhone,pc.既往病史 pastIllness,CONVERT(varchar(20),t.到达医院时刻,120) arriveHospitalTime,	"
 				+ "case when pc.送往地点='' then s.分站名称 else pc.送往地点 end sendHospital,am.车牌号码 plateNo,	"
 				+ "cureMeasure = (stuff((select ',' + NameM from  AuSp120.tb_CureMeasure cm left outer join AuSp120.tb_DMeasure dm on dm.Code=cm.救治措施编码 where cm.任务编码 = pc.任务编码 and cm.病例序号=pc.序号 for xml path('')),1,1,'')) "
 				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.车辆标识	"

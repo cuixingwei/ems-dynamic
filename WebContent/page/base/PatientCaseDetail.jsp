@@ -77,7 +77,7 @@
 						align : 'center'
 					},{
 						field : 'judgementOnPhone',
-						title : '初步判断',
+						title : '医生诊断',
 						resizable : true,
 						width : "8%",
 						align : 'center'
