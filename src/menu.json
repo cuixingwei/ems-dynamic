@@ -501,6 +501,19 @@
     	"pid":"3",
     	"state":"open",
     	"text":"患者性别统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"PatientCaseDetail.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"36",
+    	"pid":"3",
+    	"state":"open",
+    	"text":"院前急救病历一览表"
     }
     
 ]
