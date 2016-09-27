@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
 import com.xhs.ems.bean.PatientCaseDetail;
+import com.xhs.ems.common.CommonUtil;
 import com.xhs.ems.dao.PatientCaseDetailDAO;
 
 /**
@@ -47,10 +48,88 @@ public class PatientCaseDetailDAOImpl implements PatientCaseDetailDAO {
 				+ "left outer join AuSp120.tb_AcceptDescriptV a on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
 				+ "left outer join AuSp120.tb_Station s on s.分站编码=pc.分站编码	"
 				+ "left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码	"
-				+ "where e.事件性质编码=1 and pc.姓名<>'' and a.开始受理时刻 between :startTime and :endTime order by a.开始受理时刻 ";
+				+ "where e.事件性质编码=1 and pc.姓名<>'' and a.开始受理时刻 between :startTime and :endTime  ";
 		Map<String, String> paramMap = new HashMap<String, String>();
+		if(!CommonUtil.isNullOrEmpty(parameter.getDoctorDiagnosis())){
+			paramMap.put("doctorDiagnosis", "%"+parameter.getDoctorDiagnosis()+"%");
+			sql += " and pc.医生诊断 like :doctorDiagnosis ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getIllDepartment())){
+			paramMap.put("illDepartment", parameter.getIllDepartment());
+			sql += " and pc.疾病科别编码=:illDepartment ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getIllClass())){
+			paramMap.put("illClass", parameter.getIllClass());
+			sql += " and pc.分类统计编码=:illClass ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getIllState())){
+			paramMap.put("illState", parameter.getIllState());
+			sql += " and pc.病情编码=:illState ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getAidResult())){
+			paramMap.put("aidResult", parameter.getAidResult());
+			sql += " and pc.救治结果编码=:aidResult ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getDeathProof())){
+			paramMap.put("deathProof", parameter.getDeathProof());
+			sql += " and pc.死亡证明编码=:deathProof ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getSendAddrType())){
+			paramMap.put("sendAddrType", parameter.getSendAddrType());
+			sql += " and pc.送往地点类型编码=:sendAddrType ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getSpotAddrType())){
+			paramMap.put("spotAddrType", parameter.getSpotAddrType());
+			sql += " and pc.现场地点类型编码=:spotAddrType ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getIllReason())){
+			paramMap.put("illReason", parameter.getIllReason());
+			sql += " and pc.病因编码=:illReason ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getCarPlate())){
+			paramMap.put("carPlate", parameter.getCarPlate());
+			sql += " and t.车辆编码=:carPlate ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getOutCome())){
+			paramMap.put("outCome", parameter.getOutCome());
+			sql += " and pc.转归编码=:outCome ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getPatientCooperation())){
+			paramMap.put("patientCooperation", parameter.getPatientCooperation());
+			sql += " and pc.病家合作编码=:patientCooperation ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getSex())){
+			paramMap.put("sex", parameter.getSex());
+			sql += " and pc.性别=:sex ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getIdentity())){
+			paramMap.put("identity", parameter.getIdentity());
+			sql += " and pc.身份编码=:identity ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getProfession())){
+			paramMap.put("profession", parameter.getProfession());
+			sql += " and pc.职业编码=:profession ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getDoctor())){
+			paramMap.put("doctor", "%"+parameter.getDoctor()+"%");
+			sql += " and pc.随车医生 like :doctor ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getNurse())){
+			paramMap.put("nurse", "%"+parameter.getNurse()+"%");
+			sql += " and pc.随车护士 like :nurse ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getDriver())){
+			paramMap.put("driver", "%"+parameter.getDriver()+"%");
+			sql += " and pc.司机 like :driver ";
+		}
+		if(!CommonUtil.isNullOrEmpty(parameter.getPatientName())){
+			paramMap.put("patientName", "%"+parameter.getPatientName()+"%");
+			sql += " and pc.姓名 like :patientName ";
+		}
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
+		sql += " order by a.开始受理时刻";
+		
 
 		List<PatientCaseDetail> results = this.npJdbcTemplate.query(sql, paramMap,
 				new RowMapper<PatientCaseDetail>() {

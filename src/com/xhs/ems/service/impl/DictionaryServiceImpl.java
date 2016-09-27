@@ -28,4 +28,59 @@ public class DictionaryServiceImpl implements DictionaryService {
 		return dictionaryDAO.GetPatientType();
 	}
 
+	@Override
+	public List<Dictionary> GetPatientDepartment() {
+		return dictionaryDAO.GetPatientDepartment();
+	}
+
+	@Override
+	public List<Dictionary> GetPatientReason() {
+		return dictionaryDAO.GetPatientReason();
+	}
+
+	@Override
+	public List<Dictionary> GetIllState() {
+		return dictionaryDAO.GetIllState();
+	}
+
+	@Override
+	public List<Dictionary> GetAidResult() {
+		return dictionaryDAO.GetAidResult();
+	}
+
+	@Override
+	public List<Dictionary> GetDeathProve() {
+		return dictionaryDAO.GetDeathProve();
+	}
+
+	@Override
+	public List<Dictionary> GetTakenPlaceType() {
+		return dictionaryDAO.GetTakenPlaceType();
+	}
+
+	@Override
+	public List<Dictionary> GetLocaleType() {
+		return dictionaryDAO.GetLocaleType();
+	}
+
+	@Override
+	public List<Dictionary> GetOutCome() {
+		return dictionaryDAO.GetOutCome();
+	}
+
+	@Override
+	public List<Dictionary> GetCooperate() {
+		return dictionaryDAO.GetCooperate();
+	}
+
+	@Override
+	public List<Dictionary> GetIdentity() {
+		return dictionaryDAO.GetIdentity();
+	}
+
+	@Override
+	public List<Dictionary> GetProfession() {
+		return dictionaryDAO.GetProfession();
+	}
+
 }

@@ -58,4 +58,169 @@ public class dictionaryDAOImpl implements DictionaryDAO {
 		return results;
 	}
 
+	@Override
+	public List<Dictionary> GetPatientDepartment() {
+		String sql = "select * from AuSp120.tb_DDiseaseClass";
+		final List<Dictionary> results = new ArrayList<Dictionary>();
+		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
+				Dictionary dictionary = new Dictionary(rs.getString("Code"), rs
+						.getString("NameM"));
+				results.add(dictionary);
+			}
+		});
+		results.add(0, new Dictionary("", "--请选择--"));
+		return results;
+	}
+
+	@Override
+	public List<Dictionary> GetPatientReason() {
+		String sql = "select * from AuSp120.tb_DDiseaseReason";
+		final List<Dictionary> results = new ArrayList<Dictionary>();
+		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
+				Dictionary dictionary = new Dictionary(rs.getString("Code"), rs
+						.getString("NameM"));
+				results.add(dictionary);
+			}
+		});
+		results.add(0, new Dictionary("", "--请选择--"));
+		return results;
+	}
+
+	@Override
+	public List<Dictionary> GetIllState() {
+		String sql = "select * from AuSp120.tb_DILLState";
+		final List<Dictionary> results = new ArrayList<Dictionary>();
+		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
+				Dictionary dictionary = new Dictionary(rs.getString("Code"), rs
+						.getString("NameM"));
+				results.add(dictionary);
+			}
+		});
+		results.add(0, new Dictionary("", "--请选择--"));
+		return results;
+	}
+
+	@Override
+	public List<Dictionary> GetAidResult() {
+		String sql = "select * from AuSp120.tb_DResult";
+		final List<Dictionary> results = new ArrayList<Dictionary>();
+		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
+				Dictionary dictionary = new Dictionary(rs.getString("Code"), rs
+						.getString("NameM"));
+				results.add(dictionary);
+			}
+		});
+		results.add(0, new Dictionary("", "--请选择--"));
+		return results;
+	}
+
+	@Override
+	public List<Dictionary> GetDeathProve() {
+		String sql = "select * from AuSp120.tb_DDeathProve";
+		final List<Dictionary> results = new ArrayList<Dictionary>();
+		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
+				Dictionary dictionary = new Dictionary(rs.getString("Code"), rs
+						.getString("NameM"));
+				results.add(dictionary);
+			}
+		});
+		results.add(0, new Dictionary("", "--请选择--"));
+		return results;
+	}
+
+	@Override
+	public List<Dictionary> GetTakenPlaceType() {
+		String sql = "select * from AuSp120.tb_DTakenPlaceType";
+		final List<Dictionary> results = new ArrayList<Dictionary>();
+		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
+				Dictionary dictionary = new Dictionary(rs.getString("Code"), rs
+						.getString("NameM"));
+				results.add(dictionary);
+			}
+		});
+		results.add(0, new Dictionary("", "--请选择--"));
+		return results;
+	}
+
+	@Override
+	public List<Dictionary> GetLocaleType() {
+		String sql = "select * from AuSp120.tb_DLocaleType";
+		final List<Dictionary> results = new ArrayList<Dictionary>();
+		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
+				Dictionary dictionary = new Dictionary(rs.getString("Code"), rs
+						.getString("NameM"));
+				results.add(dictionary);
+			}
+		});
+		results.add(0, new Dictionary("", "--请选择--"));
+		return results;
+	}
+
+	@Override
+	public List<Dictionary> GetOutCome() {
+		String sql = "select * from AuSp120.tb_DOutCome";
+		final List<Dictionary> results = new ArrayList<Dictionary>();
+		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
+				Dictionary dictionary = new Dictionary(rs.getString("Code"), rs
+						.getString("NameM"));
+				results.add(dictionary);
+			}
+		});
+		results.add(0, new Dictionary("", "--请选择--"));
+		return results;
+	}
+
+	@Override
+	public List<Dictionary> GetCooperate() {
+		String sql = "select * from AuSp120.tb_DCooperate";
+		final List<Dictionary> results = new ArrayList<Dictionary>();
+		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
+				Dictionary dictionary = new Dictionary(rs.getString("Code"), rs
+						.getString("NameM"));
+				results.add(dictionary);
+			}
+		});
+		results.add(0, new Dictionary("", "--请选择--"));
+		return results;
+	}
+
+	@Override
+	public List<Dictionary> GetIdentity() {
+		String sql = "select * from AuSp120.tb_DIdentity";
+		final List<Dictionary> results = new ArrayList<Dictionary>();
+		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
+				Dictionary dictionary = new Dictionary(rs.getString("Code"), rs
+						.getString("NameM"));
+				results.add(dictionary);
+			}
+		});
+		results.add(0, new Dictionary("", "--请选择--"));
+		return results;
+	}
+
+	@Override
+	public List<Dictionary> GetProfession() {
+		String sql = "select * from AuSp120.tb_DProfession";
+		final List<Dictionary> results = new ArrayList<Dictionary>();
+		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
+				Dictionary dictionary = new Dictionary(rs.getString("Code"), rs
+						.getString("NameM"));
+				results.add(dictionary);
+			}
+		});
+		results.add(0, new Dictionary("", "--请选择--"));
+		return results;
+	}
+
 }

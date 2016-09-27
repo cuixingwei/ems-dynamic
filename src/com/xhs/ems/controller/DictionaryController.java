@@ -35,4 +35,72 @@ public class DictionaryController {
 		logger.info("获取疾病种类字典表");
 		return dictionaryService.GetPatientType();
 	}
+	
+	@RequestMapping(value = "/GetPatientDepartment", method = RequestMethod.GET)
+	public @ResponseBody List<Dictionary> GetPatientDepartment() {
+		logger.info("获取疾病科别字典表");
+		return dictionaryService.GetPatientDepartment();
+	}
+	
+	@RequestMapping(value = "/GetPatientReason", method = RequestMethod.GET)
+	public @ResponseBody List<Dictionary> GetPatientReason() {
+		logger.info("获取疾病原因字典表");
+		return dictionaryService.GetPatientReason();
+	}
+	
+	@RequestMapping(value = "/GetIllState", method = RequestMethod.GET)
+	public @ResponseBody List<Dictionary> GetIllState() {
+		logger.info("获取病情字典表");
+		return dictionaryService.GetIllState();
+	}
+	
+	@RequestMapping(value = "/GetAidResult", method = RequestMethod.GET)
+	public @ResponseBody List<Dictionary> GetAidResult() {
+		logger.info("获取救治结果字典表");
+		return dictionaryService.GetAidResult();
+	}
+	
+	@RequestMapping(value = "/GetDeathProve", method = RequestMethod.GET)
+	public @ResponseBody List<Dictionary> GetDeathProve() {
+		logger.info("获取死亡证明字典表");
+		return dictionaryService.GetDeathProve();
+	}
+	
+	@RequestMapping(value = "/GetTakenPlaceType", method = RequestMethod.GET)
+	public @ResponseBody List<Dictionary> GetTakenPlaceType() {
+		logger.info("获取送往地点类型字典表");
+		return dictionaryService.GetTakenPlaceType();
+	}
+	
+	@RequestMapping(value = "/GetLocaleType", method = RequestMethod.GET)
+	public @ResponseBody List<Dictionary> GetLocaleType() {
+		logger.info("获取现场地点类型字典表");
+		return dictionaryService.GetLocaleType();
+	}
+	
+	@RequestMapping(value = "/GetOutCome", method = RequestMethod.GET)
+	public @ResponseBody List<Dictionary> GetOutCome() {
+		logger.info("获取转归结果字典表");
+		return dictionaryService.GetOutCome();
+	}
+	
+	@RequestMapping(value = "/GetCooperate", method = RequestMethod.GET)
+	public @ResponseBody List<Dictionary> GetCooperate() {
+		logger.info("获取病家合作字典表");
+		return dictionaryService.GetCooperate();
+	}
+	
+	@RequestMapping(value = "/GetIdentity", method = RequestMethod.GET)
+	public @ResponseBody List<Dictionary> GetIdentity() {
+		logger.info("获取身份编码字典表");
+		return dictionaryService.GetIdentity();
+	}
+	
+	@RequestMapping(value = "/GetProfession", method = RequestMethod.GET)
+	public @ResponseBody List<Dictionary> GetProfession() {
+		logger.info("获取职业编码字典表");
+		return dictionaryService.GetProfession();
+	}
+	
+	
 }
