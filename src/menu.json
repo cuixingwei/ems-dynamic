@@ -449,5 +449,56 @@
     	"pid":"3",
     	"state":"open",
     	"text":"病发时间段统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":""
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-application_side_tree",
+    	"id":"4",
+    	"state":"closed",
+    	"text":"定制需求"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"DailySheet.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"40",
+    	"pid":"4",
+    	"state":"open",
+    	"text":"日报表"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"CenterAnserDailySheet.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"42",
+    	"pid":"4",
+    	"state":"open",
+    	"text":"中心接警日报表"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"ChangeShift.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"43",
+    	"pid":"4",
+    	"state":"open",
+    	"text":"交接班"
     }
 ]
