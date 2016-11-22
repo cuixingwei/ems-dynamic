@@ -41,8 +41,7 @@ import com.xhs.ems.bean.DataCount;
 import com.xhs.ems.bean.Parameter;
 
 public class JsGridReportBase {
-	public SimpleDateFormat timeFormat = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
+	public SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	private HttpServletResponse response;
 
@@ -61,8 +60,7 @@ public class JsGridReportBase {
 	public JsGridReportBase() {
 	}
 
-	public JsGridReportBase(HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public JsGridReportBase(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		this.response = response;
 		session = request.getSession();
 		init(this.session);
@@ -82,8 +80,7 @@ public class JsGridReportBase {
 		StringBuffer outData = new StringBuffer();
 
 		// 向前台输出数据
-		outData.append("{pageInfo: {totalRowNum: " + tableData.getTotalRows()
-				+ "},");
+		outData.append("{pageInfo: {totalRowNum: " + tableData.getTotalRows() + "},");
 		outData.append("data: [");
 		boolean isFirst = true;
 
@@ -96,8 +93,8 @@ public class JsGridReportBase {
 				if (!isFirst) {
 					outData.append(",{");
 					for (int i = 0; i < size; i++) {
-						outData.append(headerMetaData.getColumnAt(i).getId()
-								+ ": '" + dataCells.get(i).getValue() + "',");
+						outData.append(
+								headerMetaData.getColumnAt(i).getId() + ": '" + dataCells.get(i).getValue() + "',");
 					}
 					int index = outData.lastIndexOf(",");
 					outData.deleteCharAt(index);
@@ -105,8 +102,8 @@ public class JsGridReportBase {
 				} else {
 					outData.append("{");
 					for (int i = 0; i < size; i++) {
-						outData.append(headerMetaData.getColumnAt(i).getId()
-								+ ": '" + dataCells.get(i).getValue() + "',");
+						outData.append(
+								headerMetaData.getColumnAt(i).getId() + ": '" + dataCells.get(i).getValue() + "',");
 					}
 					int index = outData.lastIndexOf(",");
 					outData.deleteCharAt(index);
@@ -134,14 +131,12 @@ public class JsGridReportBase {
 	 * @param
 	 * @return void
 	 */
-	private void stopGrouping(HSSFSheet sheet, HashMap<Integer, String> word,
-			HashMap<Integer, Integer> counter, int i, int size, int rownum,
-			HSSFCellStyle style) {
+	private void stopGrouping(HSSFSheet sheet, HashMap<Integer, String> word, HashMap<Integer, Integer> counter, int i,
+			int size, int rownum, HSSFCellStyle style) {
 		String w = word.get(i);
 		if (w != null) {
 			int len = counter.get(i);
-			CellRangeAddress address = new CellRangeAddress(rownum - len,
-					rownum - 1, i, i);
+			CellRangeAddress address = new CellRangeAddress(rownum - len, rownum - 1, i, i);
 			sheet.addMergedRegion(address);
 			fillMergedRegion(sheet, address, style);
 			word.remove(i);
@@ -157,8 +152,8 @@ public class JsGridReportBase {
 	 * @param
 	 * @return void
 	 */
-	private void generateColumn(HSSFSheet sheet, TableColumn tc, int maxlevel,
-			int rownum, int colnum, HSSFCellStyle headerstyle) {
+	private void generateColumn(HSSFSheet sheet, TableColumn tc, int maxlevel, int rownum, int colnum,
+			HSSFCellStyle headerstyle) {
 		HSSFRow row = sheet.getRow(rownum);
 		if (row == null)
 			row = sheet.createRow(rownum);
@@ -169,8 +164,7 @@ public class JsGridReportBase {
 		if (headerstyle != null)
 			cell.setCellStyle(headerstyle);
 		if (tc.isComplex()) {
-			CellRangeAddress address = new CellRangeAddress(rownum, rownum,
-					colnum, colnum + tc.getLength() - 1);
+			CellRangeAddress address = new CellRangeAddress(rownum, rownum, colnum, colnum + tc.getLength() - 1);
 			sheet.addMergedRegion(address);
 			fillMergedRegion(sheet, address, headerstyle);
 
@@ -179,12 +173,10 @@ public class JsGridReportBase {
 				if (i != 0) {
 					cn = cn + tc.getChildren().get(i - 1).getLength();
 				}
-				generateColumn(sheet, tc.getChildren().get(i), maxlevel,
-						rownum + 1, cn, headerstyle);
+				generateColumn(sheet, tc.getChildren().get(i), maxlevel, rownum + 1, cn, headerstyle);
 			}
 		} else {
-			CellRangeAddress address = new CellRangeAddress(rownum, rownum
-					+ maxlevel - tc.level, colnum, colnum);
+			CellRangeAddress address = new CellRangeAddress(rownum, rownum + maxlevel - tc.level, colnum, colnum);
 			sheet.addMergedRegion(address);
 			fillMergedRegion(sheet, address, headerstyle);
 		}
@@ -196,8 +188,7 @@ public class JsGridReportBase {
 	 * @param
 	 * @return void
 	 */
-	private void fillMergedRegion(HSSFSheet sheet, CellRangeAddress address,
-			HSSFCellStyle style) {
+	private void fillMergedRegion(HSSFSheet sheet, CellRangeAddress address, HSSFCellStyle style) {
 		for (int i = address.getFirstRow(); i <= address.getLastRow(); i++) {
 			HSSFRow row = sheet.getRow(i);
 			if (row == null)
@@ -228,18 +219,14 @@ public class JsGridReportBase {
 	 *            表格数据
 	 * @throws Exception
 	 */
-	public HSSFWorkbook writeSheet(HSSFWorkbook wb, String title,
-			HashMap<String, HSSFCellStyle> styles, String creator,
+	public HSSFWorkbook writeSheet(HSSFWorkbook wb, String title, HashMap<String, HSSFCellStyle> styles, String creator,
 			TableData tableData, Parameter parameter) throws Exception {
 
 		TableHeaderMetaData headerMetaData = tableData.getTableHeader();// 获得HTML的表头元素
 
-		SimpleDateFormat formater = new SimpleDateFormat(
-				"yyyy年MM月dd日 HH时mm分ss秒");
-		String startTime = formater.format(new SimpleDateFormat(
-				"yyyy-MM-dd HH:mm:ss").parse(parameter.getStartTime()));
-		String endTime = formater.format(new SimpleDateFormat(
-				"yyyy-MM-dd HH:mm:ss").parse(parameter.getEndTime()));
+		SimpleDateFormat formater = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
+		String startTime = formater.format(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(parameter.getStartTime()));
+		String endTime = formater.format(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(parameter.getEndTime()));
 
 		HSSFSheet sheet = wb.createSheet(title);// 在Excel工作簿中建一工作表
 		sheet.setDisplayGridlines(false);// 设置表标题是否有表格边框
@@ -254,8 +241,8 @@ public class JsGridReportBase {
 		HSSFCellStyle style = styles.get("TITLE");// 设置标题样式
 		if (style != null)
 			cell.setCellStyle(style);
-		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headerMetaData
-				.getColumnCount() - 1));// 合并标题行：起始行号，终止行号， 起始列号，终止列号
+		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headerMetaData.getColumnCount() - 1));// 合并标题行：起始行号，终止行号，
+																									// 起始列号，终止列号
 
 		// 创建副标题
 		row = sheet.createRow(1);
@@ -284,15 +271,10 @@ public class JsGridReportBase {
 
 			cell = row.createCell(1);
 			style = styles.get("SUB_TITLE2");
-			cell.setCellValue(new HSSFRichTextString(startTime + "  至 " +endTime));
+			cell.setCellValue(new HSSFRichTextString(startTime + "  至 " + endTime));
 			if (style != null)
 				cell.setCellStyle(style);
 
-			/*cell = row.createCell(2);
-			style = styles.get("SUB_TITLE2");
-			cell.setCellValue(new HSSFRichTextString(endTime));
-			if (style != null)
-				cell.setCellStyle(style);*/
 		} else {
 			cell = row.createCell(2);
 			cell.setCellValue(new HSSFRichTextString("统计时间:"));
@@ -314,9 +296,9 @@ public class JsGridReportBase {
 		}
 
 		if (columns <= 3) {
-			rownum = 4;// 如果rownum = 1，则去掉创建人、创建时间等副标题；如果rownum = 0， 则把标题也去掉
-		} else {
 			rownum = 3;// 如果rownum = 1，则去掉创建人、创建时间等副标题；如果rownum = 0， 则把标题也去掉
+		} else {
+			rownum = 2;// 如果rownum = 1，则去掉创建人、创建时间等副标题；如果rownum = 0， 则把标题也去掉
 		}
 
 		HSSFCellStyle headerstyle = styles.get("TABLE_HEADER");
@@ -325,11 +307,9 @@ public class JsGridReportBase {
 		for (int i = 0; i < headerMetaData.getOriginColumns().size(); i++) {
 			TableColumn tc = headerMetaData.getOriginColumns().get(i);
 			if (i != 0) {
-				colnum += headerMetaData.getOriginColumns().get(i - 1)
-						.getLength();
+				colnum += headerMetaData.getOriginColumns().get(i - 1).getLength();
 			}
-			generateColumn(sheet, tc, headerMetaData.maxlevel, rownum, colnum,
-					headerstyle);
+			generateColumn(sheet, tc, headerMetaData.maxlevel, rownum, colnum, headerstyle);
 		}
 		rownum += headerMetaData.maxlevel;
 
@@ -361,8 +341,7 @@ public class JsGridReportBase {
 						if (w.equals(value)) {
 							counter.put(index, counter.get(index) + 1);
 						} else {
-							stopGrouping(sheet, word, counter, index, size,
-									rownum, styles.get("STRING"));
+							stopGrouping(sheet, word, counter, index, size, rownum, styles.get("STRING"));
 
 							word.put(index, value);
 							counter.put(index, 1);
@@ -376,8 +355,17 @@ public class JsGridReportBase {
 			rownum++;
 		}
 
-		stopGrouping(sheet, word, counter, 0, index, rownum,
-				styles.get("STRING"));
+		// 创建尾行，记录数
+		row = sheet.createRow(rownum);// 创建新行
+		cell = row.createCell(0);// 创建新列
+		cell.setCellValue(new HSSFRichTextString("共"+tableData.getRowCount()+"条记录"));
+		style = styles.get("TABLE_HEADER");// 设置标题样式
+		if (style != null)
+			cell.setCellStyle(style);
+		sheet.addMergedRegion(new CellRangeAddress(rownum, rownum, 0, headerMetaData.getColumnCount() - 1));// 合并尾行：起始行号，终止行号，
+																									// 起始列号，终止列号
+
+		stopGrouping(sheet, word, counter, 0, index, rownum, styles.get("STRING"));
 		// 设置前两列根据数据自动列宽
 		for (int c = 0; c < headerMetaData.getColumns().size(); c++) {
 			sheet.autoSizeColumn((short) c);
@@ -405,8 +393,7 @@ public class JsGridReportBase {
 	 *            表格数据
 	 * @throws Exception
 	 */
-	public HSSFWorkbook writeSheet(HSSFWorkbook wb,
-			HashMap<String, HSSFCellStyle> styles, String creator,
+	public HSSFWorkbook writeSheet(HSSFWorkbook wb, HashMap<String, HSSFCellStyle> styles, String creator,
 			List<TableData> tableDataLst) throws Exception {
 
 		SimpleDateFormat formater = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
@@ -415,8 +402,7 @@ public class JsGridReportBase {
 		int cnt = 1;
 		for (TableData tableData : tableDataLst) {
 			String sheetTitle = tableData.getSheetTitle();
-			sheetTitle = sheetTitle == null || sheetTitle.equals("") ? "sheet"
-					+ cnt : sheetTitle;
+			sheetTitle = sheetTitle == null || sheetTitle.equals("") ? "sheet" + cnt : sheetTitle;
 			cnt++;
 
 			TableHeaderMetaData headerMetaData = tableData.getTableHeader();// 获得HTML的表头元素
@@ -432,8 +418,8 @@ public class JsGridReportBase {
 			HSSFCellStyle style = styles.get("TITLE");// 设置标题样式
 			if (style != null)
 				cell.setCellStyle(style);
-			sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headerMetaData
-					.getColumnCount() - 1));// 合并标题行：起始行号，终止行号， 起始列号，终止列号
+			sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headerMetaData.getColumnCount() - 1));// 合并标题行：起始行号，终止行号，
+																										// 起始列号，终止列号
 
 			// 创建副标题
 			row = sheet.createRow(1);
@@ -469,11 +455,9 @@ public class JsGridReportBase {
 			for (int i = 0; i < headerMetaData.getOriginColumns().size(); i++) {
 				TableColumn tc = headerMetaData.getOriginColumns().get(i);
 				if (i != 0) {
-					colnum += headerMetaData.getOriginColumns().get(i - 1)
-							.getLength();
+					colnum += headerMetaData.getOriginColumns().get(i - 1).getLength();
 				}
-				generateColumn(sheet, tc, headerMetaData.maxlevel, rownum,
-						colnum, headerstyle);
+				generateColumn(sheet, tc, headerMetaData.maxlevel, rownum, colnum, headerstyle);
 			}
 			rownum += headerMetaData.maxlevel;
 
@@ -523,8 +507,7 @@ public class JsGridReportBase {
 	 *         bgcolor:#FFFFFF; </style> <style name="row1"> import(parent);
 	 *         bgcolor:#CAEAFE; </style>
 	 */
-	public void exportToExcel(String title, String creator,
-			TableData tableData, Parameter parameter) throws Exception {
+	public void exportToExcel(String title, String creator, TableData tableData, Parameter parameter) throws Exception {
 
 		HSSFWorkbook wb = new HSSFWorkbook();// 创建新的Excel 工作簿
 
@@ -533,8 +516,8 @@ public class JsGridReportBase {
 		wb = writeSheet(wb, title, styles, creator, tableData, parameter);// 写入工作表
 
 		String sFileName = title + ".xls";
-		response.setHeader("Content-Disposition", "attachment;filename="
-				.concat(String.valueOf(URLEncoder.encode(sFileName, "UTF-8"))));
+		response.setHeader("Content-Disposition",
+				"attachment;filename=".concat(String.valueOf(URLEncoder.encode(sFileName, "UTF-8"))));
 		response.setHeader("Connection", "close");
 		response.setHeader("Content-Type", "application/vnd.ms-excel");
 
@@ -555,8 +538,8 @@ public class JsGridReportBase {
 	 *         bgcolor:#FFFFFF; </style> <style name="row1"> import(parent);
 	 *         bgcolor:#CAEAFE; </style>
 	 */
-	public void exportToExcel(String title, String creator,
-			List<TableData> tableDataLst, Parameter parameter) throws Exception {
+	public void exportToExcel(String title, String creator, List<TableData> tableDataLst, Parameter parameter)
+			throws Exception {
 
 		HSSFWorkbook wb = new HSSFWorkbook();// 创建新的Excel 工作簿
 		HashMap<String, HSSFCellStyle> styles = initStyles(wb);// 初始化表头样式
@@ -564,16 +547,14 @@ public class JsGridReportBase {
 		int i = 1;
 		for (TableData tableData : tableDataLst) {
 			String sheetTitle = tableData.getSheetTitle();
-			sheetTitle = sheetTitle == null || sheetTitle.equals("") ? "sheet"
-					+ i : sheetTitle;
-			wb = writeSheet(wb, tableData.getSheetTitle(), styles, creator,
-					tableData, parameter);// 写入工作表
+			sheetTitle = sheetTitle == null || sheetTitle.equals("") ? "sheet" + i : sheetTitle;
+			wb = writeSheet(wb, tableData.getSheetTitle(), styles, creator, tableData, parameter);// 写入工作表
 			i++;
 		}
 
 		String sFileName = title + ".xls";
-		response.setHeader("Content-Disposition", "attachment;filename="
-				.concat(String.valueOf(URLEncoder.encode(sFileName, "UTF-8"))));
+		response.setHeader("Content-Disposition",
+				"attachment;filename=".concat(String.valueOf(URLEncoder.encode(sFileName, "UTF-8"))));
 		response.setHeader("Connection", "close");
 		response.setHeader("Content-Type", "application/vnd.ms-excel");
 
@@ -597,8 +578,7 @@ public class JsGridReportBase {
 	 *         bgcolor:#CAEAFE; </style>
 	 */
 	@SuppressWarnings("unchecked")
-	public void exportToExcel(ZipOutputStream zout, ExcelBean bean)
-			throws Exception {
+	public void exportToExcel(ZipOutputStream zout, ExcelBean bean) throws Exception {
 		@SuppressWarnings("rawtypes")
 		List list = bean.getList();
 
@@ -628,20 +608,16 @@ public class JsGridReportBase {
 				_start = (j - 1) * SHEET_MAX_CNT;
 				_end = j * SHEET_MAX_CNT - 1;
 				_end = _end > sublist.size() ? sublist.size() : _end;
-				System.out.println("正在导出第" + j + "个sheet：第"
-						+ (start + _start + 1) + "~"
-						+ (start + _start + _end + 1) + "条记录");
+				System.out.println(
+						"正在导出第" + j + "个sheet：第" + (start + _start + 1) + "~" + (start + _start + _end + 1) + "条记录");
 				List<DataCount> sheetLst = sublist.subList(_start, _end);
 				if (bean.getChildren() != null && bean.getChildren().length > 0)
-					td = ExcelUtils.createTableData(sheetLst, ExcelUtils
-							.createTableHeader(bean.getHearders(),
-									bean.getChildren()), bean.getFields());
-				else
 					td = ExcelUtils.createTableData(sheetLst,
-							ExcelUtils.createTableHeader(bean.getHearders()),
+							ExcelUtils.createTableHeader(bean.getHearders(), bean.getChildren()), bean.getFields());
+				else
+					td = ExcelUtils.createTableData(sheetLst, ExcelUtils.createTableHeader(bean.getHearders()),
 							bean.getFields());
-				td.setSheetTitle("第" + (start + _start + 1) + "~"
-						+ (start + _start + _end + 1) + "条记录");
+				td.setSheetTitle("第" + (start + _start + 1) + "~" + (start + _start + _end + 1) + "条记录");
 				tds.add(td);
 			}
 			wb = writeSheet(wb, styles, bean.getCreator(), tds);// 写入工作表
@@ -651,8 +627,7 @@ public class JsGridReportBase {
 			baos.flush();
 			byte[] aa = baos.toByteArray();
 
-			String sFileName = bean.getTitle() + "(" + (start + 1) + "~"
-					+ (end + 1) + ")" + ".xls";
+			String sFileName = bean.getTitle() + "(" + (start + 1) + "~" + (end + 1) + ")" + ".xls";
 			// fileNames = java.net.URLEncoder.encode(sFileName, "UTF-8");//
 			// 处理中文文件名的问题
 			// fileNames = new String(sFileName.getBytes("UTF-8"), "GBK"); //
@@ -674,8 +649,7 @@ public class JsGridReportBase {
 	 * @param
 	 * @return void
 	 */
-	private void createCell(HSSFRow row, TableColumn tc,
-			List<TableDataCell> data, int i, int index,
+	private void createCell(HSSFRow row, TableColumn tc, List<TableDataCell> data, int i, int index,
 			HashMap<String, HSSFCellStyle> styles) {
 		TableDataCell dc = data.get(i);
 		HSSFCell cell = row.createCell(index);
@@ -744,8 +718,7 @@ public class JsGridReportBase {
 	private HashMap<String, HSSFCellStyle> initStyles(HSSFWorkbook wb) {
 		HashMap<String, HSSFCellStyle> ret = new HashMap<String, HSSFCellStyle>();
 		try {
-			ClassPathResource res = new ClassPathResource("module.xls",
-					this.getClass());// 注意：module.xls模板文件跟该类同一路径
+			ClassPathResource res = new ClassPathResource("module.xls", this.getClass());// 注意：module.xls模板文件跟该类同一路径
 			InputStream is = res.getInputStream();
 			POIFSFileSystem fs = new POIFSFileSystem(is);
 
@@ -781,8 +754,8 @@ public class JsGridReportBase {
 	 * @param
 	 * @return void
 	 */
-	private void buildStyle(HSSFWorkbook wb, HSSFWorkbook src, HSSFSheet sheet,
-			int index, HashMap<String, HSSFCellStyle> ret, String key) {
+	private void buildStyle(HSSFWorkbook wb, HSSFWorkbook src, HSSFSheet sheet, int index,
+			HashMap<String, HSSFCellStyle> ret, String key) {
 		HSSFRow row = sheet.getRow(index);
 		HSSFCell cell = row.getCell(1);
 		HSSFCellStyle nstyle = wb.createCellStyle();
