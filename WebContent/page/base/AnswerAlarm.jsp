@@ -17,7 +17,8 @@
 				+ $('#endTime').datetimebox('getValue') + "&alarmPhone="
 				+ $('#alarmPhone').val() + "&dispatcher="
 				+ $('#dispatcher').combobox('getValue') + "&siteAddress="
-				+ $('#siteAddress').val();
+				+ $('#siteAddress').val() + "&station="
+				+ $('#station').combobox('getValue');
 		window.location.href = url;
 	};
 	/* 初始化页面标签 */
@@ -29,6 +30,12 @@
 		$('#endTime').datetimebox({
 			value : getCurrentTime()
 		})
+		$('#station').combobox({
+			url : 'getStations',
+			valueField : 'stationCode',
+			textField : 'stationName',
+			method : 'get'
+		});
 		$('#dispatcher').combobox({
 			url : 'getUsers',
 			valueField : 'employeeId',
@@ -123,18 +130,24 @@
 						<table>
 							<tr>
 								<td>报警电话:</td>
-								<td><input type="text" style="width: 80px" id="alarmPhone"
+								<td><input type="text" style="width: 120px" id="alarmPhone"
 									name="alarmPhone" /></td>
 								<td>调度员:</td>
-								<td><input style="width: 100em" id="dispatcher"
+								<td><input style="width: 120em" id="dispatcher"
 									name="dispatcher" /></td>
 								<td>报警地点:</td>
-								<td><input type="text" style="width: 80px" id="siteAddress"
+								<td><input type="text"
+									style="width: 120px; border-radius: 6px;" id="siteAddress"
 									name="siteAddress" /></td>
-								<td>查询时间</td>
+								<td>查询时间:</td>
 								<td><input id="startTime" name="startTime"
 									style="width: 150em;" />至<input id="endTime" name="endTime"
 									style="width: 150em;" /></td>
+							</tr>
+							<tr>
+								<td>分站:</td>
+								<td><input style="width: 120em;" id="station"
+									name="station" /></td>
 								<td><a href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
 									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a></td>

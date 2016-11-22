@@ -70,11 +70,15 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 		if (!CommonUtil.isNullOrEmpty(parameter.getSiteAddress())) {
 			sql += " and a.现场地址 like :siteAddress ";
 		}
+		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
+			sql += " and t2.分站编码 = :station ";
+		}
 		sql += "order by a.电话振铃时刻  drop table #temp1,#temp2,#name,#pc";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
 		paramMap.put("dispatcher", parameter.getDispatcher());
+		paramMap.put("station",parameter.getStation());
 		paramMap.put("alarmPhone", "%" + parameter.getAlarmPhone() + "%");
 		paramMap.put("siteAddress", "%" + parameter.getSiteAddress() + "%");
 
