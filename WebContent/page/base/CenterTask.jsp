@@ -43,6 +43,7 @@
 					singleSelect : true,
 					rownumbers : true,
 					idField : 'ringTime',
+					emptyMsg : '无记录',
 					pageSize : 20,
 					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 					columns : [ [ {

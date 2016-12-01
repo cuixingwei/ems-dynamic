@@ -67,6 +67,7 @@
 					striped : true,
 					singleSelect : true,
 					rownumbers : true,
+					emptyMsg : '无记录',
 					nowrap:false,
 					idField : 'id',
 					pageSize : 20,

@@ -47,6 +47,7 @@
 					pagination : true,
 					striped : true,
 					singleSelect : true,
+					emptyMsg : '无记录',
 					rownumbers : true,
 					idField : 'id',
 					pageSize : 20,

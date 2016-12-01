@@ -45,6 +45,7 @@
 					pagination : true,
 					striped : true,
 					singleSelect : true,
+					emptyMsg : '无记录',
 					rownumbers : true,
 					idField : 'ringTime',
 					pageSize : 20,
@@ -86,7 +87,7 @@
 					onBeforeLoad : function(param) {
 						var varify = cxw.checkStartTimeBeforeEndTime(
 								'#startTime', '#endTime');
-						if (!varify)  {
+						if (!varify) {
 							$.messager.alert('警告', '结束时间要大于开始时间', 'warning');
 						}
 					},

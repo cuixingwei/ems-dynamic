@@ -62,13 +62,16 @@ cxw.version = '<%=version%>';
 	src="<%=contextPath%>/jslib/jquery.cookie.js"></script>
 <%-- 引入EasyUI --%>
 <link id="easyuiTheme" rel="stylesheet"
-	href="<%=contextPath%>/jslib/jquery-easyui-1.4.1/themes/<%=easyuiTheme%>/easyui.css"
+	href="<%=contextPath%>/jslib/jquery-easyui-1.5/themes/<%=easyuiTheme%>/easyui.css"
+	type="text/css">
+	<link  rel="stylesheet"
+	href="<%=contextPath%>/jslib/jquery-easyui-1.5/themes/icon.css"
 	type="text/css">
 <script type="text/javascript"
-	src="<%=contextPath%>/jslib/jquery-easyui-1.4.1/jquery.easyui.min.js"
+	src="<%=contextPath%>/jslib/jquery-easyui-1.5/jquery.easyui.min.js"
 	charset="utf-8"></script>
 <script type="text/javascript"
-	src="<%=contextPath%>/jslib/jquery-easyui-1.4.1/locale/easyui-lang-zh_CN.js"
+	src="<%=contextPath%>/jslib/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"
 	charset="utf-8"></script>
 <%-- 引入EasyUI Portal插件 --%>
 <link rel="stylesheet"
