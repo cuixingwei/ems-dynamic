@@ -17,44 +17,43 @@ import com.xhs.ems.bean.SessionInfo;
 import com.xhs.ems.excelTools.ExcelUtils;
 import com.xhs.ems.excelTools.JsGridReportBase;
 import com.xhs.ems.excelTools.TableData;
-import com.xhs.ems.service.StateChangeService;
+import com.xhs.ems.service.PatientDepartmentService;
 
 /**
- * @author CUIXINGWEI
- * @date 2015年3月30日
+ * @datetime 2016年7月27日 下午1:10:42
+ * @author 崔兴伟
  */
 @Controller
 @RequestMapping(value = "/page/base")
-public class StateChangeController {
+public class PatientDepartmentController {
 	private static final Logger logger = Logger
-			.getLogger(StateChangeController.class);
-
+			.getLogger(PatientDepartmentController.class);
 	@Autowired
-	private StateChangeService stateChangeService;
+	private PatientDepartmentService patientDepartmentService;
 
-	@RequestMapping(value = "/getStateChangeDatas", method = RequestMethod.POST)
+	@RequestMapping(value = "/getPatientDepartment", method = RequestMethod.POST)
 	public @ResponseBody Grid getData(Parameter parameter) {
-		logger.info("状态变化统计");
-		return stateChangeService.getData(parameter);
+		logger.info("疾病科别统计");
+		return patientDepartmentService.getData(parameter);
 	}
 
-	@RequestMapping(value = "/exportStateChangeDatas", method = RequestMethod.GET)
-	public @ResponseBody void exportStateChangeDatas(Parameter parameter,
+	@RequestMapping(value = "/exportPatientDepartment", method = RequestMethod.GET)
+	public @ResponseBody void exportPatientDepartment(Parameter parameter,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		logger.info("导出状态变化统计到excel");
+		logger.info("导出疾病科别统计到excel");
 		response.setContentType("application/msexcel;charset=UTF-8");
 
-		String title = "状态变化统计";
-		String[] headers = new String[] { "调度员", "座席号", "座席状态", "开始时间", "结束时间" };
-		String[] fields = new String[] { "dispatcher", "seatCode", "seatState",
-				"startTime", "endTime" };
-		int spanCount = 1; // 需要合并的列数。从第1列开始到指定列。
+		String title = "疾病科别统计";
+		String[] headers = new String[] { "疾病科别", "人数", "百分比" };
+		String[] fields = new String[] { "patientDepartment", "numbers",
+				"radio" };
 		TableData td = ExcelUtils.createTableData(
-				stateChangeService.getData(parameter).getRows(),
-				ExcelUtils.createTableHeader(headers, spanCount), fields);
+				patientDepartmentService.getData(parameter).getRows(),
+				ExcelUtils.createTableHeader(headers), fields);
 		JsGridReportBase report = new JsGridReportBase(request, response);
 		
+
 		HttpSession session = request.getSession();
 		SessionInfo sessionInfo = (SessionInfo) session
 				.getAttribute("sessionInfo");

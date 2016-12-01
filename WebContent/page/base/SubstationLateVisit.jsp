@@ -31,7 +31,7 @@
 		});
 		$('#outCarTimesMin').numberbox({
 			min : 0,
-			value : 3
+			value : 2
 		});
 		$('#station').combobox({
 			url : 'getStations',
@@ -76,7 +76,7 @@
 						align : 'center'
 					}, {
 						field : 'createTaskTime',
-						title : '生成任务时刻',
+						title : '派车时刻',
 						resizable : true,
 						width : "12%",
 						align : 'center',

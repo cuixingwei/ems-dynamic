@@ -62,6 +62,7 @@ public class CarPauseDAOImpl implements CarPauseDAO {
 		if (!CommonUtil.isNullOrEmpty(parameter.getPauseReason())) {
 			sql = sql + " and dpr.Code=:pauseReason ";
 		}
+		sql += " order by rpr.操作时刻";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());

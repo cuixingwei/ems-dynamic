@@ -63,5 +63,37 @@ public class SendSpotTypeController {
 			report.exportToExcel(title, "", td, parameter);
 		}
 	}
+	
+	@RequestMapping(value = "/getSendSpotDatas", method = RequestMethod.POST)
+	public @ResponseBody Grid getSendSpotDatas(Parameter parameter) {
+		logger.info("送往地点查询");
+		return sendSpotTypeService.getSendSpotDatas(parameter);
+	}
+
+	@RequestMapping(value = "/exportSendSpotDatas", method = RequestMethod.GET)
+	public @ResponseBody void exportSendSpotDatas(Parameter parameter,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		logger.info("导出送往地点统计数据到excel");
+		response.setContentType("application/msexcel;charset=UTF-8");
+
+		String title = "送往地点统计";
+		String[] headers = new String[] { "送往地点", "人数", "比率" };
+		String[] fields = new String[] { "name", "times", "rate" };
+		TableData td = ExcelUtils.createTableData(
+				sendSpotTypeService.getSendSpotDatas(parameter).getRows(),
+				ExcelUtils.createTableHeader(headers), fields);
+		JsGridReportBase report = new JsGridReportBase(request, response);
+		
+		HttpSession session = request.getSession();
+		SessionInfo sessionInfo = (SessionInfo) session
+				.getAttribute("sessionInfo");
+		if (null != sessionInfo) {
+			report.exportToExcel(title, sessionInfo.getUser().getName(), td,
+					parameter);
+		} else {
+			report.exportToExcel(title, "", td, parameter);
+		}
+	}
 
 }

@@ -96,7 +96,262 @@ public class Parameter {
 	 * 事件详情查询（受理表的ID）
 	 */
 	private String id;
+	/**
+	 * 疾病分类统计编码
+	 */
+	private String patientClassCode;
+	/**
+	 * 疾病类型统计
+	 */
+	private String patientTypeCode;
+	/**
+	 * 医生诊断
+	 */
+	private String doctorDiagnosis;
+	/**
+	 * 疾病科别
+	 */
+	private String illDepartment;
+	/**
+	 * 疾病分类
+	 */
+	private String illClass;
+	/**
+	 * 患者姓名
+	 */
+	private String patientName;
+	/**
+	 * 病情
+	 */
+	private String illState;
+	/**
+	 * 救治结果
+	 */
+	private String aidResult;
+	/**
+	 * 死亡证明
+	 */
+	private String deathProof;
+	/**
+	 * 送往地点类型
+	 */
+	private String sendAddrType;
+	/**
+	 * 现场地点类型
+	 */
+	private String spotAddrType;
+	/**
+	 * 疾病原因
+	 */
+	private String illReason;
+	/**
+	 * 车辆标识
+	 */
+	private String carPlate;
+	/**
+	 * 转归编码
+	 */
+	private String outCome;
+	/**
+	 * 病家合作
+	 */
+	private String patientCooperation;
+	/**
+	 * 性别
+	 */
+	private String sex;
+	/**
+	 * 身份
+	 */
+	private String identity;
+	/**
+	 * 职业
+	 */
+	private String profession;
+	/**
+	 * 医生
+	 */
+	private String doctor;
+	/**
+	 * 护士
+	 */
+	private String nurse;
+	/**
+	 * 司机
+	 */
+	private String driver;
+	
+	
+	
+	public String getDoctorDiagnosis() {
+		return doctorDiagnosis;
+	}
 
+	public void setDoctorDiagnosis(String doctorDiagnosis) {
+		this.doctorDiagnosis = doctorDiagnosis;
+	}
+
+	public String getIllDepartment() {
+		return illDepartment;
+	}
+
+	public void setIllDepartment(String illDepartment) {
+		this.illDepartment = illDepartment;
+	}
+
+	public String getIllClass() {
+		return illClass;
+	}
+
+	public void setIllClass(String illClass) {
+		this.illClass = illClass;
+	}
+
+	public String getPatientName() {
+		return patientName;
+	}
+
+	public void setPatientName(String patientName) {
+		this.patientName = patientName;
+	}
+
+	public String getIllState() {
+		return illState;
+	}
+
+	public void setIllState(String illState) {
+		this.illState = illState;
+	}
+
+	public String getAidResult() {
+		return aidResult;
+	}
+
+	public void setAidResult(String aidResult) {
+		this.aidResult = aidResult;
+	}
+
+	public String getDeathProof() {
+		return deathProof;
+	}
+
+	public void setDeathProof(String deathProof) {
+		this.deathProof = deathProof;
+	}
+
+	public String getSendAddrType() {
+		return sendAddrType;
+	}
+
+	public void setSendAddrType(String sendAddrType) {
+		this.sendAddrType = sendAddrType;
+	}
+
+	public String getSpotAddrType() {
+		return spotAddrType;
+	}
+
+	public void setSpotAddrType(String spotAddrType) {
+		this.spotAddrType = spotAddrType;
+	}
+
+	public String getIllReason() {
+		return illReason;
+	}
+
+	public void setIllReason(String illReason) {
+		this.illReason = illReason;
+	}
+
+	public String getCarPlate() {
+		return carPlate;
+	}
+
+	public void setCarPlate(String carPlate) {
+		this.carPlate = carPlate;
+	}
+
+	public String getOutCome() {
+		return outCome;
+	}
+
+	public void setOutCome(String outCome) {
+		this.outCome = outCome;
+	}
+
+	public String getPatientCooperation() {
+		return patientCooperation;
+	}
+
+	public void setPatientCooperation(String patientCooperation) {
+		this.patientCooperation = patientCooperation;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public String getIdentity() {
+		return identity;
+	}
+
+	public void setIdentity(String identity) {
+		this.identity = identity;
+	}
+
+	public String getProfession() {
+		return profession;
+	}
+
+	public void setProfession(String profession) {
+		this.profession = profession;
+	}
+
+	public String getDoctor() {
+		return doctor;
+	}
+
+	public void setDoctor(String doctor) {
+		this.doctor = doctor;
+	}
+
+	public String getNurse() {
+		return nurse;
+	}
+
+	public void setNurse(String nurse) {
+		this.nurse = nurse;
+	}
+
+	public String getDriver() {
+		return driver;
+	}
+
+	public void setDriver(String driver) {
+		this.driver = driver;
+	}
+
+	public String getPatientTypeCode() {
+		return patientTypeCode;
+	}
+
+	public void setPatientTypeCode(String patientTypeCode) {
+		this.patientTypeCode = patientTypeCode;
+	}
+
+	public String getPatientClassCode() {
+		return patientClassCode;
+	}
+
+	public void setPatientClassCode(String patientClassCode) {
+		this.patientClassCode = patientClassCode;
+	}
+
+	
 	/**
 	 * @return the id
 	 */

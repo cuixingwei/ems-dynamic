@@ -12,9 +12,10 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-		var url = "exportPatientTypeData?startTime="
+		var url = "exportPatientType?startTime="
 				+ $('#startTime').datetimebox('getValue') + "&endTime="
-				+ $('#endTime').datetimebox('getValue');
+				+ $('#endTime').datetimebox('getValue') + "&patientTypeCode="
+				+ $('#patientTypeCode').combobox('getValue');
 		window.location.href = url;
 	};
 	/* 初始化页面标签 */
@@ -26,7 +27,13 @@
 		$('#endTime').datetimebox({
 			value : getCurrentTime()
 		});
-
+		$('#patientTypeCode').combobox({
+			url : 'GetPatientType',
+			valueField : 'code',
+			textField : 'name',
+			method : 'get',
+			editable : false
+		});
 		grid = $('#grid').datagrid(
 				{
 					url : 'getPatientTypeData',
@@ -39,142 +46,22 @@
 					pageSize : 20,
 					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 					columns : [ [ {
-						field : 'station',
-						title : '分站',
+						field : 'patientType',
+						title : '疾病种类',
 						resizable : true,
-						width : "6%",
+						width : "32%",
 						align : 'center'
 					}, {
-						field : 'type1',
-						title : '交通事<br>故外伤',
+						field : 'numbers',
+						title : '人数',
 						resizable : true,
-						width : "5%",
+						width : "32%",
 						align : 'center',
 					}, {
-						field : 'type2',
-						title : '其他类<br>外伤',
+						field : 'radio',
+						title : '百分比',
 						resizable : true,
-						width : "4%",
-						align : 'center'
-					}, {
-						field : 'type3',
-						title : '烧伤',
-						resizable : true,
-						width : "4%",
-						align : 'center',
-					}, {
-						field : 'type4',
-						title : '电击伤<br>溺水',
-						resizable : true,
-						width : "4%",
-						align : 'center'
-					}, {
-						field : 'type5',
-						title : '其他外<br>科疾病',
-						resizable : true,
-						width : "5%",
-						align : 'center',
-					}, {
-						field : 'type6',
-						title : '心血管系<br>统疾病',
-						resizable : true,
-						width : "5%",
-						align : 'center'
-					}, {
-						field : 'type7',
-						title : '脑血管系<br>统疾病',
-						resizable : true,
-						width : "5%",
-						align : 'center',
-					}, {
-						field : 'type8',
-						title : '呼吸道系<br>统疾病',
-						resizable : true,
-						width : "5%",
-						align : 'center'
-					}, {
-						field : 'type9',
-						title : '食物<br>中毒',
-						resizable : true,
-						width : "4%",
-						align : 'center',
-					}, {
-						field : 'type10',
-						title : '药物<br>中毒',
-						resizable : true,
-						width : "4%",
-						align : 'center'
-					}, {
-						field : 'type11',
-						title : '酒精<br>中毒',
-						resizable : true,
-						width : "4%",
-						align : 'center',
-					}, {
-						field : 'type12',
-						title : 'CO中毒',
-						resizable : true,
-						width : "4%",
-						align : 'center'
-					}, {
-						field : 'type13',
-						title : '其他内<br>科疾病',
-						resizable : true,
-						width : "4%",
-						align : 'center',
-					}, {
-						field : 'type14',
-						title : '妇科<br>产科',
-						resizable : true,
-						width : "4%",
-						align : 'center'
-					}, {
-						field : 'type15',
-						title : '儿科',
-						resizable : true,
-						width : "4%",
-						align : 'center',
-					}, {
-						field : 'type16',
-						title : '气管<br>异物',
-						resizable : true,
-						width : "4%",
-						align : 'center'
-					}, {
-						field : 'type17',
-						title : '其他五<br>官科',
-						resizable : true,
-						width : "4%",
-						align : 'center',
-					}, {
-						field : 'type18',
-						title : '传染病',
-						resizable : true,
-						width : "4%",
-						align : 'center'
-					}, {
-						field : 'type19',
-						title : '抢救前<br>死亡',
-						resizable : true,
-						width : "4%",
-						align : 'center',
-					}, {
-						field : 'type20',
-						title : '抢救后<br>死亡',
-						resizable : true,
-						width : "4%",
-						align : 'center'
-					} , {
-						field : 'type21',
-						title : '其他',
-						resizable : true,
-						width : "4%",
-						align : 'center',
-					}, {
-						field : 'total',
-						title : '合计',
-						resizable : true,
-						width : "4%",
+						width : "32%",
 						align : 'center'
 					} ] ],
 					toolbar : '#toolbar',
@@ -204,6 +91,11 @@
 				<td>
 					<form id="searchForm">
 						<table>
+							<tr>
+								<td>疾病种类</td>
+								<td><input id="patientTypeCode" name="patientTypeCode"
+									style="width: 120em;" /></td>
+							</tr>
 							<tr>
 								<td>查询时间:</td>
 								<td><input id="startTime" name="startTime"

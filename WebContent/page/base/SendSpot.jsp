@@ -12,10 +12,9 @@
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-		var url = "exportStateChangeDatas?startTime="
+		var url = "exportSendSpotDatas?startTime="
 				+ $('#startTime').datetimebox('getValue') + "&endTime="
-				+ $('#endTime').datetimebox('getValue') + "&dispatcher="
-				+ $('#dispatcher').combobox('getValue');
+				+ $('#endTime').datetimebox('getValue');
 		window.location.href = url;
 	};
 	/* 初始化页面标签 */
@@ -26,16 +25,11 @@
 		});
 		$('#endTime').datetimebox({
 			value : getCurrentTime()
-		})
-		$('#dispatcher').combobox({
-			url : 'getUsers',
-			valueField : 'employeeId',
-			textField : 'name',
-			method : 'get'
 		});
+
 		grid = $('#grid').datagrid(
 				{
-					url : 'getStateChangeDatas',
+					url : 'getSendSpotDatas',
 					pagePosition : 'bottom',
 					pagination : true,
 					striped : true,
@@ -45,41 +39,31 @@
 					pageSize : 20,
 					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 					columns : [ [ {
-						field : 'dispatcher',
-						title : '调度员',
-						width : "20%",
+						field : 'name',
+						title : '送往地点',
+						resizable : true,
+						width : "33%",
+						align : 'center'
+					}, {
+						field : 'times',
+						title : '人数',
+						resizable : true,
+						width : "33%",
 						align : 'center',
 					}, {
-						field : 'seatCode',
-						title : '座席号',
-						width : "20%",
-						align : 'center'
-					}, {
-						field : 'seatState',
-						title : '座席状态',
-						width : "20%",
-						align : 'center'
-					}, {
-						field : 'startTime',
-						title : '开始时间',
-						width : "19%",
-						align : 'center'
-					}, {
-						field : 'endTime',
-						title : '结束时间',
-						width : "19%",
+						field : 'rate',
+						title : '比率',
+						resizable : true,
+						width : "33%",
 						align : 'center'
 					} ] ],
 					toolbar : '#toolbar',
 					onBeforeLoad : function(param) {
 						var varify = cxw.checkStartTimeBeforeEndTime(
 								'#startTime', '#endTime');
-						if (!varify)  {
+						if (!varify){
 							$.messager.alert('警告', '结束时间要大于开始时间', 'warning');
 						}
-					},
-					onLoadSuccess : function(data) {
-						$(this).datagrid("autoMergeCells", [ 'dispatcher' ]);
 					}
 				});
 	}
@@ -98,14 +82,12 @@
 					<form id="searchForm">
 						<table>
 							<tr>
-								<td>调度员:</td>
-								<td><input style="width: 80em;" id="dispatcher"
-									name="dispatcher" /></td>
-								<td>查询时间</td>
+								<td>查询时间:</td>
 								<td><input id="startTime" name="startTime"
 									style="width: 150em;" />至<input id="endTime" name="endTime"
 									style="width: 150em;" /></td>
-								<td><a href="javascript:void(0);" class="easyui-linkbutton"
+								<td colspan="2">&nbsp;<a href="javascript:void(0);"
+									class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
 									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a></td>
 							</tr>

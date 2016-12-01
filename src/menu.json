@@ -106,19 +106,6 @@
     	"attributes":
     		{
     			"target":"",
-    			"url":"StateChange.jsp"
-    		},
-    	"checked":false,
-    	"iconCls":"ext-icon-world",
-    	"id":"07",
-    	"pid":"0",
-    	"state":"open",
-    	"text":"状态变化统计"
-    },
-    {
-    	"attributes":
-    		{
-    			"target":"",
     			"url":""
     		},
     	"checked":false,
@@ -274,6 +261,19 @@
     	"attributes":
     		{
     			"target":"",
+    			"url":"SendSpot.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"110",
+    	"pid":"1",
+    	"state":"open",
+    	"text":"送往地点统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
     			"url":"AnswerAlarm.jsp"
     		},
     	"checked":false,
@@ -320,6 +320,19 @@
     	"pid":"2",
     	"state":"open",
     	"text":"急救站出诊情况查询"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"SubstationVisitQualified.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"20",
+    	"pid":"2",
+    	"state":"open",
+    	"text":"急救站出诊合格率统计"
     },
     {
     	"attributes":
@@ -428,7 +441,7 @@
     	"attributes":
     		{
     			"target":"",
-    			"url":"PatientType.jsp"
+    			"url":"PatientClass.jsp"
     		},
     	"checked":false,
     	"iconCls":"ext-icon-world",
@@ -441,13 +454,65 @@
     	"attributes":
     		{
     			"target":"",
-    			"url":"PatientTimeSpan.jsp"
+    			"url":"PatientType.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"32",
+    	"pid":"3",
+    	"state":"open",
+    	"text":"疾病种类统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"PatientDepartment.jsp"
     		},
     	"checked":false,
     	"iconCls":"ext-icon-world",
     	"id":"33",
     	"pid":"3",
     	"state":"open",
+    	"text":"疾病科别统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"PatientTimeSpan.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"34",
+    	"pid":"3",
+    	"state":"open",
     	"text":"病发时间段统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"PatientSex.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"35",
+    	"pid":"3",
+    	"state":"open",
+    	"text":"患者性别统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"PatientCaseDetail.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"36",
+    	"pid":"3",
+    	"state":"open",
+    	"text":"院前急救病历一览表"
     }
 ]

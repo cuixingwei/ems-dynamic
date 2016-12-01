@@ -17,11 +17,11 @@ import com.xhs.ems.bean.SessionInfo;
 import com.xhs.ems.excelTools.ExcelUtils;
 import com.xhs.ems.excelTools.JsGridReportBase;
 import com.xhs.ems.excelTools.TableData;
-import com.xhs.ems.service.PatientTypeSerivce;
+import com.xhs.ems.service.PatientTypeService;
 
 /**
+ * @datetime 2016年5月18日 下午6:46:36
  * @author 崔兴伟
- * @datetime 2015年4月17日 下午5:04:54
  */
 @Controller
 @RequestMapping(value = "/page/base")
@@ -29,28 +29,31 @@ public class PatientTypeController {
 	private static final Logger logger = Logger
 			.getLogger(PatientTypeController.class);
 	@Autowired
-	private PatientTypeSerivce patientTypeSerivce;
+	private PatientTypeService patientTypeService;
 
-	@RequestMapping(value = "getPatientTypeData", method = RequestMethod.POST)
+	@RequestMapping(value = "/getPatientTypeData", method = RequestMethod.POST)
 	public @ResponseBody Grid getData(Parameter parameter) {
 		logger.info("疾病种类统计");
-		return patientTypeSerivce.getData(parameter);
+		return patientTypeService.getData(parameter);
 	}
 
-	@RequestMapping(value = "exportPatientTypeData", method = RequestMethod.GET)
-	public void export(Parameter parameter, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		logger.info("导出疾病种类统计到Excel");
+	@RequestMapping(value = "/exportPatientType", method = RequestMethod.GET)
+	public @ResponseBody void exportPatientType(Parameter parameter,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		logger.info("导出疾病种类统计到excel");
 		response.setContentType("application/msexcel;charset=UTF-8");
 
 		String title = "疾病种类统计";
-		String[] headers = new String[] { "分站", "交通事故外伤", "其他类外伤","烧伤", "电击伤 溺水", "其他外科疾病","心血管系统疾病", "脑血管系统疾病", "呼吸道系统疾病","食物中毒", "药物中毒", "酒精中毒","CO中毒", "其他内科疾病", "妇科 产科","儿科", "气管异物","其他五官科","传染病", "抢救前死亡", "抢救后死亡","其他", "合计" };
-		String[] fields = new String[] { "station", "type1", "type2","type3", "type4", "type5","type6", "type7", "type8","type9", "type10", "type11","type12", "type13", "type14","type15", "type16","type17","type18", "type19", "type20","type21", "total" };
+		String[] headers = new String[] { "疾病种类", "人数", "百分比" };
+		String[] fields = new String[] { "patientType", "numbers",
+				"radio" };
 		TableData td = ExcelUtils.createTableData(
-				patientTypeSerivce.getData(parameter).getRows(),
+				patientTypeService.getData(parameter).getRows(),
 				ExcelUtils.createTableHeader(headers), fields);
 		JsGridReportBase report = new JsGridReportBase(request, response);
 		
+
 		HttpSession session = request.getSession();
 		SessionInfo sessionInfo = (SessionInfo) session
 				.getAttribute("sessionInfo");
@@ -61,5 +64,4 @@ public class PatientTypeController {
 			report.exportToExcel(title, "", td, parameter);
 		}
 	}
-
 }

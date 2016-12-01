@@ -63,4 +63,9 @@ public class PatientCaseFillCount {
 		this.rate = rate;
 	}
 
+	public PatientCaseFillCount() {
+	}
+	
+	
+
 }

@@ -15,4 +15,12 @@ public interface SendSpotTypeService {
 	 * @return 送往地点类型统计
 	 */
 	public Grid getData(Parameter parameter);
+	/**
+	 * @datetime 2016年6月12日 下午4:34:48
+	 * @author 崔兴伟
+	 * @param parameter
+	 * @return 送往地点类型统计
+	 */
+	public Grid getSendSpotDatas(Parameter parameter);
+	
 }

@@ -4,15 +4,17 @@ import com.xhs.ems.bean.Grid;
 import com.xhs.ems.bean.Parameter;
 
 /**
+ * @datetime 2016年5月18日 下午6:31:13
  * @author 崔兴伟
- * @datetime 2015年4月17日 下午4:58:38
  */
 public interface PatientTypeDAO {
+
 	/**
+	 * 疾病类型统计
+	 * @datetime 2016年5月18日 下午6:32:08
 	 * @author 崔兴伟
-	 * @datetime 2015年4月17日 下午4:58:51
 	 * @param parameter
-	 * @return 疾病种类统计
+	 * @return
 	 */
 	public Grid getData(Parameter parameter);
 }

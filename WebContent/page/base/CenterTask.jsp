@@ -128,7 +128,7 @@
 						title : '出车结果',
 						rowspan : 2,
 						align : 'center',
-						width : '5%'
+						width : '3%'
 					} ], [ {
 						field : 'doctor',
 						title : '医生',

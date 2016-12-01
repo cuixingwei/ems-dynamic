@@ -94,4 +94,54 @@ public class SendSpotTypeDAOImpl implements SendSpotTypeDAO {
 
 	}
 
+	@Override
+	public Grid getSendSpotDatas(Parameter parameter) {
+		String sql = "select a.送往地点 name,sum(case when t.救治人数<>'' and t.救治人数 is not null then t.救治人数 else 0 end)  times,'' rate	"
+				+ "from AuSp120.tb_EventV e	left outer join AuSp120.tb_AcceptDescriptV a on e.事件编码=a.事件编码	"
+				+ "left outer join AuSp120.tb_TaskV t on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
+				+ "where e.事件性质编码=1 and a.类型编码 not in (2,4) and t.结果编码=4	"
+				+ "and a.开始受理时刻 between :startTime and :endTime	group by a.送往地点";
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("startTime", parameter.getStartTime());
+		paramMap.put("endTime", parameter.getEndTime());
+
+		List<SendSpotType> results = this.npJdbcTemplate.query(sql, paramMap,
+				new RowMapper<SendSpotType>() {
+					@Override
+					public SendSpotType mapRow(ResultSet rs, int index)
+							throws SQLException {
+						return new SendSpotType(rs.getString("name"), rs
+								.getString("times"), rs.getString("rate"));
+					}
+				});
+		logger.info("一共有" + results.size() + "条数据");
+
+		int totaltimes = 0;
+		// 计算总救治人数
+		for (SendSpotType result : results) {
+			totaltimes += Integer.parseInt(result.getTimes());
+		}
+		// 计算比率
+		for (SendSpotType result : results) {
+			result.setRate(CommonUtil.calculateRate(totaltimes,
+					Integer.parseInt(result.getTimes())));
+		}
+		results.add(new SendSpotType("合计", totaltimes+"", "100%"));
+		Grid grid = new Grid();
+		if ((int) parameter.getPage() > 0) {
+			int page = (int) parameter.getPage();
+			int rows = (int) parameter.getRows();
+
+			int fromIndex = (page - 1) * rows;
+			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
+					* rows) ? results.size() : page * rows;
+			grid.setRows(results.subList(fromIndex, toIndex));
+			grid.setTotal(results.size());
+
+		} else {
+			grid.setRows(results);
+		}
+		return grid;
+	}
+
 }
