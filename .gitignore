@@ -4,5 +4,4 @@ target
 bin
 /doc
 .idea
-.settings
 /src/jdbc.properties
