@@ -44,7 +44,7 @@ public class DriverWorkDAOImpl implements DriverWorkDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select distinct 任务编码,司机,车辆标识 into #pc from AuSp120.tb_PatientCase "
+		String sql = "select distinct 任务编码,driver 司机,actualSign 车辆标识 into #pc from AuSp120.tb_PatientCase "
 				+ "select t.生成任务时刻,t.出车时刻,t.到达现场时刻,结果编码,pc.司机,t.分站编码 into #temp1 	"
 				+ "from AuSp120.tb_Task t	left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码 "
 				+ "left outer join AuSp120.tb_Ambulance am on am.车辆编码=t.车辆编码 "

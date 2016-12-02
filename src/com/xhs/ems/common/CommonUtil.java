@@ -139,6 +139,9 @@ public class CommonUtil {
 		Double rate = Double.parseDouble(one.toString())
 				/ Double.parseDouble(second.toString());
 		String rateString = String.format("%.2f", rate);
+		if(Double.parseDouble(second.toString()) == 0.0){
+			rateString = "0";
+		}
 		return rateString + " : 1";
 	}
 	

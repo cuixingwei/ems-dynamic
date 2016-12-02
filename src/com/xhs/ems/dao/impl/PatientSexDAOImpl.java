@@ -35,20 +35,20 @@ public class PatientSexDAOImpl implements PatientSexDAO {
 
 	@Override
 	public List<PatientSex> getData(Parameter parameter) {
-		String sql = "select ddc.NameM class,'' typeName,DATENAME(YEAR,a.开始受理时刻) year,pc.性别 into #temp1	"
-				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.车辆标识	"
+		String sql = "select ddc.NameM class,'' typeName,DATENAME(YEAR,a.开始受理时刻) year,pc.sex into #temp1	"
+				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.actualSign	"
 				+ "left outer join AuSp120.tb_TaskV t on t.任务编码=pc.任务编码 and am.车辆编码=t.车辆编码	"
 				+ "left outer join AuSp120.tb_AcceptDescriptV a on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
 				+ "left outer join AuSp120.tb_EventV e on t.事件编码=e.事件编码	"
-				+ "left outer join AuSp120.tb_DDiseaseClassState ddc on ddc.Code=pc.分类统计编码	"
-				+ "where pc.分类统计编码 is not null and e.事件性质编码=1 and a.开始受理时刻 between :startTime and :endTime ";
+				+ "left outer join AuSp120.tb_DDiseaseClassState ddc on ddc.Code=pc.patientClassCode	"
+				+ "where pc.patientClassCode is not null and e.事件性质编码=1 and a.开始受理时刻 between :startTime and :endTime ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		if (!CommonUtil.isNullOrEmpty(parameter.getPatientClassCode())) {
-			sql = sql + " and pc.分类统计编码= :patientClass";
+			sql = sql + " and pc.patientClassCode= :patientClass";
 			paramMap.put("patientClass", parameter.getPatientClassCode());
 		}
-		sql += " select tt.year+'年' time,SUM(case when tt.性别='男' then 1 else 0 end) male,"
-				+ "SUM(case when tt.性别='女' then 1 else 0 end) female,	COUNT(*) total,'' radio   	"
+		sql += " select tt.year+'年' time,SUM(case when tt.sex='男' then 1 else 0 end) male,"
+				+ "SUM(case when tt.sex='女' then 1 else 0 end) female,	COUNT(*) total,'' radio   	"
 				+ "from #temp1 tt	group by tt.year	order by tt.year ; drop table #temp1";
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());

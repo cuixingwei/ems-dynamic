@@ -35,12 +35,12 @@ public class PatientTypeDAOImpl implements PatientTypeDAO {
 	@Override
 	public Grid getData(Parameter parameter) {
 		String sql = "select dt.NameM patientType,COUNT(*) numbers,'' radio from AuSp120.tb_PatientCase pc  "
-				+ "left outer join AuSp120.tb_DDiseaseType dt on dt.Code=pc.疾病种类编码 "
-				+ "left outer join AuSp120.tb_Ambulance  am on am.实际标识=pc.车辆标识 "
+				+ "left outer join AuSp120.tb_DDiseaseType dt on dt.Code=pc.patientTypeCode "
+				+ "left outer join AuSp120.tb_Ambulance  am on am.实际标识=pc.actualSign "
 				+ "left outer join AuSp120.tb_Task t on  pc.任务编码=t.任务编码 and t.车辆编码=am.车辆编码	"
-				+ "	where  pc.疾病种类编码 is not null and t.生成任务时刻 between :startTime and :endTime  ";
+				+ "	where  pc.patientTypeCode is not null and t.生成任务时刻 between :startTime and :endTime  ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getPatientTypeCode())) {
-			sql = sql + " and pc.疾病种类编码= :patientTypeCode ";
+			sql = sql + " and pc.patientTypeCode= :patientTypeCode ";
 		}
 		sql += " group by dt.NameM";
 		Map<String, String> paramMap = new HashMap<String, String>();

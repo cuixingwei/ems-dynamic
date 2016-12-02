@@ -47,7 +47,8 @@ public class AcceptMarkDAOImpl implements AcceptMarkDAO {
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
-
+		
+		logger.info(sql);
 		List<AcceptMark> results = this.npJdbcTemplate.query(sql, paramMap,
 				new RowMapper<AcceptMark>() {
 					@Override

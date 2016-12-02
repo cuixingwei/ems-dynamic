@@ -49,7 +49,7 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 				+ "select distinct e.事件编码 eventCode,m.姓名 dispatcher into #temp1	"
 				+ "from AuSp120.tb_EventV e	left outer join AuSp120.tb_MrUser m on m.工号=e.调度员编码	"
 				+ "where e.事件性质编码=1 and m.人员类型=0  select a.事件编码,a.受理序号,pc.姓名 into #pc 	"
-				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.车辆标识	"
+				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.actualSign	"
 				+ "left outer join AuSp120.tb_Task t on pc.任务编码=t.任务编码 and t.车辆编码=am.车辆编码	"
 				+ "left outer join AuSp120.tb_AcceptDescript a on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
 				+ "select	事件编码,受理序号,姓名 = (stuff((select ',' + 姓名 from #pc where 事件编码 = pc.事件编码 and 受理序号=pc.受理序号 for xml path('')),1,1,''))  into #name	"

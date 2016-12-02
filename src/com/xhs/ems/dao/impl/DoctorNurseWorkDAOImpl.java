@@ -45,9 +45,9 @@ public class DoctorNurseWorkDAOImpl implements DoctorNurseWorkDAO {
 	@Override
 	public Grid getData(Parameter parameter) {
 		String sql1 = " select distinct t.生成任务时刻,t.任务编码 into #task from AuSp120.tb_Task t "
-				+ "select  pc.任务编码,pc.随车医生,pc.随车护士,pc.分站编码 into #temp1	"
+				+ "select  pc.任务编码,pc.doctor 随车医生,pc.nurse 随车护士,pc.stationCode 分站编码 into #temp1	"
 				+ "from AuSp120.tb_PatientCase pc left outer join #task t on  pc.任务编码=t.任务编码 where pc.任务编码<>'' and t.生成任务时刻 between :startTime and :endTime ";
-		String sql2 = "select distinct pc.任务编码,pc.随车医生,pc.随车护士,pc.分站编码 into #temp2	"
+		String sql2 = "select distinct pc.任务编码,pc.doctor 随车医生,pc.nurse 随车护士,pc.stationCode 分站编码 into #temp2	"
 				+ "from AuSp120.tb_PatientCase pc left outer join #task t on  pc.任务编码=t.任务编码 where pc.任务编码<>'' and t.生成任务时刻 between :startTime and :endTime ";
 		String sql3 = "select tt.分站编码,tt.随车医生,COUNT(*) doctorCureNumbers into #temp3 "
 				+ "from #temp1 tt 	where tt.随车医生<>'' and tt.任务编码<>'' group by tt.分站编码,tt.随车医生  ";

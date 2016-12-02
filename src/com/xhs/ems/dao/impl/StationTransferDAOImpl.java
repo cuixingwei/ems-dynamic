@@ -33,15 +33,15 @@ public class StationTransferDAOImpl implements StationTransferDAO{
 	@Override
 	public Grid getData(Parameter parameter) {
 		String sql = "(select s.分站名称+'出车总数' station,count(*) total 	 "
-				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.车辆标识	"
-				+ "left outer join AuSp120.tb_Station s on s.分站编码=pc.分站编码	"
+				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.actualSign	"
+				+ "left outer join AuSp120.tb_Station s on s.分站编码=pc.stationCode	"
 				+ "left outer join AuSp120.tb_Task t on am.车辆编码=t.车辆编码 and pc.任务编码=t.任务编码	"
 				+ "where t.生成任务时刻 between :startTime and :endTime	group by s.分站名称) union	"
-				+ "(select s.分站名称+'转'+pc.送往地点 station,count(*) total	 from AuSp120.tb_PatientCase pc	"
-				+ "left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.车辆标识	"
-				+ "left outer join AuSp120.tb_Station s on s.分站编码=pc.分站编码	"
+				+ "(select s.分站名称+'转'+pc.toAddr station,count(*) total	 from AuSp120.tb_PatientCase pc	"
+				+ "left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.actualSign and pc.pcOrder=1	"
+				+ "left outer join AuSp120.tb_Station s on s.分站编码=pc.stationCode	"
 				+ "left outer join AuSp120.tb_Task t on am.车辆编码=t.车辆编码 and pc.任务编码=t.任务编码	"
-				+ "where t.生成任务时刻 between :startTime and :endTime	group by s.分站名称,pc.送往地点)";
+				+ "where t.生成任务时刻 between :startTime and :endTime	group by s.分站名称,pc.toAddr)";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("endTime", parameter.getEndTime());
 		paramMap.put("startTime", parameter.getStartTime());

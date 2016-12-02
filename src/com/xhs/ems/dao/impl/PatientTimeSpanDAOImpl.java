@@ -67,11 +67,11 @@ public class PatientTimeSpanDAOImpl implements PatientTimeSpanDAO {
 				+ "SUM(case when DATENAME(HOUR,a.开始受理时刻)>=21 and DATENAME(HOUR,a.开始受理时刻)<22 then 1 else 0 end) span21_22,	"
 				+ "SUM(case when DATENAME(HOUR,a.开始受理时刻)>=22 and DATENAME(HOUR,a.开始受理时刻)<23 then 1 else 0 end) span22_23,	"
 				+ "SUM(case when DATENAME(HOUR,a.开始受理时刻)>=23 and DATENAME(HOUR,a.开始受理时刻)<24 then 1 else 0 end) span23_24	"
-				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.车辆标识	"
+				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.actualSign	"
 				+ "left outer join AuSp120.tb_TaskV t on t.任务编码=pc.任务编码 and am.车辆编码=t.车辆编码	"
 				+ "left outer join AuSp120.tb_AcceptDescriptV a on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
-				+ "left outer join AuSp120.tb_Station s on s.分站编码=pc.分站编码	"
-				+ "left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码 left outer join AuSp120.tb_DDiseaseClassState ddcs on ddcs.Code=pc.分类统计编码	"
+				+ "left outer join AuSp120.tb_Station s on s.分站编码=pc.stationCode	"
+				+ "left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码 left outer join AuSp120.tb_DDiseaseClassState ddcs on ddcs.Code=pc.patientClassCode	"
 				+ "where e.事件性质编码=1 and pc.姓名<>'' and a.开始受理时刻 between :startTime and :endTime  "
 				+ "group by ddcs.NameM  ";
 		Map<String, String> paramMap = new HashMap<String, String>();

@@ -22,6 +22,8 @@
 	var showFun = function(id) {
 		var dialog = parent.cxw.modalDialog({
 			title : '事件详细信息',
+			width : 800,
+			height : 600,
 			url : 'base/AcceptSendCarDetailForm.jsp?id=' + id
 		});
 	};

@@ -10,7 +10,9 @@
 <jsp:include page="../../inc.jsp"></jsp:include>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <style type="text/css">
-.combobox-item{cursor: pointer} /*修改easyUI的combobox下拉列表默认鼠标样式*/
+.combobox-item {
+	cursor: pointer
+} /*修改easyUI的combobox下拉列表默认鼠标样式*/
 li {
 	list-style: none;
 }
@@ -35,6 +37,7 @@ ul li label {
 ul li input {
 	width: 13em;
 }
+
 ul li select {
 	width: 13em;
 }
@@ -48,18 +51,15 @@ ul li select {
 				+ $('#driver').val() + "&nurse=" + $("#nurse").val()
 				+ "&doctor=" + $("#doctor").val() + "&profession="
 				+ $('#profession').combobox('getValue') + "&identity="
-				+ $('#identity').combobox('getValue') + "&patientCooperation="
-				+ $('#patientCooperation').combobox('getValue') + "&outCome="
-				+ $('#outCome').combobox('getValue') + "&carPlate="
+				+ $('#identity').combobox('getValue')   + "&carPlate="
 				+ $('#carPlate').combobox('getValue') + "&illReason="
 				+ $('#illReason').combobox('getValue') + "&spotAddrType="
 				+ $('#spotAddrType').combobox('getValue') + "&sendAddrType="
-				+ $('#sendAddrType').combobox('getValue') + "&deathProof="
-				+ $('#deathProof').combobox('getValue') + "&aidResult="
+				+ $('#sendAddrType').combobox('getValue')  + "&aidResult="
 				+ $('#aidResult').combobox('getValue') + "&illState="
 				+ $('#illState').combobox('getValue') + "&illClass="
 				+ $('#illClass').combobox('getValue') + "&illDepartment="
-				+ $('#illDepartment').combobox('getValue') + "&sex="
+				+ $('#patientTypeCode').combobox('getValue') + "&sex="
 				+ $('#sex').combobox('getValue') + "&patientName="
 				+ $("#patientName").val() + "&doctorDiagnosis="
 				+ $("#doctorDiagnosis").val();
@@ -83,8 +83,8 @@ ul li select {
 			method : 'get'
 		});
 
-		$('#illDepartment').combobox({
-			url : 'GetPatientDepartment',
+		$('#patientTypeCode').combobox({
+			url : 'GetPatientType',
 			valueField : 'code',
 			textField : 'name',
 			editable : false,
@@ -123,14 +123,6 @@ ul li select {
 			method : 'get'
 		});
 
-		$('#deathProof').combobox({
-			url : 'GetDeathProve',
-			valueField : 'code',
-			textField : 'name',
-			editable : false,
-			method : 'get'
-		});
-
 		$('#sendAddrType').combobox({
 			url : 'GetTakenPlaceType',
 			valueField : 'code',
@@ -141,22 +133,6 @@ ul li select {
 
 		$('#spotAddrType').combobox({
 			url : 'GetLocaleType',
-			valueField : 'code',
-			textField : 'name',
-			editable : false,
-			method : 'get'
-		});
-
-		$('#outCome').combobox({
-			url : 'GetOutCome',
-			valueField : 'code',
-			textField : 'name',
-			editable : false,
-			method : 'get'
-		});
-
-		$('#patientCooperation').combobox({
-			url : 'GetCooperate',
 			valueField : 'code',
 			textField : 'name',
 			editable : false,
@@ -284,7 +260,7 @@ ul li select {
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'north',title:'查询条件',split:true"
-		style="height: 195px;">
+		style="height: 200px;">
 		<div id="toolbar">
 			<form id="searchForm">
 				<ul>
@@ -305,43 +281,36 @@ ul li select {
 				<ul>
 					<li><label>医生诊断:</label> <input id="doctorDiagnosis"
 						name="doctorDiagnosis" /></li>
-					<li><label>疾病科別:</label> <input id="illDepartment"
-						name="illDepartment" /></li>
+					<li><label>疾病类型:</label> <input id="patientTypeCode"
+						name="patientTypeCode" /></li>
 					<li><label>疾病分类:</label> <input id="illClass" name="illClass" /></li>
 					<li><label>患者姓名:</label> <input id="patientName"
 						name="patientName" /></li>
 				</ul>
 				<ul>
 					<li><label>病情:</label> <input id="illState" name="illState" /></li>
-					<li><label>救治结果:</label> <input id="aidResult"
+					<li><label>出诊结果:</label> <input id="aidResult"
 						name="aidResult" /></li>
-					<li><label>死亡证明:</label> <input id="deathProof"
-						name="deathProof" /></li>
 					<li><label>送往地点类型:</label> <input id="sendAddrType"
 						name="sendAddrType" /></li>
-				</ul>
-				<ul>
 					<li><label>现场地点类型:</label> <input id="spotAddrType"
 						name="spotAddrType" /></li>
+				</ul>
+				<ul>
 					<li><label>疾病原因:</label> <input id="illReason"
 						name="illReason" /></li>
 					<li><label>车辆标识:</label> <input id="carPlate" name="carPlate" /></li>
-					<li><label>转归结果:</label> <input id="outCome" name="outCome" /></li>
-				</ul>
-				<ul>
-					<li><label>病家合作:</label> <input id="patientCooperation"
-						name="patientCooperation" /></li>
-					<li><label>性别:</label><select id="sex" class="easyui-combobox"
+					<li><label>性别:</label><select id="sex" class="easyui-combobox" data-options="editable : false"
 						name="sex">
 							<option value="">--请选择--</option>
 							<option value="男">男</option>
 							<option value="女">女</option>
 					</select></li>
 					<li><label>身份:</label> <input id="identity" name="identity" /></li>
-					<li><label>职业:</label> <input id="profession"
-						name="profession" /></li>
 				</ul>
 				<ul>
+					<li><label>职业:</label> <input id="profession"
+						name="profession" /></li>
 					<li><label>司机:</label> <input id="driver" name="driver" /></li>
 					<li><label>医生:</label> <input id="doctor" name="doctor" /></li>
 					<li><label>护士:</label> <input id="nurse" name="nurse" /></li>

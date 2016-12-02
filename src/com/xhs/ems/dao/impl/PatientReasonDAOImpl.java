@@ -44,12 +44,12 @@ public class PatientReasonDAOImpl implements PatientReasonDAO {
 	@Override
 	public Grid getData(Parameter parameter) {
 		String sql = "select ddr.NameM patientReason,COUNT(*) receivePeopleNumbers,'' rate "
-				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.车辆标识	"
+				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.actualSign	"
 				+ "left outer join AuSp120.tb_TaskV t on t.任务编码=pc.任务编码 and am.车辆编码=t.车辆编码	"
 				+ "left outer join AuSp120.tb_AcceptDescriptV a on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
 				+ "left outer join AuSp120.tb_EventV e on t.事件编码=e.事件编码	"
-				+ "left outer join AuSp120.tb_DDiseaseReason ddr on ddr.Code=pc.病因编码	"
-				+ "where pc.病因编码 is not null and e.事件性质编码=1 and a.开始受理时刻 between :startTime and :endTime group by ddr.NameM ";
+				+ "left outer join AuSp120.tb_DDiseaseReason ddr on ddr.Code=pc.patientReasonCode	"
+				+ "where pc.patientReasonCode is not null and e.事件性质编码=1 and a.开始受理时刻 between :startTime and :endTime group by ddr.NameM ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
