@@ -17,9 +17,22 @@
 				+ $('#endTime').datetimebox('getValue') + "&outCarTimesMax="
 				+ $('#outCarTimesMax').val() + "&station="
 				+ $('#station').combobox('getValue') + "&outCarTimesMin="
-				+ $('#outCarTimesMin').val();
+				+ $('#outCarTimesMin').val() + $('#carCode').combobox('getValue');
 		window.location.href = url;
 	};
+	function initCar(url){
+		$('#carCode').combobox({
+			url : url,
+			valueField : 'carCode',
+			textField : 'carIdentification',
+			editable : false,
+			method : 'get',
+			onLoadSuccess:function(){
+				var data = $('#carCode').combobox('getData');
+				 $("#id ").combobox('select',data[0].carCode);
+			}
+		});
+	}
 	/* 初始化页面标签 */
 	function init() {
 		$('#startTime').datetimebox({
@@ -37,8 +50,14 @@
 			url : 'getStations',
 			valueField : 'stationCode',
 			textField : 'stationName',
-			method : 'get'
+			editable : false,
+			method : 'get',
+			onSelect : function(rec) {
+				var url = 'getCars?id=' + rec.stationCode;
+				initCar(url);
+			}
 		});
+		initCar("getCars");
 		grid = $('#grid').datagrid(
 				{
 					url : 'getSubstationLateVisitDatas',
@@ -146,6 +165,9 @@
 								<td>分站:</td>
 								<td><input style="width: 120em;" id="station"
 									name="station" /></td>
+								<td>&nbsp;车辆:</td>
+								<td><input style="width: 120em;" id="carCode"
+									name="carCode" /></td>
 								<td>&nbsp;出车时长:</td>
 								<td><input type="text" style="width: 80px;"
 									id="outCarTimesMin" name="outCarTimesMin"

@@ -48,6 +48,7 @@ public class SubstationLateVisitDAOImpl implements SubstationLateVisitDAO {
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
 		paramMap.put("station", parameter.getStation());
+		paramMap.put("carCode", parameter.getCarCode());
 		String sql = "select a.现场地址 siteAddress,det.NameM eventType,am.实际标识 carCode,"
 				+ "CONVERT(varchar(20),a.开始受理时刻,120) acceptTime,CONVERT(varchar(20),a.派车时刻,120) createTaskTime,	"
 				+ "CONVERT(varchar(20),t.出车时刻,120) outCarTime,DATEDIFF(SECOND,a.派车时刻,t.出车时刻) outCarTimes,"
@@ -63,6 +64,9 @@ public class SubstationLateVisitDAOImpl implements SubstationLateVisitDAO {
 				+ "and a.开始受理时刻 between :startTime and :endTime and a.开始受理时刻<t.出车时刻 ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
 			sql += " and t.分站编码=:station ";
+		}
+		if (!CommonUtil.isNullOrEmpty(parameter.getCarCode())) {
+			sql += " and t.车辆编码=:carCode ";
 		}
 		int second = 0;
 		if (!CommonUtil.isNullOrEmpty(parameter.getOutCarTimesMin())) {

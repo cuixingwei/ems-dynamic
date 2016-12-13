@@ -19,6 +19,19 @@
 				+ $('#carCode').combobox('getValue');
 		window.location.href = url;
 	};
+	function initCar(url){
+		$('#carCode').combobox({
+			url : url,
+			valueField : 'carCode',
+			textField : 'carIdentification',
+			editable : false,
+			method : 'get',
+			onLoadSuccess:function(){
+				var data = $('#carCode').combobox('getData');
+				 $("#id ").combobox('select',data[0].carCode);
+			}
+		});
+	}
 	/* 初始化页面标签 */
 	function init() {
 		$('#startTime').datetimebox({
@@ -32,18 +45,14 @@
 			url : 'getStations',
 			valueField : 'stationCode',
 			textField : 'stationName',
+			editable : false,
 			method : 'get',
 			onSelect : function(rec) {
 				var url = 'getCars?id=' + rec.stationCode;
-				$('#carCode').combobox('reload', url);
+				initCar(url);
 			}
 		});
-		$('#carCode').combobox({
-			url : 'getCars',
-			valueField : 'carCode',
-			textField : 'carIdentification',
-			method : 'get'
-		});
+		initCar("getCars");
 		grid = $('#grid').datagrid(
 				{
 					url : 'getCarWorkDatas',

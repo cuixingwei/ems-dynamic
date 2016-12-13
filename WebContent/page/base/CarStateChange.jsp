@@ -32,6 +32,7 @@
 			url : 'getCars',
 			valueField : 'carCode',
 			textField : 'carIdentification',
+			editable : false,
 			method : 'get'
 		});
 		$('#dispatcher').combobox({

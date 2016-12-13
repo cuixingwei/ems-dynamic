@@ -53,9 +53,7 @@ public class CarDAOImpl implements CarDAO {
 			}
 		});
 
-		if (CommonUtil.isNullOrEmpty(stationID)) {
-			results.add(0, new Car("", "--请选择--"));
-		}
+		results.add(0, new Car("", "--请选择--"));
 		return results;
 	}
 
