@@ -3,4 +3,4 @@ build/
 target
 bin
 /doc
-
+/src/jdbc.properties
