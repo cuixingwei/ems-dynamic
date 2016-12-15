@@ -43,6 +43,7 @@ public class AcceptMarkDAOImpl implements AcceptMarkDAO {
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
 			sql = sql + " and t.调度员编码=:dispatcher ";
 		}
+		sql += " order by a.开始受理时刻";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("startTime", parameter.getStartTime());

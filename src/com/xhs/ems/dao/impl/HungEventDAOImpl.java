@@ -56,6 +56,7 @@ public class HungEventDAOImpl implements HungEventDAO {
 		if (!CommonUtil.isNullOrEmpty(parameter.getHungReason())) {
 			sql = sql + " and a.挂起原因编码 = :hungReason ";
 		}
+		sql += " order by a.开始受理时刻";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("hungReason", parameter.getHungReason());

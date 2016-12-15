@@ -68,6 +68,7 @@ public class StopTaskDAOImpl implements StopTaskDAO {
 		if (!CommonUtil.isNullOrEmpty(parameter.getEmptyRunTime())) {
 			sql = sql + " and datediff(M,t.途中待命时刻,t.完成时刻)>:emptyRunTime ";
 		}
+		sql += " order by e.受理时刻";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("station", parameter.getStation());

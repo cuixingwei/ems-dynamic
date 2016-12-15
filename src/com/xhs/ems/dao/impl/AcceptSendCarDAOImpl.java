@@ -60,7 +60,7 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 		if (!CommonUtil.isNullOrEmpty(parameter.getOvertimes())) {
 			sql = sql + " and DATEDIFF(SECOND,a.开始受理时刻,a.派车时刻)>=:overtimes ";
 		}
-		sql += " order by m.姓名";
+		sql += " order by m.姓名,a.开始受理时刻 ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("startTime", parameter.getStartTime());

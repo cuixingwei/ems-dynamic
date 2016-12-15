@@ -10,7 +10,10 @@
 <jsp:include page="../../inc.jsp"></jsp:include>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <style type="text/css">
-.combobox-item{cursor: pointer} /*修改easyUI的combobox下拉列表默认鼠标样式*/
+.combobox-item {
+	cursor: pointer
+} /*修改easyUI的combobox下拉列表默认鼠标样式*/
+
 li {
 	list-style: none;
 }
@@ -27,16 +30,22 @@ ul li {
 }
 
 ul li label {
-	width: 30%;
+	width: 32%;
 	display: inline-block;
 	text-align: right;
 }
 
 ul li input {
-	width: 13em;
+	width: 12em;
+	height: 21px !important;
+	line-height: 21px !important;
 }
+
 ul li select {
-	width: 13em;
+	width: 12em;
+	padding-left: 10px !important;
+	height: 21px !important;
+	line-height: 21px !important;
 }
 </style>
 <script type="text/javascript">
@@ -265,7 +274,6 @@ ul li select {
 						width : "7%",
 						align : 'center'
 					} ] ],
-					//toolbar : '#toolbar',
 					onBeforeLoad : function(param) {
 						var varify = cxw.checkStartTimeBeforeEndTime(
 								'#startTime', '#endTime');
@@ -331,7 +339,7 @@ ul li select {
 				<ul>
 					<li><label>病家合作:</label> <input id="patientCooperation"
 						name="patientCooperation" /></li>
-					<li><label>性别:</label><select id="sex" class="easyui-combobox"
+					<li><label style="margin-right: 5px;">性别:</label><select id="sex" class="easyui-combobox"
 						name="sex">
 							<option value="">--请选择--</option>
 							<option value="男">男</option>

@@ -40,7 +40,7 @@ public class RingToAcceptDAOImpl implements RingToAcceptDAO {
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
 			sql = sql + " and tr.调度员编码=:dispatcher ";
 		}
-		sql = sql + "order by tr.调度员编码";
+		sql = sql + "order by tr.调度员编码,tr.振铃时刻";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("overtimes", parameter.getOvertimes());
 		paramMap.put("dispatcher", parameter.getDispatcher());

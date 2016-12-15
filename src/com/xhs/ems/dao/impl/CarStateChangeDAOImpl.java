@@ -56,7 +56,7 @@ public class CarStateChangeDAOImpl implements CarStateChangeDAO {
 		if (!CommonUtil.isNullOrEmpty(parameter.getEventName())) {
 			sql = sql + " and e.事件名称  like :eventName ";
 		}
-		sql += " order by e.事件名称";
+		sql += " order by t.生成任务时刻";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("carCode", parameter.getCarCode());
 		paramMap.put("startTime", parameter.getStartTime());
