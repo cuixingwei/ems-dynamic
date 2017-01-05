@@ -35,7 +35,7 @@ public class AcceptEventTypeDAOImpl implements AcceptEventTypeDAO {
 
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select a.调度员编码,	COUNT(*) numbersOfSendCar,"
+		String sql = "select a.调度员编码,sum(case when t.任务编码 is not null then 1 else 0 end) numbersOfSendCar,"
 				+ "sum(case when t.结果编码=2 then 1 else 0 end) stopTask,'' ratioStopTask,	sum(case when t.结果编码=3 then 1 else 0 end) emptyCar,'' ratioEmptyCar,"
 				+ "sum(case when t.结果编码=4 then 1 else 0 end) nomalComplete,'' ratioComplete	into #temp1 "
 				+ "from  AuSp120.tb_AcceptDescriptV a	left outer join AuSp120.tb_TaskV t on a.事件编码=t.事件编码 and a.受理序号=t.受理序号 "
@@ -59,11 +59,12 @@ public class AcceptEventTypeDAOImpl implements AcceptEventTypeDAO {
 				+ "t2.numbersOfReinforceSendCar,t2.numbersOfStopTask,t2.refuseSendCar,t2.specialEvent,t2.transmitCenter,"
 				+ "t2.wakeSendCar,t3.numbersOfPhone from #temp2 t2 left outer join #temp1 t1 on t1.调度员编码=t2.调度员编码 "
 				+ "left outer join #temp3 t3 on t2.调度员编码=t3.调度员编码 "
-				+ "left outer join AuSp120.tb_MrUser m on m.工号=t2.调度员编码 where  m.人员类型=0 "
+				+ "left outer join AuSp120.tb_MrUser m on m.工号=t2.调度员编码  "
 				+ "drop table #temp1,#temp2,#temp3";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
+		logger.info(sql);
 
 		List<AcceptEventType> results = this.npJdbcTemplate.query(sql,
 				paramMap, new RowMapper<AcceptEventType>() {
