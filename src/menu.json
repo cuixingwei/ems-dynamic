@@ -15,6 +15,19 @@
     	"attributes":
     		{
     			"target":"",
+    			"url":"HistoryEvent.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"00",
+    	"pid":"0",
+    	"state":"open",
+    	"text":"历史事件"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
     			"url":"RingToAnswerTimes.jsp"
     		},
     	"checked":false,
