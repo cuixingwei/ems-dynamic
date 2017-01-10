@@ -1,4 +1,4 @@
-[
+﻿[
 	{
     	"attributes":
     		{
@@ -424,6 +424,19 @@
     	"pid":"2",
     	"state":"open",
     	"text":"急救站转院统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"StationMsg.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"27",
+    	"pid":"2",
+    	"state":"open",
+    	"text":"急救站回单超时统计"
     },
     {
     	"attributes":
