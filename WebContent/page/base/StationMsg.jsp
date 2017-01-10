@@ -39,24 +39,30 @@
 					columns : [ [ {
 						field : 'station',
 						title : '分站',
-						width : "25%",
+						width : "20%",
 						align : 'center'
 					}, {
 						field : 'totalCount',
 						title : '总数',
-						width : "25%",
+						width : "20%",
 						align : 'center',
 					}, {
 						field : 'normalReturn',
 						title : '正常回单数',
 						resizable : true,
-						width : "25%",
+						width : "20%",
 						align : 'center'
 					}, {
 						field : 'lateReturn',
 						title : '晚回单数',
 						resizable : true,
-						width : "24%",
+						width : "20%",
+						align : 'center',
+					}, {
+						field : 'noReturn',
+						title : '未回单数',
+						resizable : true,
+						width : "19%",
 						align : 'center',
 					}] ],
 					toolbar : '#toolbar',
