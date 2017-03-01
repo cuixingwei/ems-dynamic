@@ -1,22 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%
-	String contextPath = request.getContextPath();
-	String version = "20150311";
-%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
 <jsp:include page="../../inc.jsp"></jsp:include>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript">
 	var grid;
 	var exportData = function() {
-		var url = "exporthungEventData?startTime="
+		var url = "exportStationMsgDatas?startTime="
 				+ $('#startTime').datetimebox('getValue') + "&endTime="
-				+ $('#endTime').datetimebox('getValue') + "&dispatcher="
-				+ $('#dispatcher').combobox('getValue') + "&hungReason="
-				+ $('#hungReason').combobox('getValue');
+				+ $('#endTime').datetimebox('getValue') + "&overtimes=" 
+				+ $('#overtimes').numberbox('getValue') ;
 		window.location.href = url;
 	};
 	/* 初始化页面标签 */
@@ -28,73 +25,46 @@
 		$('#endTime').datetimebox({
 			value : getCurrentTime()
 		});
-		$('#dispatcher').combobox({
-			url : 'getUsers',
-			valueField : 'employeeId',
-			textField : 'name',
-			method : 'get'
-		});
-		$('#hungReason').combobox({
-			url : 'getHungReasons',
-			valueField : 'code',
-			textField : 'name',
-			method : 'get'
-		});
 		grid = $('#grid').datagrid(
 				{
-					url : 'gethungEventData',
+					url : 'getStationMsgDatas',
 					pagePosition : 'bottom',
 					pagination : true,
 					striped : true,
 					singleSelect : true,
 					rownumbers : true,
-					emptyMsg : '无记录',
 					idField : 'id',
 					pageSize : 20,
 					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
 					columns : [ [ {
-						field : 'eventName',
-						title : '事件名称',
-						resizable : true,
-						width : "14%",
+						field : 'station',
+						title : '分站',
+						width : "20%",
 						align : 'center'
 					}, {
-						field : 'acceptType',
-						title : '受理类型',
-						resizable : true,
-						width : "14%",
+						field : 'totalCount',
+						title : '总数',
+						width : "20%",
 						align : 'center',
 					}, {
-						field : 'hungReason',
-						title : '挂起原因',
+						field : 'normalReturn',
+						title : '正常回单数',
 						resizable : true,
-						width : "14%",
+						width : "20%",
 						align : 'center'
 					}, {
-						field : 'dispatcher',
-						title : '操作人',
+						field : 'lateReturn',
+						title : '晚回单数',
 						resizable : true,
-						width : "14%",
+						width : "20%",
 						align : 'center',
 					}, {
-						field : 'hungTime',
-						title : '挂起时刻',
+						field : 'noReturn',
+						title : '未回单数',
 						resizable : true,
-						width : "14%",
-						align : 'center'
-					}, {
-						field : 'endTime',
-						title : '结束时刻',
-						resizable : true,
-						width : "14%",
+						width : "19%",
 						align : 'center',
-					}, {
-						field : 'hungtimes',
-						title : '时长',
-						resizable : true,
-						width : "14%",
-						align : 'center'
-					} ] ],
+					}] ],
 					toolbar : '#toolbar',
 					onBeforeLoad : function(param) {
 						var varify = cxw.checkStartTimeBeforeEndTime(
@@ -120,12 +90,8 @@
 					<form id="searchForm">
 						<table>
 							<tr>
-								<td>调度员:</td>
-								<td><input style="width: 120em;" id="dispatcher"
-									name="dispatcher" /></td>
-								<td>&nbsp;挂起原因:</td>
-								<td><input style="width: 120em;" id="hungReason"
-									name="hungReason" /></td>
+								<td>晚回单时间(秒):</td>
+								<td><input type="text" style="width: 150px;" id="overtimes"  name="overtimes" class="easyui-numberbox" value="30" data-options="min:0,precision:0"></td>
 								<td>&nbsp;查询时间:</td>
 								<td colspan="3"><input id="startTime" name="startTime"
 									style="width: 150em;" />至<input id="endTime" name="endTime"

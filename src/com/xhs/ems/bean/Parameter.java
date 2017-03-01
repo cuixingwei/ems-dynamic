@@ -1,6 +1,7 @@
 package com.xhs.ems.bean;
 
 public class Parameter {
+	private String eventCode; //事件编码
 	/**
 	 * 开始时间
 	 */
@@ -183,6 +184,16 @@ public class Parameter {
 	
 	
 	
+
+	
+	public String getEventCode() {
+		return eventCode;
+	}
+
+	public void setEventCode(String eventCode) {
+		this.eventCode = eventCode;
+	}
+
 	public String getDoctorDiagnosis() {
 		return doctorDiagnosis;
 	}

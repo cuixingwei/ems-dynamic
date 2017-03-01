@@ -61,6 +61,7 @@ public class EmptyCarDAOImpl implements EmptyCarDAO {
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
 			sql += " and t.分站编码=:station ";
 		}
+		sql += " order by a.开始受理时刻 ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("startTime", parameter.getStartTime());

@@ -135,6 +135,7 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 		if (!CommonUtil.isNullOrEmpty(parameter.getAlarmPhone())) {
 			sql += " and  tr.电话号码  like :alarmPhone";
 		}
+		sql += " order by tr.产生时刻";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());

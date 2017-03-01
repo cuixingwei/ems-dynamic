@@ -1,4 +1,4 @@
-[
+﻿[
 	{
     	"attributes":
     		{
@@ -10,6 +10,19 @@
     	"id":"0",
     	"state":"open",
     	"text":"调度统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"HistoryEvent.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"00",
+    	"pid":"0",
+    	"state":"open",
+    	"text":"历史事件"
     },
     {
     	"attributes":
@@ -411,6 +424,19 @@
     	"pid":"2",
     	"state":"open",
     	"text":"急救站转院统计"
+    },
+    {
+    	"attributes":
+    		{
+    			"target":"",
+    			"url":"StationMsg.jsp"
+    		},
+    	"checked":false,
+    	"iconCls":"ext-icon-world",
+    	"id":"27",
+    	"pid":"2",
+    	"state":"open",
+    	"text":"急救站回单超时统计"
     },
     {
     	"attributes":

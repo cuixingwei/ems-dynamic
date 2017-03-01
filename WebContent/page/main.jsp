@@ -187,9 +187,9 @@
 	</div>
 	<div data-options="region:'center'" style="overflow: hidden;">
 		<div id="mainTabs">
-			<div title="振铃到接听大于X秒"
+			<div title="历史事件"
 				data-options="iconCls:'ext-icon-world',closable:true,fit:true">
-				<iframe src="<%=contextPath%>/page/base/RingToAnswerTimes.jsp"
+				<iframe src="<%=contextPath%>/page/base/HistoryEvent.jsp"
 					style="border: 0; width: 99.9%; height: 99%;"></iframe>
 			</div>
 		</div>

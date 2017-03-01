@@ -32,6 +32,7 @@ var cxw = cxw || {};
 cxw.contextPath = '<%=contextPath%>';
 cxw.basePath = '<%=basePath%>';
 cxw.version = '<%=version%>';
+cxw.pixel_0 = '<%=contextPath%>/style/images/pixel_0.gif';//0像素的背景，一般用于占位
 </script>
 
 
