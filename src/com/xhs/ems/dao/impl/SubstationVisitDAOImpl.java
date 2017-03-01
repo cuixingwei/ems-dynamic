@@ -26,8 +26,7 @@ import com.xhs.ems.dao.SubstationVisitDAO;
  */
 @Repository
 public class SubstationVisitDAOImpl implements SubstationVisitDAO {
-	private static final Logger logger = Logger
-			.getLogger(SubstationVisitDAOImpl.class);
+	private static final Logger logger = Logger.getLogger(SubstationVisitDAOImpl.class);
 
 	private NamedParameterJdbcTemplate npJdbcTemplate;
 
@@ -52,85 +51,96 @@ public class SubstationVisitDAOImpl implements SubstationVisitDAO {
 				+ "select 任务编码,分站编码,结果编码 into #temp2 from AuSp120.tb_TaskV t "
 				+ "left outer join AuSp120.tb_Event e on t.事件编码=e.事件编码 "
 				+ " where e.事件性质编码=1 and t.生成任务时刻 between :startTime and :endTime  "
-				+ "select 分站编码,count(*) as 救治人数  into #temp3  "
-				+ "from AuSp120.tb_PatientCase  "
-				+ "where 任务编码 in (select 任务编码 from  #temp2)  group by 分站编码  "
+				+ "select 分站编码,count(*) as 救治人数,sum(case when 救治结果编码=1 then 1 else 0 end) noTreat,sum(case when 救治结果编码=2 then 1 else 0 end) afterDeathSpot,"
+				+ "sum(case when 救治结果编码=3 then 1 else 0 end) effect,sum(case when 救治结果编码=4 then 1 else 0 end) noChange,sum(case when 救治结果编码=5 then 1 else 0 end) stable,"
+				+ "sum(case when 救治结果编码=6 then 1 else 0 end) afterDeathRoad,sum(case when 救治结果编码=7 then 1 else 0 end) afterDeathHopital   into #temp3  "
+				+ "from AuSp120.tb_PatientCase  " + "where 任务编码 in (select 任务编码 from  #temp2)  group by 分站编码  "
 				+ "select s.分站名称 station,sum(case when t2.任务编码 is not null then 1 else 0 end) sendNumbers,	"
 				+ "sum(case when t2.结果编码=4 then 1 else 0 end) nomalNumbers,'' nomalRate,	"
 				+ "sum(case when t2.结果编码=2 then 1 else 0 end) stopNumbers, '' stopRate,	"
 				+ "sum(case when t2.结果编码=3 then 1 else 0 end) emptyNumbers, '' emptyRate,	"
 				+ "sum(case when t2.结果编码=5 then 1 else 0 end) refuseNumbers, '' refuseRate,	"
-				+ "isnull(t1.暂停次数,0) as pauseNumbers,	isnull(t3.救治人数,0) as treatNumbers,"
-				+ "isnull(t4.择院次数,0) as choiseHosNumbers  "
+				+ "isnull(t3.effect,0) as effect,isnull(t3.noChange,0) as noChange,isnull(t3.stable,0) as stable,isnull(t3.afterDeathRoad,0) as afterDeathRoad,"
+				+ "isnull(t3.afterDeathHopital,0) as afterDeathHopital,isnull(t1.暂停次数,0) as pauseNumbers,	isnull(t3.救治人数,0) as treatNumbers,"
+				+ "isnull(t3.noTreat,0) as noTreat,isnull(t3.afterDeathSpot,0) as afterDeathSpot,isnull(t4.择院次数,0) as choiseHosNumbers  "
 				+ "from AuSp120.tb_Station s  left outer join #temp2 t2 on t2.分站编码=s.分站编码  "
 				+ "left outer join	#temp1 t1 on t1.分站编码=s.分站编码  left outer join	#temp3 t3 on t3.分站编码=s.分站编码 "
 				+ "left outer join #temp4 t4 on t4.分站编码=s.分站编码  "
-				+ "group by s.分站名称,t1.暂停次数,t3.救治人数,t4.择院次数,s.显示顺序  order by 显示顺序 "
+				+ "group by s.分站名称,t1.暂停次数,t3.救治人数,t4.择院次数,s.显示顺序,t3.noTreat,t3.afterDeathSpot,t3.effect,t3.noChange,t3.stable,t3.afterDeathRoad,t3.afterDeathHopital  order by 显示顺序 "
 				+ " drop table #temp1, #temp2,#temp3,#temp4";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
 
-		List<SubstationVisit> results = this.npJdbcTemplate.query(sql,
-				paramMap, new RowMapper<SubstationVisit>() {
-					@Override
-					public SubstationVisit mapRow(ResultSet rs, int index)
-							throws SQLException {
-						return new SubstationVisit(rs.getString("station"), rs
-								.getString("sendNumbers"), rs
-								.getString("nomalNumbers"), rs
-								.getString("nomalRate"), rs
-								.getString("stopNumbers"), rs
-								.getString("stopRate"), rs
-								.getString("emptyNumbers"), rs
-								.getString("emptyRate"), rs
-								.getString("refuseNumbers"), rs
-								.getString("refuseRate"), rs
-								.getString("pauseNumbers"), rs
-								.getString("treatNumbers"), rs
-								.getString("choiseHosNumbers"));
-					}
-				});
+		List<SubstationVisit> results = this.npJdbcTemplate.query(sql, paramMap, new RowMapper<SubstationVisit>() {
+			@Override
+			public SubstationVisit mapRow(ResultSet rs, int index) throws SQLException {
+				SubstationVisit sv = new SubstationVisit();
+				sv.setAfterDeathHopital(rs.getString("afterDeathHopital"));
+				sv.setAfterDeathRoad(rs.getString("afterDeathRoad"));
+				sv.setAfterDeathSpot(rs.getString("afterDeathSpot"));
+				sv.setChoiseHosNumbers(rs.getString("choiseHosNumbers"));
+				sv.setEffect(rs.getString("effect"));
+				sv.setEmptyNumbers(rs.getString("emptyNumbers"));
+				sv.setEmptyRate(rs.getString("emptyRate"));
+				sv.setNoChange(rs.getString("noChange"));
+				sv.setNomalNumbers(rs.getString("nomalNumbers"));
+				sv.setNomalRate(rs.getString("nomalRate"));
+				sv.setNoTreat(rs.getString("noTreat"));
+				sv.setPauseNumbers(rs.getString("pauseNumbers"));
+				sv.setRefuseNumbers(rs.getString("refuseNumbers"));
+				sv.setRefuseRate(rs.getString("refuseRate"));
+				sv.setSendNumbers(rs.getString("sendNumbers"));
+				sv.setStable(rs.getString("stable"));
+				sv.setStation(rs.getString("station"));
+				sv.setStopNumbers(rs.getString("stopNumbers"));
+				sv.setStopRate(rs.getString("stopRate"));
+				sv.setTreatNumbers(rs.getString("treatNumbers"));
+				return sv;
+			}
+		});
 		logger.info("一共有" + results.size() + "条数据");
 		logger.info(sql);
 
 		// 添加合计
-		SubstationVisit summary = new SubstationVisit("合计", "0", "0", "0", "0", "0", "0", "0", "0", "0","0", "0", "0");
+		SubstationVisit summary = new SubstationVisit("合计", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
+				"0", "0", "0", "0", "0", "0", "0");
 
 		// 计算比率
 		for (SubstationVisit result : results) {
-			result.setEmptyRate(CommonUtil.calculateRate(
-					Integer.parseInt(result.getSendNumbers()),
+			result.setEmptyRate(CommonUtil.calculateRate(Integer.parseInt(result.getSendNumbers()),
 					Integer.parseInt(result.getEmptyNumbers())));
-			result.setRefuseRate(CommonUtil.calculateRate(
-					Integer.parseInt(result.getSendNumbers()),
+			result.setRefuseRate(CommonUtil.calculateRate(Integer.parseInt(result.getSendNumbers()),
 					Integer.parseInt(result.getRefuseNumbers())));
-			result.setStopRate(CommonUtil.calculateRate(
-					Integer.parseInt(result.getSendNumbers()),
+			result.setStopRate(CommonUtil.calculateRate(Integer.parseInt(result.getSendNumbers()),
 					Integer.parseInt(result.getStopNumbers())));
-			result.setNomalRate(CommonUtil.calculateRate(
-					Integer.parseInt(result.getSendNumbers()),
+			result.setNomalRate(CommonUtil.calculateRate(Integer.parseInt(result.getSendNumbers()),
 					Integer.parseInt(result.getNomalNumbers())));
-			summary.setChoiseHosNumbers((Integer.parseInt(result.getChoiseHosNumbers())+Integer.parseInt(summary.getChoiseHosNumbers()))+"");
-			summary.setEmptyNumbers((Integer.parseInt(result.getEmptyNumbers())+Integer.parseInt(summary.getEmptyNumbers()))+"");
-			summary.setNomalNumbers((Integer.parseInt(result.getNomalNumbers())+Integer.parseInt(summary.getNomalNumbers()))+"");
-			summary.setPauseNumbers((Integer.parseInt(result.getPauseNumbers())+Integer.parseInt(summary.getPauseNumbers()))+"");
-			summary.setRefuseNumbers((Integer.parseInt(result.getRefuseNumbers())+Integer.parseInt(summary.getRefuseNumbers()))+"");
-			summary.setSendNumbers((Integer.parseInt(result.getSendNumbers())+Integer.parseInt(summary.getSendNumbers()))+"");
-			summary.setStopNumbers((Integer.parseInt(result.getStopNumbers())+Integer.parseInt(summary.getStopNumbers()))+"");
-			summary.setTreatNumbers((Integer.parseInt(result.getTreatNumbers())+Integer.parseInt(summary.getTreatNumbers()))+"");
+			summary.setChoiseHosNumbers(
+					(Integer.parseInt(result.getChoiseHosNumbers()) + Integer.parseInt(summary.getChoiseHosNumbers()))
+							+ "");
+			summary.setEmptyNumbers(
+					(Integer.parseInt(result.getEmptyNumbers()) + Integer.parseInt(summary.getEmptyNumbers())) + "");
+			summary.setNomalNumbers(
+					(Integer.parseInt(result.getNomalNumbers()) + Integer.parseInt(summary.getNomalNumbers())) + "");
+			summary.setPauseNumbers(
+					(Integer.parseInt(result.getPauseNumbers()) + Integer.parseInt(summary.getPauseNumbers())) + "");
+			summary.setRefuseNumbers(
+					(Integer.parseInt(result.getRefuseNumbers()) + Integer.parseInt(summary.getRefuseNumbers())) + "");
+			summary.setSendNumbers(
+					(Integer.parseInt(result.getSendNumbers()) + Integer.parseInt(summary.getSendNumbers())) + "");
+			summary.setStopNumbers(
+					(Integer.parseInt(result.getStopNumbers()) + Integer.parseInt(summary.getStopNumbers())) + "");
+			summary.setTreatNumbers(
+					(Integer.parseInt(result.getTreatNumbers()) + Integer.parseInt(summary.getTreatNumbers())) + "");
 		}
-		summary.setEmptyRate(CommonUtil.calculateRate(
-				Integer.parseInt(summary.getSendNumbers()),
+		summary.setEmptyRate(CommonUtil.calculateRate(Integer.parseInt(summary.getSendNumbers()),
 				Integer.parseInt(summary.getEmptyNumbers())));
-		summary.setRefuseRate(CommonUtil.calculateRate(
-				Integer.parseInt(summary.getSendNumbers()),
+		summary.setRefuseRate(CommonUtil.calculateRate(Integer.parseInt(summary.getSendNumbers()),
 				Integer.parseInt(summary.getRefuseNumbers())));
-		summary.setStopRate(CommonUtil.calculateRate(
-				Integer.parseInt(summary.getSendNumbers()),
+		summary.setStopRate(CommonUtil.calculateRate(Integer.parseInt(summary.getSendNumbers()),
 				Integer.parseInt(summary.getStopNumbers())));
-		summary.setNomalRate(CommonUtil.calculateRate(
-				Integer.parseInt(summary.getSendNumbers()),
+		summary.setNomalRate(CommonUtil.calculateRate(Integer.parseInt(summary.getSendNumbers()),
 				Integer.parseInt(summary.getNomalNumbers())));
 		results.add(summary);
 
@@ -139,8 +149,8 @@ public class SubstationVisitDAOImpl implements SubstationVisitDAO {
 			int page = (int) parameter.getPage();
 			int rows = (int) parameter.getRows();
 			int fromIndex = (page - 1) * rows;
-			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
-					* rows) ? results.size() : page * rows;
+			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1) * rows) ? results.size()
+					: page * rows;
 			grid.setRows(results.subList(fromIndex, toIndex));
 			grid.setTotal(results.size());
 

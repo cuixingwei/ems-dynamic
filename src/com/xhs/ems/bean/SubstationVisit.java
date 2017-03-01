@@ -51,9 +51,37 @@ public class SubstationVisit {
 	 */
 	private String pauseNumbers;
 	/**
-	 * 救治人数
+	 * 救治人数--合计
 	 */
 	private String treatNumbers;
+	/**
+	 * 病例结果 未治人数
+	 */
+	private String noTreat;
+	/**
+	 * 救后死亡(现场)
+	 */
+	private String afterDeathSpot;
+	/**
+	 * 有效
+	 */
+	private String effect;
+	/**
+	 * 无变化
+	 */
+	private String noChange;
+	/**
+	 * 稳定
+	 */
+	private String stable;
+	/**
+	 * 救后死亡(途中)
+	 */
+	private String afterDeathRoad;
+	/**
+	 * 救后死亡(医院)
+	 */
+	private String afterDeathHopital;
 	/**
 	 * 择院次数
 	 */
@@ -162,6 +190,63 @@ public class SubstationVisit {
 	public void setChoiseHosNumbers(String choiseHosNumbers) {
 		this.choiseHosNumbers = choiseHosNumbers;
 	}
+	
+
+	public String getNoTreat() {
+		return noTreat;
+	}
+
+	public void setNoTreat(String noTreat) {
+		this.noTreat = noTreat;
+	}
+
+	public String getAfterDeathSpot() {
+		return afterDeathSpot;
+	}
+
+	public void setAfterDeathSpot(String afterDeathSpot) {
+		this.afterDeathSpot = afterDeathSpot;
+	}
+
+	public String getEffect() {
+		return effect;
+	}
+
+	public void setEffect(String effect) {
+		this.effect = effect;
+	}
+
+	public String getNoChange() {
+		return noChange;
+	}
+
+	public void setNoChange(String noChange) {
+		this.noChange = noChange;
+	}
+
+	public String getStable() {
+		return stable;
+	}
+
+	public void setStable(String stable) {
+		this.stable = stable;
+	}
+
+	public String getAfterDeathRoad() {
+		return afterDeathRoad;
+	}
+
+	public void setAfterDeathRoad(String afterDeathRoad) {
+		this.afterDeathRoad = afterDeathRoad;
+	}
+
+	public String getAfterDeathHopital() {
+		return afterDeathHopital;
+	}
+
+	public void setAfterDeathHopital(String afterDeathHopital) {
+		this.afterDeathHopital = afterDeathHopital;
+	}
 
 	/**
 	 * @param station
@@ -195,6 +280,34 @@ public class SubstationVisit {
 		this.refuseRate = refuseRate;
 		this.pauseNumbers = pauseNumbers;
 		this.treatNumbers = treatNumbers;
+		this.choiseHosNumbers = choiseHosNumbers;
+	}
+	
+
+	public SubstationVisit(String station, String sendNumbers, String nomalNumbers, String nomalRate,
+			String stopNumbers, String stopRate, String emptyNumbers, String emptyRate, String refuseNumbers,
+			String refuseRate, String pauseNumbers, String treatNumbers, String noTreat, String afterDeathSpot,
+			String effect, String noChange, String stable, String afterDeathRoad, String afterDeathHopital,
+			String choiseHosNumbers) {
+		this.station = station;
+		this.sendNumbers = sendNumbers;
+		this.nomalNumbers = nomalNumbers;
+		this.nomalRate = nomalRate;
+		this.stopNumbers = stopNumbers;
+		this.stopRate = stopRate;
+		this.emptyNumbers = emptyNumbers;
+		this.emptyRate = emptyRate;
+		this.refuseNumbers = refuseNumbers;
+		this.refuseRate = refuseRate;
+		this.pauseNumbers = pauseNumbers;
+		this.treatNumbers = treatNumbers;
+		this.noTreat = noTreat;
+		this.afterDeathSpot = afterDeathSpot;
+		this.effect = effect;
+		this.noChange = noChange;
+		this.stable = stable;
+		this.afterDeathRoad = afterDeathRoad;
+		this.afterDeathHopital = afterDeathHopital;
 		this.choiseHosNumbers = choiseHosNumbers;
 	}
 
