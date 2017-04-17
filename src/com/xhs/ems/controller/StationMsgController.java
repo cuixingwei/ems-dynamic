@@ -57,4 +57,29 @@ public class StationMsgController {
 			report.exportToExcel(title, "", td, parameter);
 		}
 	}
+	
+	@RequestMapping(value = "/getStationMsgDetail", method = RequestMethod.POST)
+	public @ResponseBody Grid getStationMsgDetail(Parameter parameter) {
+		return stationMsgService.getStationMsgDetail(parameter);
+	}
+	
+	@RequestMapping(value = "/exportStationMsgDetail", method = RequestMethod.GET)
+	public void exportStationMsgDetail(Parameter parameter, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("application/msexcel;charset=UTF-8");
+
+		String title = "急救站回单超时详情";
+		String[] headers = new String[] { "事件名称", "中心调度员", "分站", "分站调度员","回单时间(秒)" };
+		String[] fields = new String[] { "eventName", "dispatcher", "station", "stationDispatcher","times" };
+		TableData td = ExcelUtils.createTableData(stationMsgService.getStationMsgDetail(parameter).getRows(),
+				ExcelUtils.createTableHeader(headers), fields);
+		JsGridReportBase report = new JsGridReportBase(request, response);
+
+		HttpSession session = request.getSession();
+		SessionInfo sessionInfo = (SessionInfo) session.getAttribute("sessionInfo");
+		if (null != sessionInfo) {
+			report.exportToExcel(title, sessionInfo.getUser().getName(), td, parameter);
+		} else {
+			report.exportToExcel(title, "", td, parameter);
+		}
+	}
 }

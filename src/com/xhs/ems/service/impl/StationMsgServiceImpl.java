@@ -26,4 +26,12 @@ public class StationMsgServiceImpl implements StationMsgService {
 		return stationMsgDAO.getData(parameter);
 	}
 
+	/**
+	 * @author cuixingwei
+	 * @datetime 2017年4月17日下午7:37:45
+	 */
+	@Override
+	public Grid getStationMsgDetail(Parameter parameter) {
+		return stationMsgDAO.getStationMsgDetail(parameter);
+	}
 }

@@ -45,7 +45,7 @@ public class StationMsgDAOImpl implements StationMsgDAO {
 				+ "SUM(case when DATEDIFF(ss,t.生成任务时刻, m.接收时刻)> :overtimes then 1 else 0 end) lateReturn,	"
 				+ "SUM(case when DATEDIFF(ss,t.生成任务时刻, m.接收时刻)<= :overtimes then 1 else 0 end) normalReturn,"
 				+ "SUM(case when m.任务编码 is null then 1 else 0 end) noReturn "
-				+ "FROM  AuSp120.tb_EventV AS e LEFT OUTER JOIN AuSp120.tb_TaskV AS t ON t.事件编码 = e.事件编码 AND e.事件性质编码 = 1 "
+				+ "FROM  AuSp120.tb_Event AS e LEFT OUTER JOIN AuSp120.tb_Task AS t ON t.事件编码 = e.事件编码 AND e.事件性质编码 = 1 "
 				+ "LEFT OUTER JOIN  AuSp120.tb_StationMsg AS m ON m.任务编码 = t.任务编码 LEFT OUTER JOIN   "
 				+ "AuSp120.tb_Station AS s ON s.分站编码 = t.分站编码       "
 				+ "where s.分站名称 is not null   and e.受理时刻 between :startTime and :endTime ";
@@ -87,6 +87,57 @@ public class StationMsgDAOImpl implements StationMsgDAO {
 			summary.setNoReturn(Integer.parseInt(result.getNoReturn())+Integer.parseInt(summary.getNoReturn())+"");
 		}
 		results.add(summary);
+		Grid grid = new Grid();
+		if ((int) parameter.getPage() > 0) {
+			int page = (int) parameter.getPage();
+			int rows = (int) parameter.getRows();
+
+			int fromIndex = (page - 1) * rows;
+			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
+					* rows) ? results.size() : page * rows;
+			grid.setRows(results.subList(fromIndex, toIndex));
+			grid.setTotal(results.size());
+
+		} else {
+			grid.setRows(results);
+		}
+		return grid;
+	}
+	
+	/**
+	 * @author cuixingwei
+	 * @datetime 2017年4月17日下午7:38:21
+	 */
+	@Override
+	public Grid getStationMsgDetail(Parameter parameter) {
+		String sql = "SELECT s.分站名称 station,e.事件名称 eventName,u.姓名 dispatcher,m.分站调度员编码 stationDispatcher,DATEDIFF(ss,t.生成任务时刻, m.接收时刻) times "
+				+ "FROM  AuSp120.tb_Event AS e LEFT OUTER JOIN AuSp120.tb_Task AS t ON t.事件编码 = e.事件编码 AND e.事件性质编码 = 1 "
+				+ "LEFT OUTER JOIN  AuSp120.tb_StationMsg AS m ON m.任务编码 = t.任务编码 LEFT OUTER JOIN   "
+				+ "AuSp120.tb_Station AS s ON s.分站编码 = t.分站编码  left outer join AuSp120.tb_MrUser u on u.工号=t.调度员编码        "
+				+ "where s.分站名称 is not null and DATEDIFF(ss,t.生成任务时刻, m.接收时刻)> :overtimes and e.受理时刻 between :startTime and :endTime ";
+		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
+			sql = sql + " and t.分站编码=:station ";
+		}
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("startTime", parameter.getStartTime());
+		paramMap.put("endTime", parameter.getEndTime());
+		paramMap.put("overtimes", parameter.getOvertimes());
+		paramMap.put("station", parameter.getStation());
+
+		List<StationMsg> results = this.npJdbcTemplate.query(sql, paramMap,
+				new RowMapper<StationMsg>() {
+					@Override
+					public StationMsg mapRow(ResultSet rs, int index)
+							throws SQLException {
+						StationMsg stationMsg = new StationMsg();
+						stationMsg.setStation(rs.getString("station"));
+						stationMsg.setEventName(rs.getString("eventName"));
+						stationMsg.setDispatcher(rs.getString("dispatcher"));
+						stationMsg.setStationDispatcher(rs.getString("stationDispatcher"));
+						stationMsg.setTimes(rs.getString("times"));
+						return stationMsg;
+					}
+				});
 		Grid grid = new Grid();
 		if ((int) parameter.getPage() > 0) {
 			int page = (int) parameter.getPage();

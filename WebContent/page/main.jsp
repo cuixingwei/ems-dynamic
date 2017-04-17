@@ -23,32 +23,35 @@
 			showType : 'slide'
 		});
 		/* 修改密码 */
-		$('#passwordDialog').show().dialog({
-			modal : true,
-			closable : true,
-			iconCls : 'ext-icon-lock_edit',
-			buttons : [ {
-				text : '修改',
-				handler : function() {
-					if ($('#passwordDialog form').form('validate')) {
-						$.post('changePwd', {
-							'dataPwd' : $('#pwd').val()
-						}, function(result) {
-							if (result.success) {
-								$.messager.alert('提示', '密码修改成功！', 'info');
-								$('#passwordDialog').dialog('close');
-							} else {
-								$.messager.alert('提示', '密码修改失败！', 'info');
-								$('#passwordDialog').dialog('close');
+		$('#passwordDialog').show().dialog(
+				{
+					modal : true,
+					closable : true,
+					iconCls : 'ext-icon-lock_edit',
+					buttons : [ {
+						text : '修改',
+						handler : function() {
+							if ($('#passwordDialog form').form('validate')) {
+								$.post('changePwd', {
+									'dataPwd' : $('#pwd').val()
+								}, function(result) {
+									if (result.success) {
+										$.messager.alert('提示', '密码修改成功！',
+												'info');
+										$('#passwordDialog').dialog('close');
+									} else {
+										$.messager.alert('提示', '密码修改失败！',
+												'info');
+										$('#passwordDialog').dialog('close');
+									}
+								}, 'json');
 							}
-						}, 'json');
+						}
+					} ],
+					onOpen : function() {
+						$('#passwordDialog form :input').val('');
 					}
-				}
-			} ],
-			onOpen : function() {
-				$('#passwordDialog form :input').val('');
-			}
-		}).dialog('close');
+				}).dialog('close');
 
 		/* 初始化菜单 */
 		mainMenu = $('#mainMenu')
@@ -56,6 +59,16 @@
 						{
 							url : 'getMenu',
 							parentField : 'pid',
+							animate : true,
+							cascadeCheck : true,
+							dnd : true,
+							lines : true,
+							onSelect : function(node) {
+								$(this)
+										.tree(
+												node.state === 'closed' ? 'expand'
+														: 'collapse', node.target);
+							},
 							onClick : function(node) {
 								if (node.attributes.url) {
 									var src = "base/" + node.attributes.url;

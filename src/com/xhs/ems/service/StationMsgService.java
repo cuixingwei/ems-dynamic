@@ -16,4 +16,13 @@ public interface StationMsgService {
 	 * @return
 	 */
 	public Grid getData(Parameter parameter);
+	
+	/**
+	 * 分站晚回单详情
+	 * author cuixingwei
+	 * datetime 2017年4月17日下午7:36:59
+	 * @param parameter
+	 * @return
+	 */
+	public Grid getStationMsgDetail(Parameter parameter);
 }
