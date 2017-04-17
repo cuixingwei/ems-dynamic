@@ -54,19 +54,6 @@
     	"attributes":
     		{
     			"target":"",
-    			"url":"AcceptMark.jsp"
-    		},
-    	"checked":false,
-    	"iconCls":"ext-icon-world",
-    	"id":"02",
-    	"pid":"0",
-    	"state":"open",
-    	"text":"备注查询"
-    },
-    {
-    	"attributes":
-    		{
-    			"target":"",
     			"url":"AcceptEventType.jsp"
     		},
     	"checked":false,
@@ -88,19 +75,6 @@
     	"pid":"0",
     	"state":"open",
     	"text":"受理时间统计"
-    },
-    {
-    	"attributes":
-    		{
-    			"target":"",
-    			"url":"TeleBook.jsp"
-    		},
-    	"checked":false,
-    	"iconCls":"ext-icon-world",
-    	"id":"05",
-    	"pid":"0",
-    	"state":"open",
-    	"text":"通讯录"
     },
     {
     	"attributes":

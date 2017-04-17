@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -21,6 +22,8 @@ import com.xhs.ems.dao.UserDAO;
 
 @Repository("userDAO")
 public class UserDAOImpl implements UserDAO {
+	private static final Logger logger = Logger
+			.getLogger(UserDAOImpl.class);
 	private NamedParameterJdbcTemplate npJdbcTemplate;
 
 	@Autowired
@@ -30,21 +33,22 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public List<User> validateMrUser(User user) {
-		String sql = "select * from AuSp120.tb_MrUser as t where t.工号= :employeeId and t.有效标志= :isValid";
+		String sql = "select t.*,s.stationName from user as t LEFT JOIN station s on s.stationCode=t.unitCode "
+				+ "where t.jobNum= :employeeId and t.deleteState= :isValid";
 		SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(
 				user);
 		final List<User> results = new ArrayList<User>();
+		logger.info("sql"+sql);
 		this.npJdbcTemplate.query(sql, namedParameters,
 				new RowCallbackHandler() {
 					public void processRow(ResultSet rs) throws SQLException {
 						User user = new User();
-						user.setEmployeeId(rs.getString("工号"));
-						user.setName(rs.getString("姓名"));
-						user.setPassword(rs.getString("密码"));
-						user.setStationName(rs.getString("部门名称"));
-						if (!(rs.getString("人员类型").equals("1") || rs.getString(
-								"人员类型").equals("0")||rs.getString("人员类型").equals("2") || rs.getString(
-										"人员类型").equals("5"))) {
+						user.setEmployeeId(rs.getString("jobNum"));
+						user.setName(rs.getString("personName"));
+						user.setPassword(rs.getString("password"));
+						user.setStationName(rs.getString("stationName"));
+						if (!(rs.getString("userType").equals("1") || rs.getString(
+								"userType").equals("0")||rs.getString("userType").equals("2"))) {
 							user.setIsValid(3);
 						} else {
 							user.setIsValid(0);
@@ -52,16 +56,17 @@ public class UserDAOImpl implements UserDAO {
 						results.add(user);
 					}
 				});
+		logger.info("list:"+results);
 		return results;
 	}
 
 	@Override
 	public List<User> getAvailableDispatcher() {
-		String sql = "select * from AuSp120.tb_MrUser as t where t.人员类型= 0 and t.有效标志= 1";
+		String sql = "select * from user as t where t.userType= 1 and t.deleteState= 0";
 		final List<User> results = new ArrayList<User>();
 		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
 			public void processRow(ResultSet rs) throws SQLException {
-				User user = new User(rs.getString("工号"), rs.getString("姓名"));
+				User user = new User(rs.getString("jobNum"), rs.getString("personName"));
 				results.add(user);
 			}
 		});
@@ -70,7 +75,7 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public int changePwd(User user) {
-		String sql = "update AuSp120.tb_MrUser set 密码=:password where 工号=:id";
+		String sql = "update user set password=:password where jobNum=:id";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("password", user.getPassword());
 		paramMap.put("id", user.getEmployeeId());

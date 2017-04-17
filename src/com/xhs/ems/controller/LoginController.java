@@ -17,12 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xhs.ems.bean.Json;
-import com.xhs.ems.bean.Parameter;
 import com.xhs.ems.bean.SessionInfo;
-import com.xhs.ems.bean.Show;
 import com.xhs.ems.bean.User;
 import com.xhs.ems.common.CommonUtil;
-import com.xhs.ems.service.ShowService;
 import com.xhs.ems.service.UserService;
 
 @Controller
@@ -34,8 +31,6 @@ public class LoginController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private ShowService showService;
 
 	/**
 	 * 返回菜单
@@ -75,7 +70,7 @@ public class LoginController {
 			HttpServletRequest request) {
 		logger.info("用户名:" + userId + ":密码" + password);
 		Json json = new Json();
-		User user = new User(userId, "", password, 1);
+		User user = new User(userId, "", password, 0);
 		List<User> list = userService.validateMrUser(user);
 		json.setMsg("fail");
 		json.setSuccess(false);
@@ -135,22 +130,6 @@ public class LoginController {
 			json.setSuccess(false);
 		}
 		return json;
-	}
-
-	/**
-	 * 返回用于显示电视的信息
-	 * 
-	 * @datetime 2015年12月25日 下午4:23:53
-	 * @author 崔兴伟
-	 * @return
-	 */
-	@RequestMapping(value = "/getShow", method = RequestMethod.GET)
-	public @ResponseBody List<Show> getShow() {
-		logger.info("电视信息查询:" + CommonUtil.getStartTime());
-		Parameter parameter = new Parameter();
-		parameter.setStartTime(CommonUtil.getStartTime());
-		parameter.setEndTime(CommonUtil.getSystemTime());
-		return showService.getShow(parameter);
 	}
 
 }

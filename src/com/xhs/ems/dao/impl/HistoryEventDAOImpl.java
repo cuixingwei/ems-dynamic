@@ -44,23 +44,21 @@ public class HistoryEventDAOImpl implements HistoryEventDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select e.事件名称 eventName,e.受理次数 acceptCount,e.呼救电话 callPhone,e.事件编码 eventCode,CONVERT(varchar(20),e.受理时刻,120) acceptStartTime,	"
-				+ "m.姓名 thisDispatcher,et.NameM eventType,ls.NameM eventSource,er.NameM eventResult	from AuSp120.tb_Event e "
-				+ "left outer join AuSp120.tb_MrUser m on m.工号=e.调度员编码	"
-				+ "left outer join AuSp120.tb_DEventType et on et.Code=e.事件类型编码	"
-				+ "left outer join AuSp120.tb_DEventResult er on er.Code=e.事件结果编码	"
-				+ "left outer join AuSp120.tb_DLinkSource ls on ls.Code=e.联动来源编码	"
-				+ "where e.事件性质编码=1     and e.受理时刻 between :startTime and :endTime ";
+		String sql = "select e.eventAddress eventName,e.handleTimes acceptCount,e.incomingCall callPhone,e.eventCode,DATE_FORMAT(e.createTime,'%Y-%m-%d') acceptStartTime,	"
+				+ "u.personName thisDispatcher,det.name eventType,des.name eventSource,der.name eventResult	"
+				+ "from `event` e LEFT JOIN user u on e.operatorJobNum=u.jobNum	LEFT JOIN define_event_type det on det.`code`=e.eventType	"
+				+ "LEFT JOIN define_event_source des on des.`code`=e.eventSource left join define_event_result der on der.code=e.eventResult	"
+				+ "where e.eventProperty=1     and e.createTime between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getEventName())) {
-			sql = sql + " and e.事件名称 like :eventName ";
+			sql = sql + " and e.eventAddress like :eventName ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getAlarmPhone())) {
-			sql = sql + " and e.呼救电话  like :alarmPhone ";
+			sql = sql + " and e.incomingCall  like :alarmPhone ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getEventCode())) {
-			sql = sql + " and e.事件编码  = :eventCode ";
+			sql = sql + " and e.eventCode  = :eventCode ";
 		}
-		sql += " order by e.受理时刻  ";
+		sql += " order by e.createTime  ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("eventName", "%" + parameter.getEventName() + "%");
 		paramMap.put("startTime", parameter.getStartTime());
@@ -80,7 +78,6 @@ public class HistoryEventDAOImpl implements HistoryEventDAO {
 				historyEvent.setEventType(rs.getString("eventType"));
 				historyEvent.setCallPhone(rs.getString("callPhone"));
 				historyEvent.setEventCode(rs.getString("eventCode"));
-				historyEvent.setEventResult(rs.getString("eventResult"));
 				return historyEvent;
 			}
 		});
