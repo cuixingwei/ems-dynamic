@@ -14,6 +14,8 @@ public class StationMsg {
 	private String eventName;//事件名称 
 	private String dispatcher;//中心调度员 
 	private String stationDispatcher;//分站调度员
+	private String createTaskTime;//生成任务时刻
+	private String acceptTaskTime;//分站接受任务时刻
 	private String times;//回单时间
 	public String getStation() {
 		return station;
@@ -70,6 +72,19 @@ public class StationMsg {
 	}
 	public void setTimes(String times) {
 		this.times = times;
+	}
+	
+	public String getCreateTaskTime() {
+		return createTaskTime;
+	}
+	public void setCreateTaskTime(String createTaskTime) {
+		this.createTaskTime = createTaskTime;
+	}
+	public String getAcceptTaskTime() {
+		return acceptTaskTime;
+	}
+	public void setAcceptTaskTime(String acceptTaskTime) {
+		this.acceptTaskTime = acceptTaskTime;
 	}
 	public StationMsg() {
 		

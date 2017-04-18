@@ -68,8 +68,8 @@ public class StationMsgController {
 		response.setContentType("application/msexcel;charset=UTF-8");
 
 		String title = "急救站回单超时详情";
-		String[] headers = new String[] { "事件名称", "中心调度员", "分站", "分站调度员","回单时间(秒)" };
-		String[] fields = new String[] { "eventName", "dispatcher", "station", "stationDispatcher","times" };
+		String[] headers = new String[] { "事件名称", "中心调度员", "分站", "分站调度员","生成任务时刻","分站接受任务时刻","回单时间(秒)" };
+		String[] fields = new String[] { "eventName", "dispatcher", "station", "stationDispatcher","createTaskTime","acceptTaskTime","times" };
 		TableData td = ExcelUtils.createTableData(stationMsgService.getStationMsgDetail(parameter).getRows(),
 				ExcelUtils.createTableHeader(headers), fields);
 		JsGridReportBase report = new JsGridReportBase(request, response);

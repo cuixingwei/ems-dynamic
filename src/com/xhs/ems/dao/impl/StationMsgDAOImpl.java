@@ -110,9 +110,11 @@ public class StationMsgDAOImpl implements StationMsgDAO {
 	 */
 	@Override
 	public Grid getStationMsgDetail(Parameter parameter) {
-		String sql = "SELECT s.分站名称 station,e.事件名称 eventName,u.姓名 dispatcher,m.分站调度员编码 stationDispatcher,DATEDIFF(ss,t.生成任务时刻, m.接收时刻) times "
-				+ "FROM  AuSp120.tb_Event AS e LEFT OUTER JOIN AuSp120.tb_Task AS t ON t.事件编码 = e.事件编码 AND e.事件性质编码 = 1 "
-				+ "LEFT OUTER JOIN  AuSp120.tb_StationMsg AS m ON m.任务编码 = t.任务编码 LEFT OUTER JOIN   "
+		String sql = "SELECT s.分站名称 station,e.事件名称 eventName,u.姓名 dispatcher,m.分站调度员编码 stationDispatcher,DATEDIFF(ss,t.生成任务时刻, m.接收时刻) times, "
+				+ "convert(varchar(20),t.生成任务时刻,120) createTaskTime,convert(varchar(20),m.接收时刻,120) acceptTaskTime "
+				+ "from AuSp120.tb_Event e left outer join AuSp120.tb_AcceptDescript a on e.事件编码=a.事件编码	"
+				+ "left outer join AuSp120.tb_Task t on t.事件编码=a.事件编码 and t.受理序号=a.受理序号 and e.事件性质编码=1	"
+				+ "left outer join AuSp120.tb_StationMsg m on m.任务编码=t.任务编码 LEFT OUTER JOIN   "
 				+ "AuSp120.tb_Station AS s ON s.分站编码 = t.分站编码  left outer join AuSp120.tb_MrUser u on u.工号=t.调度员编码        "
 				+ "where s.分站名称 is not null and DATEDIFF(ss,t.生成任务时刻, m.接收时刻)> :overtimes and e.受理时刻 between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
@@ -134,6 +136,8 @@ public class StationMsgDAOImpl implements StationMsgDAO {
 						stationMsg.setEventName(rs.getString("eventName"));
 						stationMsg.setDispatcher(rs.getString("dispatcher"));
 						stationMsg.setStationDispatcher(rs.getString("stationDispatcher"));
+						stationMsg.setCreateTaskTime(rs.getString("createTaskTime"));
+						stationMsg.setAcceptTaskTime(rs.getString("acceptTaskTime"));
 						stationMsg.setTimes(rs.getString("times"));
 						return stationMsg;
 					}

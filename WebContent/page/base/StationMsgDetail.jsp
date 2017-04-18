@@ -46,29 +46,41 @@
 					columns : [ [ {
 						field : 'eventName',
 						title : '事件名称',
-						width : "23%",
+						width : "16%",
 						align : 'center'
 					}, {
 						field : 'dispatcher',
 						title : '中心调度员',
-						width : "18%",
+						width : "10%",
 						align : 'center',
 					}, {
 						field : 'station',
 						title : '分站',
-						width : "17%",
+						width : "10%",
 						align : 'center',
 					}, {
 						field : 'stationDispatcher',
 						title : '分站调度员',
 						resizable : true,
-						width : "18%",
+						width : "10%",
+						align : 'center'
+					}, {
+						field : 'createTaskTime',
+						title : '生成任务时刻',
+						resizable : true,
+						width : "16%",
+						align : 'center'
+					}, {
+						field : 'acceptTaskTime',
+						title : '分站接受任务时刻',
+						resizable : true,
+						width : "16%",
 						align : 'center'
 					}, {
 						field : 'times',
 						title : '回单时间(秒)',
 						resizable : true,
-						width : "19%",
+						width : "16%",
 						align : 'center',
 					} ] ],
 					toolbar : '#toolbar',
