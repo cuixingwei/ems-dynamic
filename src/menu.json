@@ -125,7 +125,7 @@
     	"id":"11",
     	"pid":"1",
     	"state":"open",
-    	"text":"中止任务信息统计"
+    	"text":"中止任务信息查询"
     },
     {
     	"attributes":
@@ -177,7 +177,7 @@
     	"id":"15",
     	"pid":"1",
     	"state":"open",
-    	"text":"放空车统计"
+    	"text":"放空车查询"
     },
     {
     	"attributes":
@@ -203,7 +203,7 @@
     	"id":"17",
     	"pid":"1",
     	"state":"open",
-    	"text":"挂起事件流水统计"
+    	"text":"挂起事件流水查询"
     },
     {
     	"attributes":

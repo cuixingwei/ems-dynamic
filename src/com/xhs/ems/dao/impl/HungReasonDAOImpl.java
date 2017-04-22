@@ -36,17 +36,18 @@ public class HungReasonDAOImpl implements HungReasonDAO {
 	 */
 	@Override
 	public List<HungReason> getData() {
-		String sql = "select * from AuSp120.tb_DHangReason";
+		String sql = "select * from define_suspend_reason";
 		final List<HungReason> results = new ArrayList<HungReason>();
 		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
 
 			@Override
 			public void processRow(ResultSet rs) throws SQLException {
-				HungReason hungReason = new HungReason(rs.getString("Code"), rs
-						.getString("NameM"));
+				HungReason hungReason = new HungReason(rs.getString("code"), rs
+						.getString("name"));
 				results.add(hungReason);
 			}
 		});
+		results.add(0, new HungReason("", "--请选择--"));
 		return results;
 
 	}

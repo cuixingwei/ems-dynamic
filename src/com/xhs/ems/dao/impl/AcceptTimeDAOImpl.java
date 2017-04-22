@@ -23,8 +23,7 @@ import com.xhs.ems.dao.AcceptTimeDAO;
 @Repository("acceptTimeDAO")
 public class AcceptTimeDAOImpl implements AcceptTimeDAO {
 
-	private static final Logger logger = Logger
-			.getLogger(AcceptTimeDAOImpl.class);
+	private static final Logger logger = Logger.getLogger(AcceptTimeDAOImpl.class);
 
 	private NamedParameterJdbcTemplate npJdbcTemplate;
 
@@ -71,45 +70,53 @@ public class AcceptTimeDAOImpl implements AcceptTimeDAO {
 		}
 		sql = sql + " drop table #temp1,#temp2,#temp3,#temp4 ";
 		summary = summary + " drop table #temp1,#temp2,#temp3,#temp4 ";
+		String sql1 = "SELECT u.personName dispatcher, IFNULL(avg(TIMESTAMPDIFF(SECOND,eh.handleBeginTime,eh.handleEndTime)),0) averageAccept,	"
+				+ "IFNULL(avg(TIMESTAMPDIFF(SECOND,eh.handleBeginTime,et.createTime)),0) averageOffSendCar	"
+				+ "from `event` e LEFT JOIN event_history eh on e.eventCode=eh.eventCode	"
+				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
+				+ "LEFT JOIN `user` u on u.jobNum=et.operatorJobNum	WHERE e.eventProperty=1 "
+				+ "and u.personName is not null and e.createTime between :startTime and :endTime ";
+
+		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
+			sql1 = sql1 + " and et.operatorJobNum=:dispatcher ";
+		}
+		String summary1 =  "SELECT IFNULL(avg(TIMESTAMPDIFF(SECOND,eh.handleBeginTime,eh.handleEndTime)),0) averageAccept,	"
+				+ "IFNULL(avg(TIMESTAMPDIFF(SECOND,eh.handleBeginTime,et.createTime)),0) averageOffSendCar	"
+				+ "from `event` e LEFT JOIN event_history eh on e.eventCode=eh.eventCode	"
+				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
+				+ "LEFT JOIN `user` u on u.jobNum=et.operatorJobNum	WHERE e.eventProperty=1 "
+				+ "and u.personName is not null and e.createTime between :startTime and :endTime ";
+		String group = " GROUP BY u.personName";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
-
-		List<AcceptTime> results = this.npJdbcTemplate.query(sql, paramMap,
-				new RowMapper<AcceptTime>() {
-					@Override
-					public AcceptTime mapRow(ResultSet rs, int index)
-							throws SQLException {
-
-						return new AcceptTime(rs.getString("dispatcher"), rs
-								.getString("averageOffhookTime"), rs
-								.getString("averageOffSendCar"), rs
-								.getString("averageAccept"), rs
-								.getString("readyTime"), rs
-								.getString("leaveTime"));
-					}
-				});
-		List<AcceptTime> summaryList = this.npJdbcTemplate.query(summary, paramMap,
-				new RowMapper<AcceptTime>() {
-					@Override
-					public AcceptTime mapRow(ResultSet rs, int index)
-							throws SQLException {
-
-						return new AcceptTime(rs.getString("dispatcher"), rs
-								.getString("averageOffhookTime"), rs
-								.getString("averageOffSendCar"), rs
-								.getString("averageAccept"), rs
-								.getString("readyTime"), rs
-								.getString("leaveTime"));
-					}
-				});
+		List<AcceptTime> results = this.npJdbcTemplate.query(sql1 + group, paramMap, new RowMapper<AcceptTime>() {
+			@Override
+			public AcceptTime mapRow(ResultSet rs, int index) throws SQLException {
+				AcceptTime acceptTime = new AcceptTime();
+				acceptTime.setAverageAccept(rs.getString("averageAccept"));
+				acceptTime.setAverageOffSendCar(rs.getString("averageOffSendCar"));
+				acceptTime.setDispatcher(rs.getString("dispatcher"));
+				return acceptTime;
+			}
+		});
+		List<AcceptTime> summaryList = this.npJdbcTemplate.query(summary1, paramMap, new RowMapper<AcceptTime>() {
+			@Override
+			public AcceptTime mapRow(ResultSet rs, int index) throws SQLException {
+				AcceptTime acceptTime = new AcceptTime();
+				acceptTime.setAverageAccept(rs.getString("averageAccept"));
+				acceptTime.setAverageOffSendCar(rs.getString("averageOffSendCar"));
+				acceptTime.setDispatcher("合计");
+				return acceptTime;
+			}
+		});
 		for (AcceptTime sm : summaryList) {
 			results.add(sm);
 		}
 		for (AcceptTime result : results) {
-			result.setReadyTime(CommonUtil.formatSecond(result.getReadyTime()));
-			result.setLeaveTime(CommonUtil.formatSecond(result.getLeaveTime()));
+			// result.setReadyTime(CommonUtil.formatSecond(result.getReadyTime()));
+			// result.setLeaveTime(CommonUtil.formatSecond(result.getLeaveTime()));
 		}
 		logger.info("一共有" + results.size() + "条数据");
 
@@ -119,8 +126,8 @@ public class AcceptTimeDAOImpl implements AcceptTimeDAO {
 			int rows = (int) parameter.getRows();
 
 			int fromIndex = (page - 1) * rows;
-			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
-					* rows) ? results.size() : page * rows;
+			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1) * rows) ? results.size()
+					: page * rows;
 			grid.setRows(results.subList(fromIndex, toIndex));
 			grid.setTotal(results.size());
 

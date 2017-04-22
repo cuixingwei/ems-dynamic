@@ -11,6 +11,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript">
 	var grid;
+	/*查询*/
+	var queryGrid = function() {
+		grid.datagrid({
+			url : 'getHungEventReasonDatas',
+			queryParams : cxw.serializeObject($('#searchForm'))
+		});
+	}
 	var exportData = function() {
 		var url = "exportHungEventReasonDatas?startTime="
 				+ $('#startTime').datetimebox('getValue') + "&endTime="
@@ -32,17 +39,18 @@
 			url : 'getHungReasons',
 			valueField : 'code',
 			textField : 'name',
+			editable : false,
 			method : 'get'
 		});
 		$('#dispatcher').combobox({
 			url : 'getUsers',
 			valueField : 'employeeId',
 			textField : 'name',
+			editable : false,
 			method : 'get'
 		});
 		grid = $('#grid').datagrid(
 				{
-					url : 'getHungEventReasonDatas',
 					pagePosition : 'bottom',
 					pagination : true,
 					striped : true,
@@ -84,7 +92,7 @@
 
 	$(document).ready(function() {
 		init();
-		grid.datagrid('load', cxw.serializeObject($('#searchForm')))
+		queryGrid();
 	});
 </script>
 </head>
@@ -109,7 +117,7 @@
 								<td colspan="2">&nbsp;<a href="javascript:void(0);"
 									class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
-									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a></td>
+									onclick="queryGrid();">查询</a></td>
 							</tr>
 						</table>
 					</form>

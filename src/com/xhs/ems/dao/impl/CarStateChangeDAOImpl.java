@@ -43,20 +43,20 @@ public class CarStateChangeDAOImpl implements CarStateChangeDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select  e.事件名称 eventName,am.实际标识 carCode,damS.NameM carState,convert(varchar(20),td.记录时刻,120) recordTime,	td.记录方式 recordClass,td.台号 seatCode,m.姓名 dispatcher	"
-				+ "from AuSp120.tb_TaskDT td  left outer join AuSp120.tb_TaskV t on t.任务编码=td.任务编码	"
-				+ "left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码	"
-				+ "left outer join AuSp120.tb_MrUser m on td.调度员编码= (case td.记录方式 when '终端按键' then m.ID when '手工按键' then m.工号 end)	"
-				+ "left outer join AuSp120.tb_Ambulance am on am.车辆编码=td.车辆编码	"
-				+ "left outer join AuSp120.tb_DAmbulanceState damS on damS.Code=td.车辆状态编码	"
-				+ "where e.事件性质编码=1 and e.事件名称 not like '%测试%' and t.生成任务时刻  between :startTime and :endTime ";
+		String sql = "SELECT e.eventAddress eventName,vl.actualSign carCode,dvs.`name` carState,u.personName dispatcher,"
+				+ "date_format(vl.createTime,'%Y-%c-%d %h:%i:%s') recordTime,vl.reason,ot.`name` recordClass	"
+				+ "from vehicle_log vl LEFT JOIN  `event` e on e.eventCode=vl.eventCode	"
+				+ "LEFT JOIN define_vehicle_state dvs on dvs.code=vl.vehicleState	"
+				+ "LEFT JOIN operatortype ot on ot.`code`=vl.operatorType	"
+				+ "LEFT JOIN `user` u on u.jobNum=vl.operatorJobNum	"
+				+ "WHERE e.eventProperty=1 and vl.createTime  between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getCarCode())) {
-			sql = sql + " and td.车辆编码=:carCode ";
+			sql = sql + " and vl.vehicleCode=:carCode ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getEventName())) {
-			sql = sql + " and e.事件名称  like :eventName ";
+			sql = sql + " and e.eventAddress  like :eventName ";
 		}
-		sql += " order by t.生成任务时刻";
+		sql += " order by e.eventAddress,vl.createTime,vl.actualSign ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("carCode", parameter.getCarCode());
 		paramMap.put("startTime", parameter.getStartTime());
@@ -68,14 +68,15 @@ public class CarStateChangeDAOImpl implements CarStateChangeDAO {
 					@Override
 					public CarStateChange mapRow(ResultSet rs, int index)
 							throws SQLException {
-
-						return new CarStateChange(rs.getString("eventName"), rs
-								.getString("carCode"),
-								rs.getString("carState"), rs
-										.getString("recordTime"), rs
-										.getString("recordClass"), rs
-										.getString("seatCode"), rs
-										.getString("dispatcher"));
+						CarStateChange carStateChange = new CarStateChange();
+						carStateChange.setCarCode(rs.getString("carCode"));
+						carStateChange.setCarState(rs.getString("carState"));
+						carStateChange.setDispatcher(rs.getString("dispatcher"));
+						carStateChange.setEventName(rs.getString("eventName"));
+						carStateChange.setReason(rs.getString("reason"));
+						carStateChange.setRecordClass(rs.getString("recordClass"));
+						carStateChange.setRecordTime(rs.getString("recordTime"));
+						return carStateChange;
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");

@@ -43,32 +43,30 @@ public class StopTaskDAOImpl implements StopTaskDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select  convert(varchar(20),e.受理时刻,120) acceptTime,a.现场地址 sickAddress,a.呼救电话 phone,"
-				+ "m.姓名 dispatcher,am.实际标识 carCode,convert(varchar(20),t.出车时刻,120) drivingTime,	datediff(Second,t.途中待命时刻,t.完成时刻) emptyRunTime,"
-				+ "s.分站名称 staion,dsr.NameM stopReason,t.备注 remark 	"
-				+ "from AuSp120.tb_AcceptDescriptV a left outer join  AuSp120.tb_TaskV t on a.事件编码=t.事件编码  and a.受理序号=t.受理序号 "
-				+ "left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码     "
-				+ "left outer join AuSp120.tb_MrUser m on t.调度员编码=m.工号   "
-				+ "left outer join AuSp120.tb_Ambulance am on am.车辆编码=t.车辆编码  "
-				+ "left outer join AuSp120.tb_DStopReason dsr on dsr.Code=t.中止任务原因编码   "
-				+ "left outer join AuSp120.tb_Station s on s.分站编码=t.分站编码	"
-				+ "where e.事件性质编码=1 and t.结果编码=2 and e.受理时刻  between :startTime and :endTime ";
+		String sql = "SELECT date_format(e.callTime,'%Y-%c-%d %h:%i:%s') acceptTime,e.eventAddress sickAddress,e.incomingCall phone,u.personName dispatcher,et.actualSign carCode,	"
+				+ "date_format(et.createTime,'%Y-%c-%d %h:%i:%s') drivingTime,s.stationName staion,dttr.name stopReason,eh.remark,"
+				+ "TIMESTAMPDIFF(SECOND,et.taskStopTime,et.taskAwaitTime) emptyRunTime	"
+				+ "from `event` e LEFT JOIN event_history eh on eh.eventCode=e.eventCode	"
+				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
+				+ "LEFT JOIN `user` u on u.jobNum=eh.operatorJobNum	LEFT JOIN define_stop_task_reason dttr on dttr.`code`=et.stopTaskReason	"
+				+ "LEFT JOIN station s on s.stationCode=et.stationCode	"
+				+ "where e.eventProperty=1 and et.taskResult=1 and et.createTime  between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
-			sql = sql + " and t.调度员编码= :dispatcher ";
+			sql = sql + " and eh.operatorJobNum = :dispatcher ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getStopReason())) {
-			sql = sql + " and t.中止任务原因编码= :stopReason ";
+			sql = sql + " and et.stopTaskReason = :stopReason ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
-			sql = sql + " and t.分站编码=:station ";
+			sql = sql + " and et.stationCode =: station ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getCarCode())) {
-			sql = sql + " and t.车辆编码=:carCode ";
+			sql = sql + " and et.vehicleCode=:carCode ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getEmptyRunTime())) {
-			sql = sql + " and datediff(M,t.途中待命时刻,t.完成时刻)>:emptyRunTime ";
+			sql = sql + " and TIMESTAMPDIFF(SECOND,et.taskStopTime,et.taskAwaitTime)>:emptyRunTime ";
 		}
-		sql += " order by e.受理时刻";
+		sql += " order by et.createTime ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("station", parameter.getStation());

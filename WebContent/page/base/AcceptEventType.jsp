@@ -11,6 +11,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript">
 	var grid;
+	/*查询*/
+	var queryGrid = function() {
+		grid.datagrid({
+			url : 'getAcceptEventTypeDatas',
+			queryParams : cxw.serializeObject($('#searchForm'))
+		});
+	}
 	var exportData = function() {
 		var url = "exportAcceptEventTypeDatas?startTime="
 				+ $('#startTime').datetimebox('getValue') + "&endTime="
@@ -28,7 +35,6 @@
 		})
 		grid = $('#grid').datagrid(
 				{
-					url : 'getAcceptEventTypeDatas',
 					pagePosition : 'bottom',
 					pagination : true,
 					striped : true,
@@ -44,12 +50,6 @@
 						rowspan : 2,
 						align : 'center'
 					}, {
-						field : 'numbersOfPhone',
-						title : '接电话数',
-						width : "5%",
-						rowspan : 2,
-						align : 'center',
-					}, {
 						field : 'numbersOfSendCar',
 						title : '派车数',
 						width : "5%",
@@ -57,10 +57,10 @@
 						align : 'center'
 					}, {
 						title : '受理类型',
-						colspan : 10
+						colspan : 9
 					}, {
 						title : '出车结果',
-						colspan : 6
+						colspan : 8
 					} ], [ {
 						field : 'numbersOfNormalSendCar',
 						title : '正常派车',
@@ -104,12 +104,7 @@
 					}, {
 						field : 'refuseSendCar',
 						title : '拒绝出车',
-						width : "5%",
-						align : 'center'
-					}, {
-						field : 'wakeSendCar',
-						title : '唤醒待派',
-						width : "5%",
+						width : "6%",
 						align : 'center'
 					}, {
 						field : 'stopTask',
@@ -118,8 +113,8 @@
 						align : 'center'
 					}, {
 						field : 'ratioStopTask',
-						title : '中止任务比率',
-						width : "7%",
+						title : '中止任务<br/>比率',
+						width : "5%",
 						align : 'center'
 					}, {
 						field : 'emptyCar',
@@ -129,19 +124,29 @@
 					}, {
 						field : 'ratioEmptyCar',
 						title : '空车比率',
-						width : "5%",
+						width : "6%",
 						align : 'center'
 					}, {
 						field : 'nomalComplete',
 						title : '正常完成',
-						width : "4.9%",
+						width : "6%",
 						align : 'center'
 					}, {
 						field : 'ratioComplete',
-						title : '正常完成比率',
-						width : "7%",
+						title : '正常完成<br/>比率',
+						width : "6%",
 						align : 'center'
-					} ] ],
+					} , {
+						field : 'refuseCar',
+						title : '拒绝出车',
+						width : "6%",
+						align : 'center'
+					}, {
+						field : 'ratioRefuseCar',
+						title : '拒绝出车<br/>比率',
+						width : "6%",
+						align : 'center'
+					}] ],
 					toolbar : '#toolbar',
 					onBeforeLoad : function(param) {
 						var varify = cxw.checkStartTimeBeforeEndTime(
@@ -155,7 +160,7 @@
 
 	$(document).ready(function() {
 		init();
-		grid.datagrid('load', cxw.serializeObject($('#searchForm')))
+		queryGrid();
 	});
 </script>
 </head>
@@ -173,7 +178,7 @@
 									style="width: 150em;" /></td>
 								<td><a href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
-									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a></td>
+									onclick="queryGrid();">查询</a></td>
 							</tr>
 						</table>
 					</form>

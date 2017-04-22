@@ -44,19 +44,17 @@ public class EmptyCarReasonDAOImpl implements EmptyCarReasonDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select der.NameM reason,COUNT(t.任务编码) times,'' rate from AuSp120.tb_AcceptDescriptV a	"
-				+ "left outer join AuSp120.tb_TaskV t on t.事件编码=a.事件编码 and a.受理序号=t.受理序号	"
-				+ "left outer join AuSp120.tb_EventV e on t.事件编码=e.事件编码	"
-				+ "left outer join AuSp120.tb_DEmptyReason der on der.Code=t.放空车原因编码 	"
-				+ "where t.结果编码=3 and e.事件性质编码=1	and t.放空车原因编码 is not null "
-				+ "and a.开始受理时刻 between :startTime and :endTime ";
+		String sql = "SELECT der.`name` reason,COUNT(DISTINCT et.taskCode) times,'' rate "
+				+ "from event_task et LEFT JOIN `event` e on e.eventCode=et.eventCode	"
+				+ "LEFT JOIN define_empty_reason der on der.`code`=et.emptyVehicleReason	"
+				+ "where e.eventProperty=1 and et.taskResult=2 and et.createTime between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
-			sql = sql + " and t.分站编码=:station ";
+			sql = sql + " and et.stationCode=:station ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getEmptyReason())) {
-			sql += " and t.放空车原因编码=:emptyReason";
+			sql += " and et.emptyVehicleReason=:emptyReason";
 		}
-		sql += " group by der.NameM";
+		sql += " group by der.`name` ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());

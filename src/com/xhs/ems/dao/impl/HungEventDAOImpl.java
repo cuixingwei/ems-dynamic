@@ -43,20 +43,21 @@ public class HungEventDAOImpl implements HungEventDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select e.事件名称 eventName,dat.NameM acceptType,CONVERT(varchar(20),a.开始受理时刻,120) hungTime,"
-				+ "dhr.NameM hungReason,	m.姓名 dispatcher,CONVERT(varchar(20),a.结束受理时刻,120) endTime,ISNULL(DATEDIFF(Second,a.开始受理时刻,a.结束受理时刻),0) hungtimes	"
-				+ "from AuSp120.tb_AcceptDescriptV a	left outer join AuSp120.tb_EventV e on a.事件编码=e.事件编码	"
-				+ "left outer join AuSp120.tb_DHangReason dhr on dhr.Code=a.挂起原因编码	"
-				+ "left outer join AuSp120.tb_DAcceptDescriptType dat on dat.Code=a.类型编码	"
-				+ "left outer join AuSp120.tb_MrUser m on m.工号=e.调度员编码	where e.事件性质编码=1 "
-				+ "and a.开始受理时刻 between :startTime and :endTime and a.挂起原因编码 is not null";
+		String sql = "SELECT dsr.`name` hungReason,eh.eventAddress eventName,dht.`name` acceptType,"
+				+ "date_format(eh.handleBeginTime,'%Y-%c-%d %h:%i:%s')  hungTime,	date_format(eh.handleEndTime,'%Y-%c-%d %h:%i:%s')  endTime,"
+				+ "TIMESTAMPDIFF(SECOND,eh.handleBeginTime,eh.handleEndTime) hungtimes,u.personName dispatcher	"
+				+ "from `event` e LEFT JOIN event_history eh on e.eventCode=eh.eventCode	"
+				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
+				+ "LEFT JOIN `user` u on u.jobNum=eh.operatorJobNum	LEFT JOIN define_suspend_reason dsr on dsr.`code`=eh.suspendReason	"
+				+ "LEFT JOIN define_handle_type dht on dht.code=eh.handleType	"
+				+ "WHERE e.eventProperty=1 and eh.suspendReason is not null and eh.createTime  between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
-			sql = sql + " and e.调度员编码= :dispatcher ";
+			sql = sql + " and eh.operatorJobNum= :dispatcher ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getHungReason())) {
-			sql = sql + " and a.挂起原因编码 = :hungReason ";
+			sql = sql + " and eh.suspendReason = :hungReason ";
 		}
-		sql += " order by a.开始受理时刻";
+		sql += " order by eh.createTime ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("hungReason", parameter.getHungReason());

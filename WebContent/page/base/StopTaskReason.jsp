@@ -11,6 +11,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript">
 	var grid;
+	/*查询*/
+	var queryGrid = function() {
+		grid.datagrid({
+			url : 'getStopTaskReasonDatas',
+			queryParams : cxw.serializeObject($('#searchForm'))
+		});
+	}
 	var exportData = function() {
 		var url = "exportStopTaskReasonDatas?startTime="
 				+ $('#startTime').datetimebox('getValue') + "&endTime="
@@ -31,11 +38,11 @@
 			url : 'getStations',
 			valueField : 'stationCode',
 			textField : 'stationName',
+			editable : false,
 			method : 'get'
 		});
 		grid = $('#grid').datagrid(
 				{
-					url : 'getStopTaskReasonDatas',
 					pagePosition : 'bottom',
 					pagination : true,
 					striped : true,
@@ -68,7 +75,7 @@
 					onBeforeLoad : function(param) {
 						var varify = cxw.checkStartTimeBeforeEndTime(
 								'#startTime', '#endTime');
-						if (!varify)  {
+						if (!varify) {
 							$.messager.alert('警告', '结束时间要大于开始时间', 'warning');
 						}
 					}
@@ -77,7 +84,7 @@
 
 	$(document).ready(function() {
 		init();
-		grid.datagrid('load', cxw.serializeObject($('#searchForm')))
+		queryGrid();
 	});
 </script>
 </head>
@@ -99,7 +106,7 @@
 								<td colspan="2">&nbsp;<a href="javascript:void(0);"
 									class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
-									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a></td>
+									onclick="queryGrid();">查询</a></td>
 							</tr>
 						</table>
 					</form>

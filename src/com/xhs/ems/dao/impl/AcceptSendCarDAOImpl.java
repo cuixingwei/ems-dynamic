@@ -46,21 +46,21 @@ public class AcceptSendCarDAOImpl implements AcceptSendCarDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select t.ID id,m.姓名  dispatcher,CONVERT(varchar(20),a.开始受理时刻,120) startAcceptTime,"
-				+ "CONVERT(varchar(20),a.派车时刻,120) sendCarTime,	 "
-				+ "dat.NameM acceptType,a.呼救电话  ringPhone,DATEDIFF(SECOND,a.开始受理时刻,a.派车时刻) sendCarTimes,a.备注  remark from AuSp120.tb_Task t	"
-				+ "left outer join AuSp120.tb_AcceptDescriptV a on a.事件编码=t.事件编码 and a.受理序号=t.受理序号 "
-				+ "left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码	"
-				+ "left outer join AuSp120.tb_MrUser m on t.调度员编码=m.工号	"
-				+ "left outer join AuSp120.tb_DAcceptDescriptType dat on dat.Code=a.类型编码	"
-				+ "where e.事件性质编码=1  and m.人员类型=0 and a.类型编码 not in(3,10)  and a.开始受理时刻 between :startTime and :endTime ";
+		String sql = "SELECT et.id,dht.`name` acceptType,date_format(eh.handleBeginTime,'%Y-%c-%d %h:%i:%s')  startAcceptTime,"
+				+ "eh.incomingCall ringPhone,date_format(et.createTime,'%Y-%c-%d %h:%i:%s')  sendCarTime,eh.remark,"
+				+ "TIMESTAMPDIFF(SECOND,eh.handleBeginTime,et.createTime) sendCarTimes,u.personName dispatcher	"
+				+ "from `event` e LEFT JOIN event_history eh on e.eventCode=eh.eventCode	"
+				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
+				+ "LEFT JOIN `user` u on u.jobNum=eh.operatorJobNum	LEFT JOIN define_handle_type dht on dht.code=eh.handleType	"
+				+ "WHERE e.eventProperty=1 and eh.createTime between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
-			sql = sql + " and t.调度员编码=:dispatcher ";
+			sql = sql + " and eh.operatorJobNum=:dispatcher ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getOvertimes())) {
-			sql = sql + " and DATEDIFF(SECOND,a.开始受理时刻,a.派车时刻)>=:overtimes ";
+			sql = sql + " and TIMESTAMPDIFF(SECOND,eh.handleBeginTime,et.createTime) >= :overtimes ";
 		}
-		sql += " order by m.姓名,a.开始受理时刻 ";
+		sql += " order by u.personName,eh.createTime ";
+		logger.info("sql:"+sql);
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("startTime", parameter.getStartTime());

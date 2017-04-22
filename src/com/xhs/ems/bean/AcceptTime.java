@@ -66,6 +66,10 @@ public class AcceptTime {
 	public void setLeaveTime(String leaveTime) {
 		this.leaveTime = leaveTime;
 	}
+	
+	public AcceptTime() {
+		
+	}
 	public AcceptTime(String dispatcher, String averageOffhookTime,
 			String averageOffSendCar, String averageAccept, String readyTime,
 			String leaveTime) {

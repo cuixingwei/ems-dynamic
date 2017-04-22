@@ -11,6 +11,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript">
 	var grid;
+	/*查询*/
+	var queryGrid = function() {
+		grid.datagrid({
+			url : 'getPhoneRecord',
+			queryParams : cxw.serializeObject($('#searchForm'))
+		});
+	}
 	/* 导出录音 */
 	var exportFun = function(recordPath, alarmTime, phone) {
 		var fileName = alarmTime + '__' + phone;
@@ -30,12 +37,12 @@
 			url : 'getUsers',
 			valueField : 'employeeId',
 			textField : 'name',
+			editable : false,
 			method : 'get'
 		});
 		grid = $('#grid')
 				.datagrid(
 						{
-							url : 'getPhoneRecord',
 							pagePosition : 'bottom',
 							pagination : true,
 							striped : true,
@@ -121,7 +128,7 @@
 
 	$(document).ready(function() {
 		init();
-		grid.datagrid('load', cxw.serializeObject($('#searchForm')))
+		queryGrid();
 	});
 </script>
 </head>
@@ -145,7 +152,7 @@
 									style="width: 150em;" /></td>
 								<td><a href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
-									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a></td>
+									onclick="queryGrid();">查询</a></td>
 							</tr>
 						</table>
 					</form>

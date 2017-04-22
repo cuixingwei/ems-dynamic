@@ -39,16 +39,16 @@ public class CarDAOImpl implements CarDAO {
 	 */
 	@Override
 	public List<Car> getData(String stationID) {
-		String sql = "select * from AuSp120.tb_Ambulance  where 有效标志=1";
+		String sql = "select * from vehicle where 1=1 ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		if (!CommonUtil.isNullOrEmpty(stationID)) {
-			sql = sql + " and 分站编码= :stationID";
+			sql = sql + " and stationCode= :stationID";
 			paramMap.put("stationID", stationID);
 		}
 		final List<Car> results = new ArrayList<Car>();
 		this.npJdbcTemplate.query(sql, paramMap, new RowCallbackHandler() {
 			public void processRow(ResultSet rs) throws SQLException {
-				Car car = new Car(rs.getString("车辆编码"), rs.getString("实际标识"));
+				Car car = new Car(rs.getString("vehicleCode"), rs.getString("actualSign"));
 				results.add(car);
 			}
 		});

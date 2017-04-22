@@ -35,75 +35,98 @@ public class AcceptEventTypeDAOImpl implements AcceptEventTypeDAO {
 
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select a.调度员编码,sum(case when t.任务编码 is not null then 1 else 0 end) numbersOfSendCar,"
-				+ "sum(case when t.结果编码=2 then 1 else 0 end) stopTask,'' ratioStopTask,	sum(case when t.结果编码=3 then 1 else 0 end) emptyCar,'' ratioEmptyCar,"
-				+ "sum(case when t.结果编码=4 then 1 else 0 end) nomalComplete,'' ratioComplete	into #temp1 "
-				+ "from  AuSp120.tb_AcceptDescriptV a	left outer join AuSp120.tb_TaskV t on a.事件编码=t.事件编码 and a.受理序号=t.受理序号 "
-				+ "left outer join AuSp120.tb_Event e on e.事件编码=a.事件编码	"
-				+ "where e.事件性质编码=1 and a.开始受理时刻 between :startTime and :endTime 	group by a.调度员编码 "
-				+ "select a.调度员编码,sum(case when a.类型编码=1 then 1 else 0 end) numbersOfNormalSendCar,"
-				+ "sum(case when a.类型编码=2 then 1 else 0 end) numbersOfNormalHangUp,	"
-				+ "sum(case when a.类型编码=3 then 1 else 0 end) numbersOfReinforceSendCar,"
-				+ "sum(case when a.类型编码=4 then 1 else 0 end) numbersOfReinforceHangUp,	"
-				+ "sum(case when a.类型编码=5 then 1 else 0 end) numbersOfStopTask,sum(case when a.类型编码=6 then 1 else 0 end) specialEvent,"
-				+ "sum(case when a.类型编码=7 then 1 else 0 end) noCar,sum(case when a.类型编码=8 then 1 else 0 end) transmitCenter,	"
-				+ "sum(case when a.类型编码=9 then 1 else 0 end) refuseSendCar,"
-				+ "sum(case when a.类型编码=10 then 1 else 0 end) wakeSendCar	into #temp2  "
-				+ "from  AuSp120.tb_AcceptDescriptV a	"
-				+ "left outer join AuSp120.tb_Event e on e.事件编码=a.事件编码	left outer join AuSp120.tb_MrUser m on m.工号=a.调度员编码 "
-				+ "where e.事件性质编码=1   and a.开始受理时刻 between :startTime and :endTime	group by a.调度员编码 "
-				+ "select tr.调度员编码,COUNT(*) numbersOfPhone into #temp3 from AuSp120.tb_TeleRecordV tr where tr.记录类型编码 in (1,2,3,5,8) and 结果编码=4 "
-				+ "and tr.产生时刻 between :startTime and :endTime group by tr.调度员编码 "
-				+ "select m.姓名 dispatcher,t1.emptyCar,t1.nomalComplete,t1.numbersOfSendCar,t1.ratioComplete,t1.ratioEmptyCar,"
-				+ "t1.ratioStopTask,t1.stopTask,t2.noCar,t2.numbersOfNormalHangUp,t2.numbersOfNormalSendCar,t2.numbersOfReinforceHangUp,"
-				+ "t2.numbersOfReinforceSendCar,t2.numbersOfStopTask,t2.refuseSendCar,t2.specialEvent,t2.transmitCenter,"
-				+ "t2.wakeSendCar,t3.numbersOfPhone from #temp2 t2 left outer join #temp1 t1 on t1.调度员编码=t2.调度员编码 "
-				+ "left outer join #temp3 t3 on t2.调度员编码=t3.调度员编码 "
-				+ "left outer join AuSp120.tb_MrUser m on m.工号=t2.调度员编码  "
-				+ "drop table #temp1,#temp2,#temp3";
+		String sql1 = "SELECT u.personName dispatcher,sum(if(eh.handleType=1,1,0)) numbersOfNormalSendCar,sum(if(eh.handleType=2,1,0)) numbersOfNormalHangUp,	"
+				+ "sum(if(eh.handleType=3,1,0)) numbersOfReinforceSendCar,sum(if(eh.handleType=4,1,0)) numbersOfReinforceHangUp,	"
+				+ "sum(if(eh.handleType=5,1,0)) numbersOfStopTask,sum(if(eh.handleType=6,1,0)) specialEvent,sum(if(eh.handleType=7,1,0)) noCar,	"
+				+ "sum(if(eh.handleType=8,1,0)) transmitCenter,sum(if(eh.handleType=9,1,0)) refuseSendCar	"
+				+ "from `event` e LEFT JOIN event_history eh on e.eventCode=eh.eventCode	LEFT JOIN `user` u on u.jobNum=eh.operatorJobNum	"
+				+ "WHERE e.eventProperty=1  and e.createTime  between :startTime and :endTime group by u.personName ";
+		String sql2 = "SELECT u.personName dispatcher,sum(if(et.taskResult=1,1,0)) stopTask,'' ratioStopTask,sum(if(et.taskResult=2,1,0)) emptyCar,'' ratioEmptyCar,	"
+				+ "sum(if(et.taskResult=3,1,0)) nomalComplete,'' ratioComplete,sum(if(et.taskResult=4,1,0)) refuseCar,"
+				+ " '' ratioRefuseCar,COUNT(DISTINCT et.taskCode) numbersOfSendCar	"
+				+ "from `event` e LEFT JOIN event_task et on et.eventCode=e.eventCode	"
+				+ "LEFT JOIN `user` u on u.jobNum=et.operatorJobNum	WHERE e.eventProperty=1  and e.createTime between :startTime and :endTime group by u.personName ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
-		logger.info(sql);
 
-		List<AcceptEventType> results = this.npJdbcTemplate.query(sql,
+		List<AcceptEventType> results1 = this.npJdbcTemplate.query(sql1,
 				paramMap, new RowMapper<AcceptEventType>() {
 					@Override
 					public AcceptEventType mapRow(ResultSet rs, int index)
 							throws SQLException {
 						AcceptEventType acceptEventType = new AcceptEventType();
 						acceptEventType.setDispatcher(rs.getString("dispatcher"));
-						acceptEventType.setEmptyCar(rs.getString("emptyCar"));
-						acceptEventType.setNoCar(rs.getString("noCar"));
-						acceptEventType.setNomalComplete(rs.getString("nomalComplete"));
 						acceptEventType.setNumbersOfNormalHangUp(rs.getString("numbersOfNormalHangUp"));
 						acceptEventType.setNumbersOfNormalSendCar(rs.getString("numbersOfNormalSendCar"));
-						acceptEventType.setNumbersOfPhone(rs.getString("numbersOfPhone"));
 						acceptEventType.setNumbersOfReinforceHangUp(rs.getString("numbersOfReinforceHangUp"));
 						acceptEventType.setNumbersOfReinforceSendCar(rs.getString("numbersOfReinforceSendCar"));
-						acceptEventType.setNumbersOfSendCar(rs.getString("numbersOfSendCar"));
 						acceptEventType.setNumbersOfStopTask(rs.getString("numbersOfStopTask"));
-						acceptEventType.setRatioComplete(rs.getString("ratioComplete"));
-						acceptEventType.setRatioEmptyCar(rs.getString("ratioEmptyCar"));
-						acceptEventType.setRatioStopTask(rs.getString("ratioStopTask"));
 						acceptEventType.setRefuseSendCar(rs.getString("refuseSendCar"));
 						acceptEventType.setSpecialEvent(rs.getString("specialEvent"));
-						acceptEventType.setStopTask(rs.getString("stopTask"));
 						acceptEventType.setTransmitCenter(rs.getString("transmitCenter"));
-						acceptEventType.setWakeSendCar(rs.getString("wakeSendCar"));
-
+						acceptEventType.setNoCar(rs.getString("noCar"));
 						return acceptEventType;
 					}
 				});
-		logger.info("一共有" + results.size() + "条数据");
-		AcceptEventType summary = new AcceptEventType("合计", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0");
-		for (AcceptEventType result : results) {
+		List<AcceptEventType> results2 = this.npJdbcTemplate.query(sql2,
+				paramMap, new RowMapper<AcceptEventType>() {
+					@Override
+					public AcceptEventType mapRow(ResultSet rs, int index)
+							throws SQLException {
+						AcceptEventType acceptEventType = new AcceptEventType();
+						acceptEventType.setDispatcher(rs.getString("dispatcher"));
+						acceptEventType.setNumbersOfSendCar(rs.getString("numbersOfSendCar"));
+						acceptEventType.setEmptyCar(rs.getString("emptyCar"));
+						acceptEventType.setNomalComplete(rs.getString("nomalComplete"));
+						acceptEventType.setRatioComplete(rs.getString("ratioComplete"));
+						acceptEventType.setRatioEmptyCar(rs.getString("ratioEmptyCar"));
+						acceptEventType.setRatioStopTask(rs.getString("ratioStopTask"));
+						acceptEventType.setStopTask(rs.getString("stopTask"));
+						acceptEventType.setRefuseCar(rs.getString("refuseCar"));
+						acceptEventType.setRatioRefuseCar(rs.getString("ratioRefuseCar"));
+						return acceptEventType;
+					}
+				});
+		for (AcceptEventType result : results1) {
+			for (AcceptEventType rs : results2) {
+				if(result.getDispatcher().equals(rs.getDispatcher())){
+					result.setEmptyCar(rs.getEmptyCar());
+					result.setRatioEmptyCar(rs.getRatioEmptyCar());
+					result.setNumbersOfSendCar(rs.getNumbersOfSendCar());
+					result.setStopTask(rs.getStopTask());
+					result.setRatioStopTask(rs.getRatioStopTask());
+					result.setNomalComplete(rs.getNomalComplete());
+					result.setRatioComplete(rs.getRatioComplete());
+					result.setRefuseCar(rs.getRefuseCar());
+					result.setRatioRefuseCar(rs.getRefuseSendCar());
+				}
+			}
+		}
+		AcceptEventType summary = new AcceptEventType();
+		summary.setDispatcher("合计");
+		summary.setEmptyCar("0");
+		summary.setNoCar("0");
+		summary.setNomalComplete("0");
+		summary.setNumbersOfNormalHangUp("0");
+		summary.setNumbersOfNormalSendCar("0");
+		summary.setNumbersOfReinforceHangUp("0");
+		summary.setNomalComplete("0");
+		summary.setNumbersOfReinforceSendCar("0");
+		summary.setNumbersOfSendCar("0");
+		summary.setNumbersOfStopTask("0");
+		summary.setRefuseSendCar("0");
+		summary.setSpecialEvent("0");
+		summary.setStopTask("0");
+		summary.setTransmitCenter("0");
+		summary.setRefuseCar("0");
+		for (AcceptEventType result : results1) {
 			summary.setEmptyCar(Integer.parseInt(result.getEmptyCar())+Integer.parseInt(summary.getEmptyCar())+"");
 			summary.setNoCar(Integer.parseInt(result.getNoCar())+Integer.parseInt(summary.getNoCar())+"");
 			summary.setNomalComplete(Integer.parseInt(result.getNomalComplete())+Integer.parseInt(summary.getNomalComplete())+"");
 			summary.setNumbersOfNormalHangUp(Integer.parseInt(result.getNumbersOfNormalHangUp())+Integer.parseInt(summary.getNumbersOfNormalHangUp())+"");
 			summary.setNumbersOfNormalSendCar(Integer.parseInt(result.getNumbersOfNormalSendCar())+Integer.parseInt(summary.getNumbersOfNormalSendCar())+"");
-			summary.setNumbersOfPhone(Integer.parseInt(result.getNumbersOfPhone())+Integer.parseInt(summary.getNumbersOfPhone())+"");
+//			summary.setNumbersOfPhone(Integer.parseInt(result.getNumbersOfPhone())+Integer.parseInt(summary.getNumbersOfPhone())+"");
 			summary.setNumbersOfReinforceHangUp(Integer.parseInt(result.getNumbersOfReinforceHangUp())+Integer.parseInt(summary.getNumbersOfReinforceHangUp())+"");
 			summary.setNumbersOfReinforceSendCar(Integer.parseInt(result.getNumbersOfReinforceSendCar())+Integer.parseInt(summary.getNumbersOfReinforceSendCar())+"");
 			summary.setNumbersOfSendCar(Integer.parseInt(result.getNumbersOfSendCar())+Integer.parseInt(summary.getNumbersOfSendCar())+"");
@@ -112,11 +135,12 @@ public class AcceptEventTypeDAOImpl implements AcceptEventTypeDAO {
 			summary.setSpecialEvent(Integer.parseInt(result.getSpecialEvent())+Integer.parseInt(summary.getSpecialEvent())+"");
 			summary.setStopTask(Integer.parseInt(result.getStopTask())+Integer.parseInt(summary.getStopTask())+"");
 			summary.setTransmitCenter(Integer.parseInt(result.getTransmitCenter())+Integer.parseInt(summary.getTransmitCenter())+"");
-			summary.setWakeSendCar(Integer.parseInt(result.getWakeSendCar())+Integer.parseInt(summary.getWakeSendCar())+"");
+//			summary.setWakeSendCar(Integer.parseInt(result.getWakeSendCar())+Integer.parseInt(summary.getWakeSendCar())+"");
+			summary.setRefuseCar(Integer.parseInt(result.getRefuseCar())+Integer.parseInt(summary.getRefuseCar())+"");
 		}
-		results.add(summary);
+		results1.add(summary);
 		
-		for (AcceptEventType result : results) {
+		for (AcceptEventType result : results1) {
 			result.setRatioStopTask(CommonUtil.calculateRate(
 					Integer.parseInt(result.getNumbersOfSendCar().toString()),
 					Integer.parseInt(result.getStopTask().toString())));
@@ -126,6 +150,9 @@ public class AcceptEventTypeDAOImpl implements AcceptEventTypeDAO {
 			result.setRatioEmptyCar(CommonUtil.calculateRate(
 					Integer.parseInt(result.getNumbersOfSendCar().toString()),
 					Integer.parseInt(result.getEmptyCar().toString())));
+			result.setRatioRefuseCar(CommonUtil.calculateRate(
+					Integer.parseInt(result.getNumbersOfSendCar().toString()),
+					Integer.parseInt(result.getRefuseCar().toString())));
 		}
 
 		Grid grid = new Grid();
@@ -134,13 +161,13 @@ public class AcceptEventTypeDAOImpl implements AcceptEventTypeDAO {
 			int rows = (int) parameter.getRows();
 
 			int fromIndex = (page - 1) * rows;
-			int toIndex = (results.size() <= page * rows && results.size() >= (page - 1)
-					* rows) ? results.size() : page * rows;
-			grid.setRows(results.subList(fromIndex, toIndex));
-			grid.setTotal(results.size());
+			int toIndex = (results1.size() <= page * rows && results1.size() >= (page - 1)
+					* rows) ? results1.size() : page * rows;
+			grid.setRows(results1.subList(fromIndex, toIndex));
+			grid.setTotal(results1.size());
 
 		} else {
-			grid.setRows(results);
+			grid.setRows(results1);
 		}
 		return grid;
 	}

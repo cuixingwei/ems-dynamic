@@ -11,6 +11,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript">
 	var grid;
+	/*查询*/
+	var queryGrid = function() {
+		grid.datagrid({
+			url : 'getCenterTaskDatas',
+			queryParams : cxw.serializeObject($('#searchForm'))
+		});
+	}
 	var exportData = function() {
 		var url = "exportCenterTaskDatas?startTime="
 				+ $('#startTime').datetimebox('getValue') + "&endTime="
@@ -31,18 +38,18 @@
 			url : 'getStations',
 			valueField : 'stationCode',
 			textField : 'stationName',
+			editable : false,
 			method : 'get'
 		});
 		grid = $('#grid').datagrid(
 				{
-					url : 'getCenterTaskDatas',
 					pagePosition : 'bottom',
 					pagination : true,
 					striped : true,
 					nowrap : false,
 					singleSelect : true,
 					rownumbers : true,
-					idField : 'ringTime',
+					idField : 'name',
 					emptyMsg : '无记录',
 					pageSize : 20,
 					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
@@ -54,13 +61,13 @@
 						align : 'center'
 					}, {
 						field : 'sickAddress',
-						title : '患者地址',
+						title : '现场地址',
 						rowspan : 2,
 						width : "8%",
 						align : 'center',
 					}, {
 						field : 'sickDescription',
-						title : '主诉',
+						title : '初步诊断',
 						rowspan : 2,
 						width : "8%",
 						align : 'center'
@@ -68,18 +75,18 @@
 						field : 'phone',
 						title : '呼救电话',
 						rowspan : 2,
-						width : "8%",
+						width : "6%",
 						align : 'center'
 					}, {
 						field : 'acceptTime',
 						title : '受理时间',
 						rowspan : 2,
-						width : "7%",
+						width : "8%",
 						align : 'center'
 					}, {
 						field : 'sendCarTime',
 						title : '派车时间',
-						width : "7%",
+						width : "8%",
 						rowspan : 2,
 						resizable : true,
 						align : 'center'
@@ -104,7 +111,7 @@
 					}, {
 						field : 'toAddress',
 						title : '送住地点',
-						width : "5%",
+						width : "6%",
 						rowspan : 2,
 						align : 'center'
 					}, {
@@ -129,7 +136,7 @@
 						title : '出车结果',
 						rowspan : 2,
 						align : 'center',
-						width : '3%'
+						width : '6%'
 					} ], [ {
 						field : 'doctor',
 						title : '医生',
@@ -143,7 +150,7 @@
 					}, {
 						field : 'driver',
 						title : '司机',
-						width : "4.9%",
+						width : "3%",
 						align : 'center'
 					} ] ],
 					toolbar : '#toolbar',
@@ -159,7 +166,7 @@
 
 	$(document).ready(function() {
 		init();
-		grid.datagrid('load', cxw.serializeObject($('#searchForm')))
+		queryGrid();
 	});
 </script>
 </head>
@@ -180,7 +187,7 @@
 									style="width: 150em;" /></td>
 								<td><a href="javascript:void(0);" class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
-									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a></td>
+									onclick="queryGrid();">查询</a></td>
 							</tr>
 						</table>
 					</form>

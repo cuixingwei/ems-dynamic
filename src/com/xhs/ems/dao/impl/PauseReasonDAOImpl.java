@@ -36,15 +36,16 @@ public class PauseReasonDAOImpl implements PauseReasonDAO {
 	 */
 	@Override
 	public List<PauseReason> getData() {
-		String sql = "select * from AuSp120.tb_DPauseReason";
+		String sql = "select * from define_pause_reason";
 		final List<PauseReason> results = new ArrayList<PauseReason>();
 		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
 			public void processRow(ResultSet rs) throws SQLException {
-				PauseReason pauseReason = new PauseReason(rs.getString("Code"),
-						rs.getString("NameM"));
+				PauseReason pauseReason = new PauseReason(rs.getString("code"),
+						rs.getString("name"));
 				results.add(pauseReason);
 			}
 		});
+		results.add(0, new PauseReason("", "--请选择--"));
 		return results;
 	}
 

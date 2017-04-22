@@ -50,6 +50,13 @@ ul li select {
 </style>
 <script type="text/javascript">
 	var grid;
+	/*查询*/
+	var queryGrid = function() {
+		grid.datagrid({
+			url : 'getPatientCaseDetailDatas',
+			queryParams : cxw.serializeObject($('#searchForm'))
+		});
+	}
 	var exportData = function() {
 		var url = "exportPatientCaseDetailDatas?startTime="
 				+ $('#startTime').datetimebox('getValue') + "&endTime="
@@ -190,7 +197,6 @@ ul li select {
 
 		grid = $('#grid').datagrid(
 				{
-					url : 'getPatientCaseDetailDatas',
 					pagePosition : 'top',
 					pagination : true,
 					striped : true,
@@ -286,7 +292,7 @@ ul li select {
 
 	$(document).ready(function() {
 		init();
-		grid.datagrid('load', cxw.serializeObject($('#searchForm')))
+		queryGrid();
 	});
 </script>
 </head>
@@ -307,7 +313,7 @@ ul li select {
 					<li><label></label> <a href="javascript:void(0);"
 						class="easyui-linkbutton"
 						data-options="iconCls:'ext-icon-zoom',plain:true"
-						onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a>
+						onclick="queryGrid();">查询</a>
 					</li>
 				</ul>
 				<ul>

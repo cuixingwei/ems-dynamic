@@ -11,6 +11,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript">
 	var grid;
+	/*查询*/
+	var queryGrid = function() {
+		grid.datagrid({
+			url : 'getStopTaskDatas',
+			queryParams : cxw.serializeObject($('#searchForm'))
+		});
+	}
 	var exportData = function() {
 		var url = "exportStopTaskDatas?startTime="
 				+ $('#startTime').datetimebox('getValue') + "&endTime="
@@ -35,6 +42,7 @@
 			url : 'getStations',
 			valueField : 'stationCode',
 			textField : 'stationName',
+			editable:false,
 			method : 'get',
 			onSelect : function(rec) {
 				var url = 'getCars?id=' + rec.stationCode;
@@ -44,12 +52,14 @@
 		$('#stopReason').combobox({
 			url : 'getStopReasons',
 			valueField : 'code',
+			editable:false,
 			textField : 'name',
 			method : 'get'
 		});
 		$('#carCode').combobox({
 			url : 'getCars',
 			valueField : 'carCode',
+			editable:false,
 			textField : 'carIdentification',
 			method : 'get'
 		});
@@ -57,11 +67,11 @@
 			url : 'getUsers',
 			valueField : 'employeeId',
 			textField : 'name',
+			editable:false,
 			method : 'get'
 		});
 		grid = $('#grid').datagrid(
 				{
-					url : 'getStopTaskDatas',
 					pagePosition : 'bottom',
 					pagination : true,
 					striped : true,
@@ -144,7 +154,7 @@
 
 	$(document).ready(function() {
 		init();
-		grid.datagrid('load', cxw.serializeObject($('#searchForm')))
+		queryGrid();
 	});
 </script>
 </head>
@@ -181,7 +191,7 @@
 								<td colspan="2">&nbsp;<a href="javascript:void(0);"
 									class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
-									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a></td>
+									onclick="queryGrid();">查询</a></td>
 							</tr>
 						</table>
 					</form>

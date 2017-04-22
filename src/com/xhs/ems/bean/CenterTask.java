@@ -198,27 +198,8 @@ public class CenterTask {
 		this.taskResult = taskResult;
 	}
 
-	public CenterTask(String name, String sickAddress, String sickDescription,
-			String phone, String acceptTime, String sendCarTime,
-			String drivingTime, String arrivalTime, String returnHospitalTime,
-			String toAddress, String carCode, String doctor, String nurse,
-			String driver, String dispatcher, String taskResult) {
-		this.name = name;
-		this.sickAddress = sickAddress;
-		this.sickDescription = sickDescription;
-		this.phone = phone;
-		this.acceptTime = acceptTime;
-		this.sendCarTime = sendCarTime;
-		this.drivingTime = drivingTime;
-		this.arrivalTime = arrivalTime;
-		this.returnHospitalTime = returnHospitalTime;
-		this.toAddress = toAddress;
-		this.carCode = carCode;
-		this.doctor = doctor;
-		this.nurse = nurse;
-		this.driver = driver;
-		this.dispatcher = dispatcher;
-		this.taskResult = taskResult;
+	public CenterTask() {
+		super();
 	}
 
 

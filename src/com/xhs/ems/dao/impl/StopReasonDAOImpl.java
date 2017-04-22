@@ -36,17 +36,18 @@ public class StopReasonDAOImpl implements StopReasonDAO {
 	 */
 	@Override
 	public List<StopReason> getData() {
-		String sql = "select * from AuSp120.tb_DStopReason";
+		String sql = "select * from define_stop_task_reason ";
 		final List<StopReason> results = new ArrayList<StopReason>();
 		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
 
 			@Override
 			public void processRow(ResultSet rs) throws SQLException {
-				StopReason stopReason = new StopReason(rs.getString("Code"), rs
-						.getString("NameM"));
+				StopReason stopReason = new StopReason(rs.getString("code"), rs
+						.getString("name"));
 				results.add(stopReason);
 			}
 		});
+		results.add(0, new StopReason("", "--请选择--"));
 		return results;
 	}
 }

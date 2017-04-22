@@ -43,19 +43,17 @@ public class HungEventReasonDAOImpl implements HungEventReasonDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select dhr.NameM reason,COUNT(a.开始受理时刻) times,'' rate	"
-				+ "from AuSp120.tb_AcceptDescriptV a	"
-				+ "left outer join AuSp120.tb_EventV e on a.事件编码=e.事件编码	"
-				+ "left outer join AuSp120.tb_DHangReason dhr on dhr.Code=a.挂起原因编码	"
-				+ "where e.事件性质编码=1 and a.开始受理时刻 between :startTime and :endTime	"
-				+ "and a.挂起原因编码 is not null	";
+		String sql = "SELECT dsr.`name` reason,COUNT(DISTINCT eh.eventCode) times,'' rate	from `event` e "
+				+ "LEFT JOIN event_history eh on e.eventCode=eh.eventCode	"
+				+ "LEFT JOIN define_suspend_reason dsr on dsr.`code`=eh.suspendReason	"
+				+ "WHERE e.eventProperty=1 and eh.suspendReason is not null and eh.createTime	";
 		if (!CommonUtil.isNullOrEmpty(parameter.getHungReason())) {
-			sql += " and a.挂起原因编码=:hungReason";
+			sql += " and eh.suspendReason =:hungReason";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
-			sql += " and e.调度员编码=:dispatcher";
+			sql += " and eh.operatorJobNum=:dispatcher";
 		}
-		sql += " group by dhr.NameM";
+		sql += " group by dsr.`name` ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());

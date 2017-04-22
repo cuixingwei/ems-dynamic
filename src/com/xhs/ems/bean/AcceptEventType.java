@@ -82,6 +82,14 @@ public class AcceptEventType {
 	 * 正常完成比率
 	 */
 	private String ratioComplete;
+	/**
+	 * 拒绝出车
+	 */
+	private String refuseCar;
+	/**
+	 * 拒绝出车比率
+	 */
+	private String ratioRefuseCar;
 	public String getDispatcher() {
 		return dispatcher;
 	}
@@ -196,56 +204,21 @@ public class AcceptEventType {
 	public void setRatioComplete(String ratioComplete) {
 		this.ratioComplete = ratioComplete;
 	}
-	public AcceptEventType() {
+	
+	public String getRefuseCar() {
+		return refuseCar;
 	}
-	/**
-	 * @param dispatcher
-	 * @param numbersOfPhone
-	 * @param numbersOfSendCar
-	 * @param numbersOfNormalSendCar
-	 * @param numbersOfNormalHangUp
-	 * @param numbersOfReinforceSendCar
-	 * @param numbersOfReinforceHangUp
-	 * @param numbersOfStopTask
-	 * @param specialEvent
-	 * @param noCar
-	 * @param transmitCenter
-	 * @param refuseSendCar
-	 * @param wakeSendCar
-	 * @param stopTask
-	 * @param ratioStopTask
-	 * @param emptyCar
-	 * @param ratioEmptyCar
-	 * @param nomalComplete
-	 * @param ratioComplete
-	 */
-	public AcceptEventType(String dispatcher, String numbersOfPhone,
-			String numbersOfSendCar, String numbersOfNormalSendCar,
-			String numbersOfNormalHangUp, String numbersOfReinforceSendCar,
-			String numbersOfReinforceHangUp, String numbersOfStopTask,
-			String specialEvent, String noCar, String transmitCenter,
-			String refuseSendCar, String wakeSendCar, String stopTask,
-			String ratioStopTask, String emptyCar, String ratioEmptyCar,
-			String nomalComplete, String ratioComplete) {
-		this.dispatcher = dispatcher;
-		this.numbersOfPhone = numbersOfPhone;
-		this.numbersOfSendCar = numbersOfSendCar;
-		this.numbersOfNormalSendCar = numbersOfNormalSendCar;
-		this.numbersOfNormalHangUp = numbersOfNormalHangUp;
-		this.numbersOfReinforceSendCar = numbersOfReinforceSendCar;
-		this.numbersOfReinforceHangUp = numbersOfReinforceHangUp;
-		this.numbersOfStopTask = numbersOfStopTask;
-		this.specialEvent = specialEvent;
-		this.noCar = noCar;
-		this.transmitCenter = transmitCenter;
-		this.refuseSendCar = refuseSendCar;
-		this.wakeSendCar = wakeSendCar;
-		this.stopTask = stopTask;
-		this.ratioStopTask = ratioStopTask;
-		this.emptyCar = emptyCar;
-		this.ratioEmptyCar = ratioEmptyCar;
-		this.nomalComplete = nomalComplete;
-		this.ratioComplete = ratioComplete;
+	public void setRefuseCar(String refuseCar) {
+		this.refuseCar = refuseCar;
+	}
+	public String getRatioRefuseCar() {
+		return ratioRefuseCar;
+	}
+	public void setRatioRefuseCar(String ratioRefuseCar) {
+		this.ratioRefuseCar = ratioRefuseCar;
+	}
+	
+	public AcceptEventType() {
 	}
 	
 	

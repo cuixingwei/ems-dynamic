@@ -44,24 +44,23 @@ public class EmptyCarDAOImpl implements EmptyCarDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select convert(varchar(20),a.开始受理时刻,120) acceptTime,a.现场地址 sickAddress,"
-				+ "m.姓名 dispatcher,	isnull(DATEDIFF(Second,t.出车时刻,t.途中待命时刻),0) emptyRunTimes,der.NameM emptyReason	"
-				+ "from AuSp120.tb_AcceptDescriptV a	"
-				+ "left outer join AuSp120.tb_TaskV t on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
-				+ "left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码	"
-				+ "left outer join AuSp120.tb_MrUser m on t.调度员编码=m.工号	"
-				+ "left outer join AuSp120.tb_DEmptyReason der on der.Code=t.放空车原因编码  	"
-				+ "where e.事件性质编码=1 and t.结果编码=3 and t.放空车原因编码 is not null and a.开始受理时刻 between :startTime and :endTime ";
+		String sql = "SELECT der.`name` emptyReason,date_format(e.callTime,'%Y-%c-%d %h:%i:%s') acceptTime,e.eventAddress sickAddress,	"
+				+ "u.personName dispatcher,TIMESTAMPDIFF(SECOND,et.taskEmptyTime,et.taskAwaitTime) emptyRunTime	"
+				+ "from `event` e LEFT JOIN event_history eh on eh.eventCode=e.eventCode	"
+				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
+				+ "LEFT JOIN define_empty_reason der on der.`code`=et.emptyVehicleReason	"
+				+ "LEFT JOIN `user` u on u.jobNum=eh.operatorJobNum	"
+				+ "where e.eventProperty=1 and et.taskResult=2 and et.createTime between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
-			sql += " and t.调度员编码=:dispatcher ";
+			sql += " and et.stationCode=:dispatcher ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getEmptyReason())) {
-			sql += " and t.放空车原因编码=:emptyCarReason ";
+			sql += " and et.emptyVehicleReason=:emptyCarReason ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
-			sql += " and t.分站编码=:station ";
+			sql += " and et.stationCode=:station ";
 		}
-		sql += " order by a.开始受理时刻 ";
+		sql += " order by et.createTime ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("startTime", parameter.getStartTime());

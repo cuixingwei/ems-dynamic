@@ -43,14 +43,13 @@ public class StopTaskReasonDAOImpl implements StopTaskReasonDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select dsr.NameM reason,COUNT(t.任务编码) times,'' rate "
-				+ "	from AuSp120.tb_TaskV t left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码	"
-				+ "left outer join AuSp120.tb_DStopReason dsr on dsr.Code=t.中止任务原因编码  "
-				+ " where e.事件性质编码=1 and t.结果编码=2 and t.生成任务时刻  between :startTime and :endTime ";
+		String sql = "SELECT dstr.`name` reason,COUNT(DISTINCT et.taskCode) times,'' rate from event_task et LEFT JOIN `event` e on e.eventCode=et.eventCode	"
+				+ "LEFT JOIN define_stop_task_reason dstr on dstr.`code`=et.stopTaskReason	"
+				+ "where e.eventProperty=1 and et.taskResult=1 and et.createTime  between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
-			sql = sql + "and t.分站编码=:station ";
+			sql = sql + "and et.stationCode=:station ";
 		}
-		sql = sql + " group by dsr.NameM";
+		sql = sql + " group by dstr.`name` ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());

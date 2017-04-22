@@ -12,6 +12,7 @@ public class CarStateChange {
 	private String recordClass;  //记录类型
 	private String seatCode;  //坐席号
 	private String dispatcher;  //操作人
+	private String reason; //原因
 	public String getEventName() {
 		return eventName;
 	}
@@ -54,16 +55,16 @@ public class CarStateChange {
 	public void setDispatcher(String dispatcher) {
 		this.dispatcher = dispatcher;
 	}
-	public CarStateChange(String eventName, String carCode, String carState,
-			String recordTime, String recordClass, String seatCode,
-			String dispatcher) {
-		this.eventName = eventName;
-		this.carCode = carCode;
-		this.carState = carState;
-		this.recordTime = recordTime;
-		this.recordClass = recordClass;
-		this.seatCode = seatCode;
-		this.dispatcher = dispatcher;
+	
+	public String getReason() {
+		return reason;
+	}
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+	
+	public CarStateChange() {
+		
 	}
 	
 }

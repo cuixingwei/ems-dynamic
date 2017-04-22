@@ -11,6 +11,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript">
 	var grid;
+	/*查询*/
+	var queryGrid = function() {
+		grid.datagrid({
+			url : 'getEmptyCarData',
+			queryParams : cxw.serializeObject($('#searchForm'))
+		});
+	}
 	var exportData = function() {
 		var url = "exportEmptyCarData?startTime="
 				+ $('#startTime').datetimebox('getValue') + "&endTime="
@@ -33,12 +40,14 @@
 			url : 'getUsers',
 			valueField : 'employeeId',
 			textField : 'name',
+			editable : false,
 			method : 'get'
 		});
 		$('#station').combobox({
 			url : 'getStations',
 			valueField : 'stationCode',
 			textField : 'stationName',
+			editable : false,
 			method : 'get',
 			onSelect : function(rec) {
 				var url = 'getCars?id=' + rec.stationCode;
@@ -48,12 +57,12 @@
 		$('#emptyReason').combobox({
 			url : 'getEmptyReasons',
 			valueField : 'code',
+			editable : false,
 			textField : 'name',
 			method : 'get'
 		});
 		grid = $('#grid').datagrid(
 				{
-					url : 'getEmptyCarData',
 					pagePosition : 'bottom',
 					pagination : true,
 					striped : true,
@@ -71,7 +80,7 @@
 						align : 'center'
 					}, {
 						field : 'sickAddress',
-						title : '患者地址',
+						title : '现场地址',
 						resizable : true,
 						width : "20%",
 						align : 'center',
@@ -89,7 +98,7 @@
 						align : 'center',
 					}, {
 						field : 'emptyReason',
-						title : '空炮原因',
+						title : '空跑原因',
 						resizable : true,
 						width : "19%",
 						align : 'center'
@@ -107,7 +116,7 @@
 
 	$(document).ready(function() {
 		init();
-		grid.datagrid('load', cxw.serializeObject($('#searchForm')))
+		queryGrid();
 	});
 </script>
 </head>
@@ -137,7 +146,7 @@
 								<td colspan="2">&nbsp;<a href="javascript:void(0);"
 									class="easyui-linkbutton"
 									data-options="iconCls:'ext-icon-zoom',plain:true"
-									onclick="grid.datagrid('load',cxw.serializeObject($('#searchForm')));">查询</a></td>
+									onclick="queryGrid();">查询</a></td>
 							</tr>
 						</table>
 					</form>

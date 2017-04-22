@@ -36,15 +36,16 @@ public class StationDAOImpl implements StationDAO {
 	 */
 	@Override
 	public List<Station> getData() {
-		String sql = "select * from AuSp120.tb_Station order by 显示顺序 asc";
+		String sql = "SELECT * from station  where deleteState=0  order by stationCode asc";
 		final List<Station> results = new ArrayList<Station>();
 		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
 			public void processRow(ResultSet rs) throws SQLException {
-				Station station = new Station(rs.getString("分站编码"), rs
-						.getString("分站名称"), rs.getString("显示顺序"));
+				Station station = new Station(rs.getString("stationCode"), rs
+						.getString("stationName"));
 				results.add(station);
 			}
 		});
+		results.add(0, new Station("", "--请选择--"));
 		return results;
 	}
 

@@ -13,10 +13,6 @@ public class Station {
 	 * 分站名称
 	 */
 	private String stationName;
-	/**
-	 * 显示顺序
-	 */
-	private String order;
 	public String getStationCode() {
 		return stationCode;
 	}
@@ -29,16 +25,9 @@ public class Station {
 	public void setStationName(String stationName) {
 		this.stationName = stationName;
 	}
-	public String getOrder() {
-		return order;
-	}
-	public void setOrder(String order) {
-		this.order = order;
-	}
-	public Station(String stationCode, String stationName, String order) {
+	public Station(String stationCode, String stationName) {
 		this.stationCode = stationCode;
 		this.stationName = stationName;
-		this.order = order;
 	}
 	
 }

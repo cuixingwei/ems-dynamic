@@ -36,17 +36,18 @@ public class EmptyReasonDAOImpl implements EmptyReasonDAO {
 	 */
 	@Override
 	public List<EmptyReason> getData() {
-		String sql = "select * from AuSp120.tb_DEmptyReason";
+		String sql = "select * from define_empty_reason";
 		final List<EmptyReason> results = new ArrayList<EmptyReason>();
 		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
 
 			@Override
 			public void processRow(ResultSet rs) throws SQLException {
 				EmptyReason emptyCarReason = new EmptyReason(rs
-						.getString("Code"), rs.getString("NameM"));
+						.getString("code"), rs.getString("name"));
 				results.add(emptyCarReason);
 			}
 		});
+		results.add(0, new EmptyReason("", "--请选择--"));
 		return results;
 
 	}

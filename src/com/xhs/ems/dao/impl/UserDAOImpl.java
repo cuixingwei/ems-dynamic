@@ -70,6 +70,7 @@ public class UserDAOImpl implements UserDAO {
 				results.add(user);
 			}
 		});
+		results.add(0, new User("", "--请选择--"));
 		return results;
 	}
 

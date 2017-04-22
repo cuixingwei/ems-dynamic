@@ -44,7 +44,7 @@ public class HungEventController {
 		response.setContentType("application/msexcel;charset=UTF-8");
 
 		String title = "挂起事件流水统计";
-		String[] headers = new String[] { "事件名称", "受理类型", "操作人", "挂起时刻",
+		String[] headers = new String[] { "现场地址", "受理类型", "操作人", "挂起时刻",
 				"挂起原因", "结束时刻", "时长" };
 		String[] fields = new String[] { "eventName", "acceptType",
 				"dispatcher", "hungTime", "hungReason", "endTime", "hungtimes" };
