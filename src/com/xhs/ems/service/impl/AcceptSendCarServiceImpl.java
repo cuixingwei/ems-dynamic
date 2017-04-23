@@ -5,8 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.xhs.ems.bean.AcceptSendCarDetail;
 import com.xhs.ems.bean.Grid;
+import com.xhs.ems.bean.HistoryEvent;
 import com.xhs.ems.bean.Parameter;
 import com.xhs.ems.dao.AcceptSendCarDAO;
 import com.xhs.ems.service.AcceptSendCarService;
@@ -31,7 +31,7 @@ public class AcceptSendCarServiceImpl implements AcceptSendCarService {
 	}
 
 	@Override
-	public AcceptSendCarDetail getDetail(String id, HttpServletRequest request) {
+	public HistoryEvent getDetail(String id, HttpServletRequest request) {
 		return acceptSendCarDAO.getDetail(id, request);
 	}
 

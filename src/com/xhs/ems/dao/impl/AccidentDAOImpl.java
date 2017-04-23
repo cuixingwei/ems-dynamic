@@ -25,10 +25,12 @@ public class AccidentDAOImpl implements AccidentDAO {
 			.getLogger(AccidentDAOImpl.class);
 
 	private NamedParameterJdbcTemplate npJdbcTemplate;
+	private NamedParameterJdbcTemplate npJdbcTemplateSQLServer;
 
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+	public void setDataSource(DataSource dataSourceMysql,DataSource dataSourceSQLServer) {
+		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSourceMysql);
+		this.npJdbcTemplateSQLServer = new NamedParameterJdbcTemplate(dataSourceSQLServer);
 	}
 
 	@Override
@@ -45,7 +47,7 @@ public class AccidentDAOImpl implements AccidentDAO {
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
 
-		List<Accident> results = this.npJdbcTemplate.query(sql, paramMap,
+		List<Accident> results = this.npJdbcTemplateSQLServer.query(sql, paramMap,
 				new RowMapper<Accident>() {
 					@Override
 					public Accident mapRow(ResultSet rs, int index)

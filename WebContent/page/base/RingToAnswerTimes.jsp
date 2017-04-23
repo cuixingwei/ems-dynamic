@@ -66,8 +66,7 @@
 						field : 'ringTime',
 						title : '电话振铃时刻',
 						width : "15%",
-						align : 'center',
-						sortable : true
+						align : 'center'
 					}, {
 						field : 'callTime',
 						title : '通话时刻',

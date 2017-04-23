@@ -30,10 +30,12 @@ public class SendSpotTypeDAOImpl implements SendSpotTypeDAO {
 			.getLogger(SendSpotTypeDAOImpl.class);
 
 	private NamedParameterJdbcTemplate npJdbcTemplate;
+	private NamedParameterJdbcTemplate npJdbcTemplateSQLServer;
 
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+	public void setDataSource(DataSource dataSourceMysql,DataSource dataSourceSQLServer) {
+		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSourceMysql);
+		this.npJdbcTemplateSQLServer = new NamedParameterJdbcTemplate(dataSourceSQLServer);
 	}
 
 	/**
@@ -96,11 +98,11 @@ public class SendSpotTypeDAOImpl implements SendSpotTypeDAO {
 
 	@Override
 	public Grid getSendSpotDatas(Parameter parameter) {
-		String sql = "select a.送往地点 name,sum(case when t.救治人数<>'' and t.救治人数 is not null then t.救治人数 else 0 end)  times,'' rate	"
-				+ "from AuSp120.tb_EventV e	left outer join AuSp120.tb_AcceptDescriptV a on e.事件编码=a.事件编码	"
-				+ "left outer join AuSp120.tb_TaskV t on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
-				+ "where e.事件性质编码=1 and a.类型编码 not in (2,4) and t.结果编码=4	"
-				+ "and a.开始受理时刻 between :startTime and :endTime	group by a.送往地点";
+		String sql = "SELECT eh.sendTarget name,sum(if(ISNULL(eh.patientNum),0,eh.patientNum)) times,'' rate	"
+				+ "from `event` e LEFT JOIN event_history eh on e.eventCode=eh.eventCode	"
+				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
+				+ "WHERE e.eventProperty=1 and e.suspendReason is not null and eh.handleType not in (2,4) and et.taskResult=3 "
+				+ "and e.createTime between :startTime and :endTime	group by eh.sendTarget";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());

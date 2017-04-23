@@ -10,7 +10,7 @@ public class HistoryEvent {
 	 * 事件表,受理
 	 */
 	private String acceptOrder;//受理序号
-	private String taskOrder; //任务序号
+	private String taskOrder; //任务序号--
 	private String eventResult; //事件结果
 	private String eventCode; //事件编码
 	private String eventName; // 事件名称
@@ -20,8 +20,8 @@ public class HistoryEvent {
 	private String eventType; // 事件类型
 	private String eventNature; // 事件性质
 	private String callPhone; // 主叫号码
-	private String callAddress; // 呼救地点
-	private String patientNeed; // 病人需求
+	private String callAddress; // 呼救地点/现场地点----
+	private String patientNeed; // 病人需求---
 	private String preJudgment; // 初步判断
 	private String sickCondition; // 病情
 	private String specialNeeds; // 特殊需求
@@ -32,11 +32,13 @@ public class HistoryEvent {
 	private String identity; // 身份
 	private String contactMan; // 联系人
 	private String contactPhone; // 联系电话
-	private String extension; // 分机
+	private String extension; // 分机---
 	private String thisDispatcher; // 本次调度员
 	private String remark; // 备注
 	private String isOrNoLitter; // 是否担架
-	private String acceptNumber; // 受理序号
+	private String sendTarget;//送往地点
+	private String roadState;//路况
+	private String weatherState;//天气状态
 
 	/**
 	 * 受理表
@@ -48,6 +50,8 @@ public class HistoryEvent {
 	private String cancelReason; // 撤销原因
 	private String sendCarTime; // 派车时刻
 	private String sendStation; // 出车医院
+	private String suspendReason;//挂起原因
+
 	/**
 	 * 任务表
 	 */
@@ -57,19 +61,80 @@ public class HistoryEvent {
 	private String taskResult; // 出车结果
 	private String reason; // 原因
 	private String outCarTime; // 出车时刻
-	private String taskRemark; // 任务备注
+	private String taskRemark; // 任务备注---
 	private String arriveSpotTime; // 到达现场时刻
-	private String takeHumanNumbers; // 接回人数
-	private String toHospitalNumbers; // 入院人数
+	private String takeHumanNumbers; // 接回人数------
+	private String toHospitalNumbers; // 入院人数-------
 	private String leaveSpotTime; // 离开现场时刻
-	private String deathNumbers; // 死亡人数
-	private String stayHospitalNumbers; // 留院人数
-	private String backHospitalNumbers; // 返院（转院）人数
+	private String deathNumbers; // 死亡人数---
+	private String stayHospitalNumbers; // 留院人数------
+	private String backHospitalNumbers; // 返院（转院）人数----------
 	private String completeTime; // 完成时刻
-	private String stationDispatcher; // 分站调度员
-	private String outCarNumbers; // 出车次数
-
+	private String stationDispatcher; // 分站调度员---
+	private String outCarNumbers; // 出车次数---
+	private String emptyVehicleReason;//空车原因
+	private String stopTaskReason;//中止任务原因
+	private String taskAwaitTime;//站内待命时间
+	
 	private String record; // 录音文件名
+
+	
+	
+	public String getRoadState() {
+		return roadState;
+	}
+
+	public void setRoadState(String roadState) {
+		this.roadState = roadState;
+	}
+
+	public String getWeatherState() {
+		return weatherState;
+	}
+
+	public void setWeatherState(String weatherState) {
+		this.weatherState = weatherState;
+	}
+
+	public String getTaskAwaitTime() {
+		return taskAwaitTime;
+	}
+
+	public void setTaskAwaitTime(String taskAwaitTime) {
+		this.taskAwaitTime = taskAwaitTime;
+	}
+
+	public String getEmptyVehicleReason() {
+		return emptyVehicleReason;
+	}
+
+	public void setEmptyVehicleReason(String emptyVehicleReason) {
+		this.emptyVehicleReason = emptyVehicleReason;
+	}
+
+	public String getStopTaskReason() {
+		return stopTaskReason;
+	}
+
+	public void setStopTaskReason(String stopTaskReason) {
+		this.stopTaskReason = stopTaskReason;
+	}
+
+	public String getSendTarget() {
+		return sendTarget;
+	}
+
+	public void setSendTarget(String sendTarget) {
+		this.sendTarget = sendTarget;
+	}
+
+	public String getSuspendReason() {
+		return suspendReason;
+	}
+
+	public void setSuspendReason(String suspendReason) {
+		this.suspendReason = suspendReason;
+	}
 
 	public String getEventResult() {
 		return eventResult;
@@ -255,13 +320,6 @@ public class HistoryEvent {
 		this.isOrNoLitter = isOrNoLitter;
 	}
 
-	public String getAcceptNumber() {
-		return acceptNumber;
-	}
-
-	public void setAcceptNumber(String acceptNumber) {
-		this.acceptNumber = acceptNumber;
-	}
 
 	public String getAcceptStartTime() {
 		return acceptStartTime;

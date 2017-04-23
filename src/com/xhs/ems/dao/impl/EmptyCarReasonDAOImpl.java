@@ -33,8 +33,8 @@ public class EmptyCarReasonDAOImpl implements EmptyCarReasonDAO {
 	private NamedParameterJdbcTemplate npJdbcTemplate;
 
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+	public void setDataSource(DataSource dataSourceMysql) {
+		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSourceMysql);
 	}
 
 	/**

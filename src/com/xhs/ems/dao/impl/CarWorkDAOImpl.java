@@ -30,10 +30,12 @@ public class CarWorkDAOImpl implements CarWorkDAO {
 	private static final Logger logger = Logger.getLogger(CarWorkDAOImpl.class);
 
 	private NamedParameterJdbcTemplate npJdbcTemplate;
+	private NamedParameterJdbcTemplate npJdbcTemplateSQLServer;
 
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+	public void setDataSource(DataSource dataSourceMysql,DataSource dataSourceSQLServer) {
+		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSourceMysql);
+		this.npJdbcTemplateSQLServer = new NamedParameterJdbcTemplate(dataSourceSQLServer);
 	}
 
 	/**
@@ -43,34 +45,21 @@ public class CarWorkDAOImpl implements CarWorkDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select 分站编码 station,实际标识 carCode,count( p.车辆编码) as pauseNumbers into #temp1 	"
-				+ "from AuSp120.tb_RecordPauseReason p left join AuSp120.tb_Ambulance a on p.车辆编码=a.车辆编码 	"
-				+ "where p.操作时刻 between :startTime and :endTime group by (分站编码),(实际标识) "
-				+ "select t.分站编码 station,am.实际标识 carCode,t.出车时刻 ,t.到达现场时刻,t.生成任务时刻,结果编码 into #temp2	"
-				+ "from AuSp120.tb_TaskV t left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码	"
-				+ "left outer join AuSp120.tb_Ambulance am on am.车辆编码=t.车辆编码 	"
-				+ "where e.事件性质编码=1 and t.生成任务时刻 between :startTime and :endTime ";
+		String sql = "SELECT s.stationName station,et.actualSign carCode,COUNT(DISTINCT et.taskCode) outCarNumbers,	"
+				+ "avg(TIMESTAMPDIFF(SECOND,et.createTime,et.taskDriveToTime)) averageOutCarTimes,"
+				+ "sum(if(et.taskArriveTime is not null,1,0)) arriveSpotNumbers,	"
+				+ "avg(TIMESTAMPDIFF(SECOND,et.createTime,et.taskArriveTime)) averageArriveSpotTimes	"
+				+ "from `event` e LEFT JOIN event_history eh on e.eventCode=eh.eventCode	"
+				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
+				+ "LEFT JOIN station s on s.stationCode=et.stationCode	"
+				+ "WHERE e.eventProperty=1 and et.taskCode is not null and s.stationName is not null and e.createTime between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
-			sql = sql + " and t.分站编码=:station ";
+			sql = sql + " and et.stationCode=:station ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getCarCode())) {
-			sql = sql + " and t.车辆编码=:carCode ";
+			sql = sql + " and et.vehicleCode=:carCode ";
 		}
-		sql += "select station,carCode,AVG(DATEDIFF(Second,生成任务时刻,出车时刻)) averageOutCarTimes into #temp3 	from #temp2 "
-				+ "where 生成任务时刻<出车时刻 group by station,carCode	"
-				+ "select station,carCode,AVG(DATEDIFF(Second,出车时刻,到达现场时刻)) averageArriveSpotTimes into #temp4	"
-				+ "from #temp2 where 出车时刻<到达现场时刻 and 出车时刻 is not null group by station,carCode "
-				+ "select t.station,t.carCode,sum(case when t.出车时刻 is not null then 1 else 0 end) outCarNumbers,"
-				+ "sum(case when t.到达现场时刻 is not null then 1 else 0 end) arriveSpotNumbers into #temp5	"
-				+ "from #temp2 t group by t.station,t.carCode "
-				+ "select s.分站名称 station,t5.carCode,outCarNumbers,averageOutCarTimes,arriveSpotNumbers,"
-				+ "averageArriveSpotTimes,isnull(pauseNumbers,0) pauseNumbers 	from AuSp120.tb_Station s "
-				+ "left outer join #temp5 t5 on t5.station=s.分站编码	"
-				+ "left outer join #temp1 t1  on t1.station=t5.station and t1.carCode=t5.carCode	"
-				+ "left outer join #temp3 t3  on t3.station=t5.station and t3.carCode=t5.carCode	"
-				+ "left outer join #temp4 t4  on t3.station=t4.station and t3.carCode=t4.carCode	"
-				+ "where t5.carCode is not null	order by s.显示顺序 "
-				+ " drop table #temp1,#temp2,#temp3,#temp4,#temp5";
+		sql += " GROUP BY s.stationName,et.actualSign";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
@@ -82,16 +71,16 @@ public class CarWorkDAOImpl implements CarWorkDAO {
 					@Override
 					public CarWork mapRow(ResultSet rs, int index)
 							throws SQLException {
-						return new CarWork(rs.getString("station"), rs
-								.getString("carCode"), rs
-								.getString("outCarNumbers"), rs
-								.getString("averageOutCarTimes"), rs
-								.getString("arriveSpotNumbers"), rs
-								.getString("averageArriveSpotTimes"), rs
-								.getString("pauseNumbers"));
+						CarWork carWork = new CarWork();
+						carWork.setArriveSpotNumbers(rs.getString("arriveSpotNumbers"));
+						carWork.setAverageArriveSpotTimes(rs.getString("averageArriveSpotTimes"));
+						carWork.setAverageOutCarTimes(rs.getString("averageOutCarTimes"));
+						carWork.setCarCode(rs.getString("carCode"));
+						carWork.setStation(rs.getString("station"));
+						carWork.setOutCarNumbers(rs.getString("outCarNumbers"));
+						return carWork;
 					}
 				});
-		logger.info("一共有" + results.size() + "条数据");
 		logger.info(sql);
 		for (CarWork result : results) {
 			result.setAverageArriveSpotTimes(CommonUtil.formatSecond(result

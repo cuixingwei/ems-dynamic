@@ -44,10 +44,10 @@ public class DoctorNurseWorkController {
 		response.setContentType("application/msexcel;charset=UTF-8");
 		String title1 = "医生工作情况统计";
 		String title2 = "护士工作情况统计";
-		String[] headers = new String[] { "分站", "姓名", "出车数", "有效出车数", "中止数",
+		String[] headers = new String[] { "分站", "姓名", "出车数", "有效出车数", "中止数(中止、空车)","拒绝出车数",
 				"救治人数", "平均救治时间" };
 		String[] fields = new String[] { "station", "name", "outCarNumbers",
-				"validOutCarNumbers", "stopNumbers", "curePeopleNumbers",
+				"validOutCarNumbers", "stopNumbers", "refuseNumbers","curePeopleNumbers",
 				"averateCureTimes" };
 		int spanCount = 1; // 需要合并的列数。从第1列开始到指定列。
 		TableData td = ExcelUtils.createTableData(doctorNurseWorkService

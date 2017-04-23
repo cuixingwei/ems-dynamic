@@ -32,9 +32,9 @@ public class PatientCaseFillCountDAOImpl implements PatientCaseFillCountDAO {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	@Autowired
-	public void SetDataSourceTag(DataSource dataSource) {
+	public void SetDataSourceTag(DataSource dataSourceMysql) {
 		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(
-				dataSource);
+				dataSourceMysql);
 	}
 
 	/**

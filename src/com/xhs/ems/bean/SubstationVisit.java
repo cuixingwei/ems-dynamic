@@ -162,27 +162,15 @@ public class SubstationVisit {
 	public void setChoiseHosNumbers(String choiseHosNumbers) {
 		this.choiseHosNumbers = choiseHosNumbers;
 	}
+	
 
-	/**
-	 * @param station
-	 * @param sendNumbers
-	 * @param nomalNumbers
-	 * @param nomalRate
-	 * @param stopNumbers
-	 * @param stopRate
-	 * @param emptyNumbers
-	 * @param emptyRate
-	 * @param refuseNumbers
-	 * @param refuseRate
-	 * @param pauseNumbers
-	 * @param treatNumbers
-	 * @param choiseHosNumbers
-	 */
-	public SubstationVisit(String station, String sendNumbers,
-			String nomalNumbers, String nomalRate, String stopNumbers,
-			String stopRate, String emptyNumbers, String emptyRate,
-			String refuseNumbers, String refuseRate, String pauseNumbers,
-			String treatNumbers, String choiseHosNumbers) {
+	public SubstationVisit() {
+		
+	}
+
+	public SubstationVisit(String station, String sendNumbers, String nomalNumbers, String nomalRate,
+			String stopNumbers, String stopRate, String emptyNumbers, String emptyRate, String refuseNumbers,
+			String refuseRate, String pauseNumbers, String treatNumbers, String choiseHosNumbers) {
 		this.station = station;
 		this.sendNumbers = sendNumbers;
 		this.nomalNumbers = nomalNumbers;
@@ -196,10 +184,6 @@ public class SubstationVisit {
 		this.pauseNumbers = pauseNumbers;
 		this.treatNumbers = treatNumbers;
 		this.choiseHosNumbers = choiseHosNumbers;
-	}
-
-	public SubstationVisit() {
-		
 	}
 	
 

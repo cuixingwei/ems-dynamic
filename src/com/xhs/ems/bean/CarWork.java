@@ -90,6 +90,12 @@ public class CarWork {
 	public void setPauseNumbers(String pauseNumbers) {
 		this.pauseNumbers = pauseNumbers;
 	}
+	
+	
+
+	public CarWork() {
+		
+	}
 
 	public CarWork(String station, String carCode, String outCarNumbers,
 			String averageOutCarTimes, String arriveSpotNumbers,

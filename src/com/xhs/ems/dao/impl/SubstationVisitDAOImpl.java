@@ -32,8 +32,8 @@ public class SubstationVisitDAOImpl implements SubstationVisitDAO {
 	private NamedParameterJdbcTemplate npJdbcTemplate;
 
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+	public void setDataSource(DataSource dataSourceMysql) {
+		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSourceMysql);
 	}
 
 	/**
@@ -43,31 +43,13 @@ public class SubstationVisitDAOImpl implements SubstationVisitDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select s.分站编码,COUNT(*) as 择院次数 into #temp4 from AuSp120.tb_AcceptDescript a 	"
-				+ "left outer join AuSp120.tb_Station s on a.择院需求编码=s.ID	where a.择院需求编码 <> 0 "
-				+ "and a.开始受理时刻 between :startTime and :endTime	"
-				+ "group by s.分站编码 select 分站编码,count( p.车辆编码) as 暂停次数  into #temp1 "
-				+ "from AuSp120.tb_RecordPauseReason p left join AuSp120.tb_Ambulance a on p.车辆编码=a.车辆编码 "
-				+ " where p.操作时刻 between :startTime and :endTime group by (分站编码) "
-				+ "select 任务编码,分站编码,结果编码 into #temp2 from  AuSp120.tb_AcceptDescriptV a	"
-				+ " left outer join AuSp120.tb_TaskV t on a.事件编码=t.事件编码 and a.受理序号=t.受理序号  "
-				+ " left outer join AuSp120.tb_Event e on e.事件编码=a.事件编码	 "
-				+ " where e.事件性质编码=1  and a.开始受理时刻 between :startTime and :endTime  "
-				+ "select 分站编码,count(*) as 救治人数  into #temp3  "
-				+ "from AuSp120.tb_PatientCase  "
-				+ "where 任务编码 in (select 任务编码 from  #temp2)  group by 分站编码  "
-				+ "select s.分站名称 station,sum(case when t2.任务编码 is not null then 1 else 0 end) sendNumbers,	"
-				+ "sum(case when t2.结果编码=4 then 1 else 0 end) nomalNumbers,'' nomalRate,	"
-				+ "sum(case when t2.结果编码=2 then 1 else 0 end) stopNumbers, '' stopRate,	"
-				+ "sum(case when t2.结果编码=3 then 1 else 0 end) emptyNumbers, '' emptyRate,	"
-				+ "sum(case when t2.结果编码=5 then 1 else 0 end) refuseNumbers, '' refuseRate,	"
-				+ "isnull(t1.暂停次数,0) as pauseNumbers,	isnull(t3.救治人数,0) as treatNumbers,"
-				+ "isnull(t4.择院次数,0) as choiseHosNumbers  "
-				+ "from AuSp120.tb_Station s  left outer join #temp2 t2 on t2.分站编码=s.分站编码  "
-				+ "left outer join	#temp1 t1 on t1.分站编码=s.分站编码  left outer join	#temp3 t3 on t3.分站编码=s.分站编码 "
-				+ "left outer join #temp4 t4 on t4.分站编码=s.分站编码  "
-				+ "group by s.分站名称,t1.暂停次数,t3.救治人数,t4.择院次数,s.显示顺序  order by 显示顺序 "
-				+ " drop table #temp1, #temp2,#temp3,#temp4";
+		String sql = "SELECT s.stationName station,COUNT(DISTINCT et.taskCode) sendNumbers,sum(if(et.taskResult=1,1,0))stopNumbers,'' stopRate,	"
+				+ "sum(if(et.taskResult=2,1,0)) emptyNumbers,'' emptyRate,	sum(if(et.taskResult=3,1,0)) nomalNumbers,'' nomalRate,	"
+				+ "sum(if(et.taskResult=4,1,0)) refuseNumbers,'' refuseRate,sum(if(eh.patientNum is null or eh.patientNum='',0,1)) treatNumbers	"
+				+ "from `event` e LEFT JOIN event_history eh on e.eventCode=eh.eventCode	"
+				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
+				+ "LEFT JOIN station s on s.stationCode=et.stationCode	"
+				+ "WHERE e.eventProperty=1 and et.taskCode is not null and eh.createTime between :startTime and :endTime group by s.stationName ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
@@ -77,19 +59,19 @@ public class SubstationVisitDAOImpl implements SubstationVisitDAO {
 					@Override
 					public SubstationVisit mapRow(ResultSet rs, int index)
 							throws SQLException {
-						return new SubstationVisit(rs.getString("station"), rs
-								.getString("sendNumbers"), rs
-								.getString("nomalNumbers"), rs
-								.getString("nomalRate"), rs
-								.getString("stopNumbers"), rs
-								.getString("stopRate"), rs
-								.getString("emptyNumbers"), rs
-								.getString("emptyRate"), rs
-								.getString("refuseNumbers"), rs
-								.getString("refuseRate"), rs
-								.getString("pauseNumbers"), rs
-								.getString("treatNumbers"), rs
-								.getString("choiseHosNumbers"));
+						SubstationVisit substationVisit= new SubstationVisit();
+						substationVisit.setEmptyNumbers(rs.getString("emptyNumbers"));
+						substationVisit.setEmptyRate(rs.getString("emptyRate"));
+						substationVisit.setNomalNumbers(rs.getString("nomalNumbers"));
+						substationVisit.setNomalRate(rs.getString("nomalRate"));
+						substationVisit.setRefuseNumbers(rs.getString("refuseNumbers"));
+						substationVisit.setRefuseRate(rs.getString("refuseRate"));
+						substationVisit.setSendNumbers(rs.getString("sendNumbers"));
+						substationVisit.setStation(rs.getString("station"));
+						substationVisit.setStopNumbers(rs.getString("stopNumbers"));
+						substationVisit.setTreatNumbers(rs.getString("treatNumbers"));
+						substationVisit.setStopRate(rs.getString("stopRate"));
+						return substationVisit;
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");
@@ -112,10 +94,10 @@ public class SubstationVisitDAOImpl implements SubstationVisitDAO {
 			result.setNomalRate(CommonUtil.calculateRate(
 					Integer.parseInt(result.getSendNumbers()),
 					Integer.parseInt(result.getNomalNumbers())));
-			summary.setChoiseHosNumbers((Integer.parseInt(result.getChoiseHosNumbers())+Integer.parseInt(summary.getChoiseHosNumbers()))+"");
+//			summary.setChoiseHosNumbers((Integer.parseInt(result.getChoiseHosNumbers())+Integer.parseInt(summary.getChoiseHosNumbers()))+"");
 			summary.setEmptyNumbers((Integer.parseInt(result.getEmptyNumbers())+Integer.parseInt(summary.getEmptyNumbers()))+"");
 			summary.setNomalNumbers((Integer.parseInt(result.getNomalNumbers())+Integer.parseInt(summary.getNomalNumbers()))+"");
-			summary.setPauseNumbers((Integer.parseInt(result.getPauseNumbers())+Integer.parseInt(summary.getPauseNumbers()))+"");
+//			summary.setPauseNumbers((Integer.parseInt(result.getPauseNumbers())+Integer.parseInt(summary.getPauseNumbers()))+"");
 			summary.setRefuseNumbers((Integer.parseInt(result.getRefuseNumbers())+Integer.parseInt(summary.getRefuseNumbers()))+"");
 			summary.setSendNumbers((Integer.parseInt(result.getSendNumbers())+Integer.parseInt(summary.getSendNumbers()))+"");
 			summary.setStopNumbers((Integer.parseInt(result.getStopNumbers())+Integer.parseInt(summary.getStopNumbers()))+"");

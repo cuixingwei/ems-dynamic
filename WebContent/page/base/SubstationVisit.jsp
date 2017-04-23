@@ -49,80 +49,68 @@
 						field : 'station',
 						title : '分站名称',
 						resizable : true,
-						width : "8%",
+						width : "10%",
 						align : 'center',
 						nowrap : false
 					}, {
 						field : 'sendNumbers',
 						title : '120派诊',
 						resizable : true,
-						width : "7%",
+						width : "9%",
 						align : 'center',
 					}, {
 						field : 'nomalNumbers',
 						title : '正常完成',
 						resizable : true,
-						width : "7%",
+						width : "9%",
 						align : 'center'
 					}, {
 						field : 'nomalRate',
 						title : '正常完成比率',
 						resizable : true,
-						width : "9%",
+						width : "10%",
 						align : 'center'
 					}, {
 						field : 'stopNumbers',
 						title : '中止任务',
 						resizable : true,
-						width : "7%",
+						width : "9%",
 						align : 'center',
 					}, {
 						field : 'stopRate',
 						title : '中止任务比率',
 						resizable : true,
-						width : "8%",
+						width : "9%",
 						align : 'center'
 					}, {
 						field : 'emptyNumbers',
 						title : '空车',
 						resizable : true,
-						width : "7%",
+						width : "9%",
 						align : 'center'
 					}, {
 						field : 'emptyRate',
 						title : '空车比率',
 						resizable : true,
-						width : "7%",
+						width : "9%",
 						align : 'center',
 					}, {
 						field : 'refuseNumbers',
 						title : '拒绝出车',
 						resizable : true,
-						width : "7%",
+						width : "9%",
 						align : 'center'
 					}, {
 						field : 'refuseRate',
 						title : '拒绝出车比率',
 						resizable : true,
-						width : "8%",
+						width : "10%",
 						align : 'center'
-					}, {
-						field : 'pauseNumbers',
-						title : '暂停调用',
-						resizable : true,
-						width : "7%",
-						align : 'center',
 					}, {
 						field : 'treatNumbers',
 						title : '救治人数',
 						resizable : true,
-						width : "7%",
-						align : 'center'
-					}, {
-						field : 'choiseHosNumbers',
-						title : '择院次数',
-						resizable : true,
-						width : "7%",
+						width : "8%",
 						align : 'center'
 					} ] ],
 					toolbar : '#toolbar',

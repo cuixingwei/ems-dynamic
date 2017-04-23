@@ -105,7 +105,7 @@
 										title : '联动来源',
 										width : '10%',
 										align : 'center'
-									}/* ,
+									} ,
 									{
 										field : 'eventCode',
 										title : '详情',
@@ -120,7 +120,7 @@
 															row.eventCode)
 											return str;
 										}
-									} */ ] ],
+									}  ] ],
 							toolbar : '#toolbar',
 							onBeforeLoad : function(param) {
 								var varify = cxw.checkStartTimeBeforeEndTime(

@@ -2,8 +2,8 @@ package com.xhs.ems.service;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.xhs.ems.bean.AcceptSendCarDetail;
 import com.xhs.ems.bean.Grid;
+import com.xhs.ems.bean.HistoryEvent;
 import com.xhs.ems.bean.Parameter;
 
 /**
@@ -25,5 +25,5 @@ public interface AcceptSendCarService {
 	 * @param id request
 	 * @return 事件详情
 	 */
-	public AcceptSendCarDetail getDetail(String id, HttpServletRequest request);
+	public HistoryEvent getDetail(String id, HttpServletRequest request);
 }

@@ -112,22 +112,6 @@
 							border : false,
 							tools : [
 									{
-										iconCls : 'ext-icon-arrow_up',
-										handler : function() {
-											mainTabs.tabs({
-												tabPosition : 'top'
-											});
-										}
-									},
-									{
-										iconCls : 'ext-icon-arrow_down',
-										handler : function() {
-											mainTabs.tabs({
-												tabPosition : 'bottom'
-											});
-										}
-									},
-									{
 										text : '刷新',
 										iconCls : 'ext-icon-arrow_refresh',
 										handler : function() {

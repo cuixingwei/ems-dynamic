@@ -28,8 +28,8 @@ public class RingToAcceptDAOImpl implements RingToAcceptDAO {
 	private NamedParameterJdbcTemplate npJdbcTemplate;
 
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+	public void setDataSource(DataSource dataSourceSQLServer) {
+		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSourceSQLServer);
 	}
 
 	@Override

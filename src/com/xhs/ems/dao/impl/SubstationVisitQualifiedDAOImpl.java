@@ -30,28 +30,30 @@ public class SubstationVisitQualifiedDAOImpl implements
 	private static final Logger logger = Logger
 			.getLogger(SubstationVisitQualifiedDAOImpl.class);
 
-	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	private NamedParameterJdbcTemplate npJdbcTemplate;
+	private NamedParameterJdbcTemplate npJdbcTemplateSQLServer;
 
 	@Autowired
-	public void SetDataSourceTag(DataSource dataSource) {
-		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(
-				dataSource);
+	public void setDataSource(DataSource dataSourceMysql,DataSource dataSourceSQLServer) {
+		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSourceMysql);
+		this.npJdbcTemplateSQLServer = new NamedParameterJdbcTemplate(dataSourceSQLServer);
 	}
 
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select s.分站名称 station,COUNT(*) total,SUM(case when DATEDIFF(SECOND,a.派车时刻,t.出车时刻)<= 120 then 1 else 0 end) normal,	"
-				+ "SUM(case when DATEDIFF(SECOND,a.派车时刻,t.出车时刻) > 120 then 1 else 0 end) late,'' rate	"
-				+ "from AuSp120.tb_EventV e	left outer join AuSp120.tb_AcceptDescriptV a on e.事件编码=a.事件编码	"
-				+ "left outer join AuSp120.tb_TaskV t on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
-				+ "left outer join AuSp120.tb_Station s on t.分站编码=s.分站编码	"
-				+ "where e.事件性质编码=1 and a.类型编码 not in (2,4)	and a.派车时刻<t.出车时刻 	"
-				+ "and a.开始受理时刻 between :startTime and :endTime	group by s.分站名称";
+		String sql = "SELECT s.stationName station,COUNT(DISTINCT et.taskCode) total,"
+				+ "sum(if(TIMESTAMPDIFF(SECOND,et.createTime,et.taskDriveToTime)>120,1,0)) late,	"
+				+ "sum(if(TIMESTAMPDIFF(SECOND,et.createTime,et.taskDriveToTime)<=120,1,0)) normal,'' rate	"
+				+ "from `event` e LEFT JOIN event_history eh on e.eventCode=eh.eventCode	"
+				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
+				+ "LEFT JOIN station s on s.stationCode=et.stationCode	"
+				+ "WHERE e.eventProperty=1 and et.taskCode is not null and s.stationName is not null "
+				+ "and e.createTime between :startTime and :endTime	group by s.stationName ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
 
-		List<SubstationVisitQualified> results = this.namedParameterJdbcTemplate.query(sql,
+		List<SubstationVisitQualified> results = this.npJdbcTemplate.query(sql,
 				paramMap, new RowMapper<SubstationVisitQualified>() {
 					@Override
 					public SubstationVisitQualified mapRow(ResultSet rs, int index)

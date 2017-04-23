@@ -68,7 +68,6 @@
 									{
 										field : 'dispatcher',
 										title : '调度员',
-										resizable : true,
 										width : "15%",
 										align : 'center'
 									},
@@ -76,13 +75,11 @@
 										field : 'startAcceptTime',
 										title : '开始受理时刻',
 										width : "15%",
-										align : 'center',
-										sortable : true
+										align : 'center'
 									},
 									{
 										field : 'sendCarTime',
 										title : '派车时刻',
-										resizable : true,
 										width : "15%",
 										align : 'center'
 									},
@@ -95,7 +92,6 @@
 									{
 										field : 'ringPhone',
 										title : '呼救电话',
-										resizable : true,
 										width : "10%",
 										align : 'center'
 									},
@@ -103,13 +99,11 @@
 										field : 'sendCarTimes',
 										title : '派车时长',
 										width : "10%",
-										resizable : true,
 										align : 'center'
 									},
 									{
 										field : 'remark',
 										title : '受理备注',
-										resizable : true,
 										width : "14%",
 										align : 'center'
 									},
@@ -117,14 +111,13 @@
 										field : 'id',
 										title : '详情',
 										width : "10%",
-										resizable : true,
 										align : 'center',
 										formatter : function(value, row) {
 											var str = '';
 											str += cxw
 													.formatString(
-															'<button onclick="showFun(\'{0}\');">详情</button>',
-															row.id);
+															'<img class="iconImg ext-icon-note" title="详情" onclick="showFun(\'{0}\');"/>',
+															row.id)
 											return str;
 										}
 									} ] ],
@@ -140,6 +133,7 @@
 							onLoadSuccess : function(data) {
 								$(this).datagrid("autoMergeCells",
 										[ 'dispatcher' ]);
+								$('.iconImg').attr('src', cxw.pixel_0);
 							}
 						});
 	}

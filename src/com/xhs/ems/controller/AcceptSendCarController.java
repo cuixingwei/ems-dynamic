@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.xhs.ems.bean.AcceptSendCarDetail;
 import com.xhs.ems.bean.Grid;
+import com.xhs.ems.bean.HistoryEvent;
 import com.xhs.ems.bean.Parameter;
 import com.xhs.ems.bean.SessionInfo;
 import com.xhs.ems.excelTools.ExcelUtils;
@@ -40,7 +40,7 @@ public class AcceptSendCarController {
 	}
 
 	@RequestMapping(value = "/getDetail", method = RequestMethod.GET)
-	public @ResponseBody AcceptSendCarDetail getDetail(Parameter parameter,
+	public @ResponseBody HistoryEvent getDetail(Parameter parameter,
 			HttpServletRequest request) {
 		logger.info("事件详情查询");
 		

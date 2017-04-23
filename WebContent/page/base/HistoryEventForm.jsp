@@ -143,7 +143,7 @@
 			<table class="table" style="width: 100%;">
 				<!--事件-->
 				<tr>
-					<td>事件名称</td>
+					<td>现场地址</td>
 					<td><input name="eventName" readonly="readonly" /></td>
 					<td>等车地点</td>
 					<td><input name="waitAddress" readonly="readonly" /></td>
@@ -161,10 +161,10 @@
 					<td><input name="callPhone" readonly="readonly" /></td>
 				</tr>
 				<tr>
-					<td>呼救地点</td>
-					<td><input name="callAddress" readonly="readonly" /></td>
-					<td>病人需求</td>
-					<td><input name="patientNeed" readonly="readonly" /></td>
+					<td>天气状态</td>
+					<td><input name="weatherState" readonly="readonly" /></td>
+					<td>路况</td>
+					<td><input name="roadState" readonly="readonly" /></td>
 				</tr>
 				<tr>
 					<td>初步判断</td>
@@ -173,8 +173,8 @@
 					<td><input name="sickCondition" readonly="readonly" /></td>
 				</tr>
 				<tr>
-					<td>特殊要求</td>
-					<td><input name="specialNeeds" readonly="readonly" /></td>
+					<td>送往地点</td>
+					<td><input name="sendTarget" readonly="readonly" /></td>
 					<td>人数</td>
 					<td><input name="humanNumbers" readonly="readonly" /></td>
 				</tr>
@@ -197,16 +197,14 @@
 					<td><input name="contactPhone" readonly="readonly" /></td>
 				</tr>
 				<tr>
-					<td>分机</td>
-					<td><input name="extension" readonly="readonly" /></td>
-					<td>本次调度员</td>
-					<td><input name="thisDispatcher" readonly="readonly" /></td>
-				</tr>
-				<tr>
 					<td>备注</td>
 					<td><input name="remark" readonly="readonly" /></td>
 					<td>是否要担架</td>
 					<td><input name="isOrNoLitter" readonly="readonly" /></td>
+				</tr>
+				<tr>
+					<td>本次调度员</td>
+					<td><input name="thisDispatcher" readonly="readonly" /></td>
 				</tr>
 				<tr>
 					<td colspan="4" id="acceptTD"></td>
@@ -224,8 +222,8 @@
 					<td><input name="acceptType" readonly="readonly" /></td>
 				</tr>
 				<tr>
-					<td>待派原因</td>
-					<td><input name="toBeSentReason" readonly="readonly" /></td>
+					<td>挂起原因</td>
+					<td><input name="suspendReason" readonly="readonly" /></td>
 					<td>结束时刻</td>
 					<td><input name="endAcceptTime" readonly="readonly" /></td>
 				</tr>
@@ -264,37 +262,27 @@
 					<td><input name="outCarTime" readonly="readonly" /></td>
 				</tr>
 				<tr>
-					<td>备注说明</td>
-					<td><input name="taskRemark" readonly="readonly" /></td>
 					<td>到达现场时刻</td>
 					<td><input name="arriveSpotTime" readonly="readonly" /></td>
-				</tr>
-				<tr>
-					<td>接回人数</td>
-					<td><input name="takeHumanNumbers" readonly="readonly" /></td>
-					<td>入院人数</td>
-					<td><input name="toHospitalNumbers" readonly="readonly" /></td>
-				</tr>
-				<tr>
 					<td>离开现场时刻</td>
 					<td><input name="leaveSpotTime" readonly="readonly" /></td>
-					<td>死亡人数</td>
-					<td><input name="deathNumbers" readonly="readonly" /></td>
 				</tr>
 				<tr>
-					<td>留观人数</td>
-					<td><input name="stayHospitalNumbers" readonly="readonly" /></td>
-					<td>返院(转院)人数</td>
-					<td><input name="backHospitalNumbers" readonly="readonly" /></td>
+					<td>空车原因</td>
+					<td><input name="emptyVehicleReason" readonly="readonly" /></td>
+					<td>中止原因</td>
+					<td><input name="stopTaskReason" readonly="readonly" /></td>
 				</tr>
 				<tr>
 					<td>完成时刻</td>
 					<td><input name="completeTime" readonly="readonly" /></td>
+					<td>站内待命时刻</td>
+					<td><input name="taskAwaitTime" readonly="readonly" /></td>
+				</tr>
+				<tr>
 					<td colspan="2"><audio id="record" src='' controls='controls'></audio></td>
 				</tr>
 				<tr>
-					<td>分站调度员</td>
-					<td><input name="stationDispatcher" readonly="readonly" /></td>
 					<td colspan="2" id="taskTD"></td>
 				</tr>
 			</table>

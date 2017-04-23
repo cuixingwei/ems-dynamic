@@ -32,9 +32,9 @@ public class EmptyCarDAOImpl implements EmptyCarDAO {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	@Autowired
-	public void SetDataSourceTag(DataSource dataSource) {
+	public void SetDataSourceTag(DataSource dataSourceMysql) {
 		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(
-				dataSource);
+				dataSourceMysql);
 	}
 
 	/**

@@ -30,10 +30,12 @@ public class CarPauseDAOImpl implements CarPauseDAO {
 			.getLogger(CarPauseDAOImpl.class);
 
 	private NamedParameterJdbcTemplate npJdbcTemplate;
+	private NamedParameterJdbcTemplate npJdbcTemplateSQLServer;
 
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+	public void setDataSource(DataSource dataSourceMysql,DataSource dataSourceSQLServer) {
+		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSourceMysql);
+		this.npJdbcTemplateSQLServer = new NamedParameterJdbcTemplate(dataSourceSQLServer);
 	}
 
 	/**
@@ -71,7 +73,7 @@ public class CarPauseDAOImpl implements CarPauseDAO {
 		paramMap.put("carCode", parameter.getCarCode());
 		paramMap.put("pauseReason", parameter.getPauseReason());
 
-		List<CarPause> results = this.npJdbcTemplate.query(sql, paramMap,
+		List<CarPause> results = this.npJdbcTemplateSQLServer.query(sql, paramMap,
 				new RowMapper<CarPause>() {
 					@Override
 					public CarPause mapRow(ResultSet rs, int index)

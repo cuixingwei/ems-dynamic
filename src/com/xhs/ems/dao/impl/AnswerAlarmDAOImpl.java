@@ -31,10 +31,12 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 			.getLogger(AnswerAlarmDAOImpl.class);
 
 	private NamedParameterJdbcTemplate npJdbcTemplate;
+	private NamedParameterJdbcTemplate npJdbcTemplateSQLServer;
 
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+	public void setDataSource(DataSource dataSourceMysql,DataSource dataSourceSQLServer) {
+		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSourceMysql);
+		this.npJdbcTemplateSQLServer = new NamedParameterJdbcTemplate(dataSourceSQLServer);
 	}
 
 	/**
@@ -44,36 +46,25 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select distinct t.事件编码,t.分站编码,s.分站名称 station  into #temp2 	"
-				+ "from AuSp120.tb_TaskV t left outer join AuSp120.tb_Station s on s.分站编码=t.分站编码 "
-				+ "select distinct e.事件编码 eventCode,m.姓名 dispatcher into #temp1	"
-				+ "from AuSp120.tb_EventV e	left outer join AuSp120.tb_MrUser m on m.工号=e.调度员编码	"
-				+ "where e.事件性质编码=1 and m.人员类型=0  select a.事件编码,a.受理序号,pc.姓名 into #pc 	"
-				+ "from AuSp120.tb_PatientCase pc	left outer join AuSp120.tb_Ambulance am on am.实际标识=pc.车辆标识	"
-				+ "left outer join AuSp120.tb_Task t on pc.任务编码=t.任务编码 and t.车辆编码=am.车辆编码	"
-				+ "left outer join AuSp120.tb_AcceptDescript a on a.事件编码=t.事件编码 and a.受理序号=t.受理序号	"
-				+ "select	事件编码,受理序号,姓名 = (stuff((select ',' + 姓名 from #pc where 事件编码 = pc.事件编码 and 受理序号=pc.受理序号 for xml path('')),1,1,''))  into #name	"
-				+ "from #pc pc  group by pc.事件编码,pc.受理序号 "
-				+ "select a.ID id,convert(varchar(20),a.电话振铃时刻,120) answerAlarmTime,a.呼救电话 alarmPhone,"
-				+ "a.联系电话 relatedPhone,a.现场地址 siteAddress,	a.初步判断 judgementOnPhone, t2.station,"
-				+ "convert(varchar(20),a.派车时刻,120) sendCarTime, t.dispatcher,et.录音文件名 recordPath,n.姓名 patientName	from #temp1 t	"
-				+ "left outer join AuSp120.tb_AcceptDescriptV a on t.eventCode=a.事件编码 "
-				+ "left outer join #temp2 t2 on t2.事件编码=t.eventCode	left outer join AuSp120.tb_EventTele et on et.事件编码=t.eventCode "
-				+ "left outer join #name n on n.事件编码=a.事件编码 and a.受理序号=n.受理序号  "
-				+ "where a.电话振铃时刻  between :startTime and :endTime  ";
+		String sql = "SELECT date_format(eh.createTime,'%Y-%c-%d %h:%i:%s') answerAlarmTime,eh.incomingCall alarmPhone,eh.contactPhone relatedPhone,"
+				+ "eh.eventAddress siteAddress,eh.prejudge judgementOnPhone,s.stationName station,date_format(et.createTime,'%Y-%c-%d %h:%i:%s') sendCarTime,"
+				+ "u.personName dispatcher,eh.patientName	from `event` e LEFT JOIN event_history eh on e.eventCode=eh.eventCode	"
+				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
+				+ "LEFT JOIN `user` u on u.jobNum=eh.operatorJobNum	LEFT JOIN station s on s.stationCode=et.stationCode	"
+				+ "WHERE e.eventProperty=1 and eh.createTime  between :startTime and :endTime  ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
-			sql = sql + "and a.调度员编码= :dispatcher ";
+			sql = sql + "and eh.operatorJobNum= :dispatcher ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getAlarmPhone())) {
-			sql += " and  a.呼救电话  like :alarmPhone ";
+			sql += " and  eh.incomingCall like :alarmPhone ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getSiteAddress())) {
-			sql += " and a.现场地址 like :siteAddress ";
+			sql += " and eh.eventAddress like :siteAddress ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
-			sql += " and t2.分站编码 = :station ";
+			sql += " and et.stationCode = :station ";
 		}
-		sql += "order by a.电话振铃时刻  drop table #temp1,#temp2,#name,#pc";
+		sql += "order by eh.createTime ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
@@ -90,7 +81,6 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 					public AnswerAlarm mapRow(ResultSet rs, int index)
 							throws SQLException {
 						AnswerAlarm alarm = new AnswerAlarm();
-						alarm.setId(rs.getString("id"));
 						alarm.setAlarmPhone(rs.getString("alarmPhone"));
 						alarm.setAnswerAlarmTime(rs.getString("answerAlarmTime"));
 						alarm.setRelatedPhone(rs.getString("relatedPhone"));
@@ -144,7 +134,7 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 
 		logger.info(sql);
 
-		List<AnswerAlarm> results = this.npJdbcTemplate.query(sql, paramMap,
+		List<AnswerAlarm> results = this.npJdbcTemplateSQLServer.query(sql, paramMap,
 				new RowMapper<AnswerAlarm>() {
 					@Override
 					public AnswerAlarm mapRow(ResultSet rs, int index)

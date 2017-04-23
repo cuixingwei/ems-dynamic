@@ -33,8 +33,8 @@ public class DriverWorkDAOImpl implements DriverWorkDAO {
 	private NamedParameterJdbcTemplate npJdbcTemplate;
 
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+	public void setDataSource(DataSource dataSourceMysql) {
+		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSourceMysql);
 	}
 
 	/**
@@ -44,38 +44,20 @@ public class DriverWorkDAOImpl implements DriverWorkDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select distinct 任务编码,司机,车辆标识 into #pc from AuSp120.tb_PatientCase "
-				+ "select t.生成任务时刻,t.出车时刻,t.到达现场时刻,结果编码,pc.司机,t.分站编码 into #temp1 	"
-				+ "from AuSp120.tb_Task t	left outer join AuSp120.tb_EventV e on e.事件编码=t.事件编码 "
-				+ "left outer join AuSp120.tb_Ambulance am on am.车辆编码=t.车辆编码 "
-				+ "	left outer join #pc	pc on pc.车辆标识=am.实际标识 and pc.任务编码=t.任务编码	"
-				+ "where e.事件性质编码=1 and pc.司机<>'' 	and t.生成任务时刻 between :startTime and :endTime  ";
+		String sql = "SELECT s.stationName station,et.driverName driver,COUNT(DISTINCT et.taskCode) outCarNumbers,	"
+				+ "avg(TIMESTAMPDIFF(SECOND,et.createTime,et.taskDriveToTime)) averageOutCarTimes,sum(if(et.taskResult=1,1,0)) stopNumbers,	"
+				+ "avg(TIMESTAMPDIFF(SECOND,et.createTime,et.taskArriveTime)) averageArriveSpotTimes,sum(if(et.taskResult=2,1,0)) emptyNumbers,	"
+				+ "sum(if(et.taskResult=3,1,0)) nomalNumbers,sum(if(et.taskResult=4,1,0)) refuseNumbers	"
+				+ "from `event` e LEFT JOIN event_history eh on e.eventCode=eh.eventCode	"
+				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
+				+ "LEFT JOIN station s on s.stationCode=et.stationCode	"
+				+ "WHERE e.eventProperty=1 and et.taskCode is not null and s.stationName is not null "
+				+ "and e.createTime  between :startTime and :endTime  ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
-			sql = sql + " and t.分站编码=:station ";
+			sql = sql + " and et.stationCode=:station ";
 		}
-		sql += " select 分站编码,p.司机,count(p.司机) as pauseNumbers into #temp2 	"
-				+ "from AuSp120.tb_RecordPauseReason p	left join AuSp120.tb_Ambulance a on p.车辆编码=a.车辆编码 	"
-				+ "where p.操作时刻 between :startTime and :endTime and p.司机<>''	group by (分站编码),(p.司机) "
-				+ "select t.分站编码,t.司机 driver,SUM(case when t.生成任务时刻 is not null then 1 else 0 end) outCarNumbers,	"
-				+ "SUM(case when t.结果编码=4 then 1 else 0 end) nomalNumbers,	"
-				+ "SUM(case when t.结果编码=3 then 1 else 0 end) emptyNumbers,	"
-				+ "SUM(case when t.结果编码=2 then 1 else 0 end) stopNumbers,	"
-				+ "SUM(case when t.结果编码=5 then 1 else 0 end) refuseNumbers into #temp3	"
-				+ "from #temp1 t group by t.分站编码,t.司机  "
-				+ "select t.分站编码,t.司机 driver,AVG(DATEDIFF(Second,t.生成任务时刻,t.出车时刻)) averageOutCarTimes 	into #temp4	"
-				+ "from #temp1 t "
-				+ "where t.生成任务时刻<t.出车时刻 group by t.分站编码,t.司机  select t.分站编码,t.司机 driver,"
-				+ "isnull(AVG(DATEDIFF(Second,t.出车时刻,t.到达现场时刻)),0) averageArriveSpotTimes	into #temp5	"
-				+ "from #temp1 t "
-				+ "where t.出车时刻<t.到达现场时刻 and t.出车时刻 is not null group by t.分站编码,t.司机  "
-				+ "select s.分站名称 station,t3.driver,outCarNumbers,nomalNumbers,stopNumbers,emptyNumbers,isnull(refuseNumbers,0) refuseNumbers,	"
-				+ "isnull(pauseNumbers,0) pauseNumbers,averageOutCarTimes,isnull(averageArriveSpotTimes,0) averageArriveSpotTimes	"
-				+ "from AuSp120.tb_Station s left outer join #temp3 t3 on t3.分站编码=s.分站编码	"
-				+ "left outer join #temp2 t2 on t3.分站编码=t2.分站编码 and t3.driver=t2.司机	"
-				+ "left outer join #temp4 t4 on t3.分站编码=t4.分站编码 and t3.driver=t4.driver	"
-				+ "left outer join #temp5 t5 on t3.分站编码=t5.分站编码 and t3.driver=t5.driver	"
-				+ "where t3.driver<>''	order by s.显示顺序  "
-				+ "drop table #temp1,#temp2,#temp3,#temp4,#temp5,#pc";
+		
+		sql += " GROUP BY s.stationName,et.driverName";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("station", parameter.getStation());
 		paramMap.put("endTime", parameter.getEndTime());
@@ -94,7 +76,7 @@ public class DriverWorkDAOImpl implements DriverWorkDAO {
 						driverWork.setEmptyNumbers(rs.getString("emptyNumbers"));
 						driverWork.setNomalNumbers(rs.getString("nomalNumbers"));
 						driverWork.setOutCarNumbers(rs.getString("outCarNumbers"));
-						driverWork.setPauseNumbers(rs.getString("pauseNumbers"));
+//						driverWork.setPauseNumbers(rs.getString("pauseNumbers"));
 						driverWork.setRefuseNumbers(rs.getString("refuseNumbers"));
 						driverWork.setStation(rs.getString("station"));
 						driverWork.setStopNumbers(rs.getString("stopNumbers"));

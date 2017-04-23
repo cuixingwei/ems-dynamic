@@ -26,59 +26,27 @@ public class AcceptTimeDAOImpl implements AcceptTimeDAO {
 	private static final Logger logger = Logger.getLogger(AcceptTimeDAOImpl.class);
 
 	private NamedParameterJdbcTemplate npJdbcTemplate;
+	private NamedParameterJdbcTemplate npJdbcTemplateSQLServer;
 
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+	public void setDataSource(DataSource dataSourceMysql,DataSource dataSourceSQLServer) {
+		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSourceMysql);
+		this.npJdbcTemplateSQLServer = new NamedParameterJdbcTemplate(dataSourceSQLServer);
 	}
 
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select sl.调度员编码 工号, avg(datediff(SECOND,sl.开始时刻,sl.结束时刻)) readyTime into #temp1 "
-				+ "from AuSp120.tb_SlinoLog sl	where sl.座席状态='就绪' "
-				+ "and sl.开始时刻 between :startTime and :endTime group by sl.调度员编码	"
-				+ "select sl.调度员编码 工号,avg(datediff(SECOND,sl.开始时刻,sl.结束时刻)) leaveTime  into #temp2 "
-				+ "from AuSp120.tb_SlinoLog sl	where sl.座席状态='离席' and sl.开始时刻 between :startTime and :endTime group by sl.调度员编码	"
-				+ "select tr.调度员编码 工号,avg(datediff(Second,tr.振铃时刻,tr.通话开始时刻))  averageOffhookTime into #temp3 "
-				+ "from AuSp120.tb_TeleRecord tr	where tr.振铃时刻 between :startTime and :endTime group by tr.调度员编码	"
-				+ "select a.调度员编码 工号,	avg(datediff(Second, a.开始受理时刻, a.派车时刻)) averageOffSendCar,	"
-				+ "avg(datediff(Second, a.开始受理时刻, a.结束受理时刻)) averageAccept into #temp4	from  AuSp120.tb_AcceptDescriptV a		"
-				+ "left outer join AuSp120.tb_Event e on e.事件编码=a.事件编码	where e.事件性质编码=1 "
-				+ "and a.开始受理时刻 between :startTime and :endTime  group by a.调度员编码	"
-				+ "select m.姓名 dispatcher,ISNULL(t1.readyTime,0) readyTime,ISNULL(t2.leaveTime,0) leaveTime,"
-				+ "ISNULL(t3.averageOffhookTime,0) averageOffhookTime,ISNULL(t4.averageAccept,0) averageAccept,"
-				+ "ISNULL(t4.averageOffSendCar,0) averageOffSendCar	from #temp4 t4 left outer join #temp1 t1 on t1.工号=t4.工号	"
-				+ "left outer join #temp2 t2 on t4.工号=t2.工号	left outer join #temp3 t3 on t4.工号=t3.工号	"
-				+ "left outer join AuSp120.tb_MrUser m on t4.工号=m.工号	where m.人员类型=0";
-		String summary = "select '合计' 工号, avg(datediff(SECOND,sl.开始时刻,sl.结束时刻)) readyTime into #temp1 "
-				+ "from AuSp120.tb_SlinoLog sl	where sl.座席状态='就绪' "
-				+ "and sl.开始时刻 between :startTime and :endTime 	"
-				+ "select '合计' 工号,avg(datediff(SECOND,sl.开始时刻,sl.结束时刻)) leaveTime  into #temp2 "
-				+ "from AuSp120.tb_SlinoLog sl	where sl.座席状态='离席' and sl.开始时刻 between :startTime and :endTime 	"
-				+ "select '合计' 工号,avg(datediff(Second,tr.振铃时刻,tr.通话开始时刻))  averageOffhookTime into #temp3 "
-				+ "from AuSp120.tb_TeleRecord tr	where tr.振铃时刻 between :startTime and :endTime 	"
-				+ "select '合计' 工号,	avg(datediff(Second, a.开始受理时刻, a.派车时刻)) averageOffSendCar,	"
-				+ "avg(datediff(Second, a.开始受理时刻, a.结束受理时刻)) averageAccept into #temp4	from  AuSp120.tb_AcceptDescriptV a		"
-				+ "left outer join AuSp120.tb_Event e on e.事件编码=a.事件编码	where e.事件性质编码=1 "
-				+ "and a.开始受理时刻 between :startTime and :endTime  	"
-				+ "select '合计' dispatcher,ISNULL(t1.readyTime,0) readyTime,ISNULL(t2.leaveTime,0) leaveTime,"
-				+ "ISNULL(t3.averageOffhookTime,0) averageOffhookTime,ISNULL(t4.averageAccept,0) averageAccept,"
-				+ "ISNULL(t4.averageOffSendCar,0) averageOffSendCar	from #temp4 t4 left outer join #temp1 t1 on t1.工号=t4.工号	"
-				+ "left outer join #temp2 t2 on t4.工号=t2.工号	left outer join #temp3 t3 on t4.工号=t3.工号	";
-		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
-			sql = sql + " and t4.工号=:dispatcher ";
-		}
-		sql = sql + " drop table #temp1,#temp2,#temp3,#temp4 ";
-		summary = summary + " drop table #temp1,#temp2,#temp3,#temp4 ";
 		String sql1 = "SELECT u.personName dispatcher, IFNULL(avg(TIMESTAMPDIFF(SECOND,eh.handleBeginTime,eh.handleEndTime)),0) averageAccept,	"
 				+ "IFNULL(avg(TIMESTAMPDIFF(SECOND,eh.handleBeginTime,et.createTime)),0) averageOffSendCar	"
 				+ "from `event` e LEFT JOIN event_history eh on e.eventCode=eh.eventCode	"
 				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
 				+ "LEFT JOIN `user` u on u.jobNum=et.operatorJobNum	WHERE e.eventProperty=1 "
 				+ "and u.personName is not null and e.createTime between :startTime and :endTime ";
-
+		String sql2 = "select m.姓名 dispatcher,avg(datediff(Second,tr.振铃时刻,tr.通话开始时刻))  averageOffhookTime  "
+				+ "from AuSp120.tb_TeleRecord tr left outer join AuSp120.tb_MrUser m on tr.调度员编码=m.工号	where tr.振铃时刻  between :startTime and :endTime 	";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
 			sql1 = sql1 + " and et.operatorJobNum=:dispatcher ";
+			sql2 = sql2 + " and tr.调度员编码=:dispatcher ";
 		}
 		String summary1 =  "SELECT IFNULL(avg(TIMESTAMPDIFF(SECOND,eh.handleBeginTime,eh.handleEndTime)),0) averageAccept,	"
 				+ "IFNULL(avg(TIMESTAMPDIFF(SECOND,eh.handleBeginTime,et.createTime)),0) averageOffSendCar	"
@@ -86,7 +54,10 @@ public class AcceptTimeDAOImpl implements AcceptTimeDAO {
 				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
 				+ "LEFT JOIN `user` u on u.jobNum=et.operatorJobNum	WHERE e.eventProperty=1 "
 				+ "and u.personName is not null and e.createTime between :startTime and :endTime ";
+		String summary2 = "select avg(datediff(Second,tr.振铃时刻,tr.通话开始时刻))  averageOffhookTime  "
+				+ "from AuSp120.tb_TeleRecord tr left outer join AuSp120.tb_MrUser m on tr.调度员编码=m.工号	where tr.振铃时刻  between :startTime and :endTime";
 		String group = " GROUP BY u.personName";
+		String groupSQLServer = " group by m.姓名 ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("startTime", parameter.getStartTime());
@@ -101,6 +72,15 @@ public class AcceptTimeDAOImpl implements AcceptTimeDAO {
 				return acceptTime;
 			}
 		});
+		List<AcceptTime> results1 = this.npJdbcTemplateSQLServer.query(sql2 + groupSQLServer, paramMap, new RowMapper<AcceptTime>() {
+			@Override
+			public AcceptTime mapRow(ResultSet rs, int index) throws SQLException {
+				AcceptTime acceptTime = new AcceptTime();
+				acceptTime.setDispatcher(rs.getString("dispatcher"));
+				acceptTime.setAverageOffhookTime(rs.getString("averageOffhookTime"));
+				return acceptTime;
+			}
+		});
 		List<AcceptTime> summaryList = this.npJdbcTemplate.query(summary1, paramMap, new RowMapper<AcceptTime>() {
 			@Override
 			public AcceptTime mapRow(ResultSet rs, int index) throws SQLException {
@@ -111,6 +91,31 @@ public class AcceptTimeDAOImpl implements AcceptTimeDAO {
 				return acceptTime;
 			}
 		});
+		List<AcceptTime> summaryList1 = this.npJdbcTemplateSQLServer.query(summary2, paramMap, new RowMapper<AcceptTime>() {
+			@Override
+			public AcceptTime mapRow(ResultSet rs, int index) throws SQLException {
+				AcceptTime acceptTime = new AcceptTime();
+				acceptTime.setAverageOffhookTime(rs.getString("averageOffhookTime"));
+				acceptTime.setDispatcher("合计");
+				return acceptTime;
+			}
+		});
+		
+		for (AcceptTime rs : results) {
+			for (AcceptTime rs1 : results1) {
+				if(rs.getDispatcher().equals(rs1.getDispatcher())){
+					rs.setAverageOffhookTime(rs1.getAverageOffhookTime());
+				}
+			}
+		}
+		
+		for (AcceptTime sm : summaryList) {
+			for (AcceptTime sm1 : summaryList1) {
+				if(sm.getDispatcher().equals(sm1.getDispatcher())){
+					sm.setAverageOffhookTime(sm1.getAverageOffhookTime());
+				}
+			}
+		}
 		for (AcceptTime sm : summaryList) {
 			results.add(sm);
 		}

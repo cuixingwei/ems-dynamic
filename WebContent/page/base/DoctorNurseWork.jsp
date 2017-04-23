@@ -71,31 +71,37 @@
 						field : 'outCarNumbers',
 						title : '出车数',
 						resizable : true,
-						width : "14%",
+						width : "12%",
 						align : 'center'
 					}, {
 						field : 'validOutCarNumbers',
 						title : '有效出车数',
 						resizable : true,
-						width : "15%",
+						width : "14%",
 						align : 'center'
 					}, {
 						field : 'stopNumbers',
-						title : '中止数',
+						title : '中止数(中止、空车)',
 						resizable : true,
 						width : "15%",
+						align : 'center'
+					}, {
+						field : 'refuseNumbers',
+						title : '拒绝出车数',
+						resizable : true,
+						width : "10%",
 						align : 'center'
 					}, {
 						field : 'curePeopleNumbers',
 						title : '救治人数',
 						resizable : true,
-						width : "15%",
+						width : "10%",
 						align : 'center',
 					}, {
 						field : 'averateCureTimes',
 						title : '平均救治时间',
 						resizable : true,
-						width : "15%",
+						width : "13%",
 						align : 'center'
 					} ] ],
 					toolbar : '#toolbar',
@@ -130,7 +136,7 @@
 								<td><input style="width: 120em;" id="station"
 									name="station" /></td>
 								<td>查询类别:</td>
-								<td><select id="doctorOrNurse" class="easyui-combobox"
+								<td><select id="doctorOrNurse" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'"
 									name="doctorOrNurse" style="width: 120em;">
 										<option value="1">医生</option>
 										<option value="2">护士</option>
