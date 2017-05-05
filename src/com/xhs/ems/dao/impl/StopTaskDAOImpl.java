@@ -45,7 +45,7 @@ public class StopTaskDAOImpl implements StopTaskDAO {
 	public Grid getData(Parameter parameter) {
 		String sql = "SELECT date_format(e.callTime,'%Y-%c-%d %h:%i:%s') acceptTime,e.eventAddress sickAddress,e.incomingCall phone,u.personName dispatcher,et.actualSign carCode,	"
 				+ "date_format(et.createTime,'%Y-%c-%d %h:%i:%s') drivingTime,s.stationName staion,dttr.name stopReason,eh.remark,"
-				+ "TIMESTAMPDIFF(SECOND,et.taskStopTime,et.taskAwaitTime) emptyRunTime	"
+				+ "TIMESTAMPDIFF(SECOND,et.taskStopTime,et.taskHospitalAwaitTime) emptyRunTime	"
 				+ "from `event` e LEFT JOIN event_history eh on eh.eventCode=e.eventCode	"
 				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
 				+ "LEFT JOIN `user` u on u.jobNum=eh.operatorJobNum	LEFT JOIN define_stop_task_reason dttr on dttr.`code`=et.stopTaskReason	"
@@ -64,7 +64,7 @@ public class StopTaskDAOImpl implements StopTaskDAO {
 			sql = sql + " and et.vehicleCode=:carCode ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getEmptyRunTime())) {
-			sql = sql + " and TIMESTAMPDIFF(SECOND,et.taskStopTime,et.taskAwaitTime)>:emptyRunTime ";
+			sql = sql + " and TIMESTAMPDIFF(SECOND,et.taskStopTime,et.taskHospitalAwaitTime)>:emptyRunTime ";
 		}
 		sql += " order by et.createTime ";
 		Map<String, String> paramMap = new HashMap<String, String>();

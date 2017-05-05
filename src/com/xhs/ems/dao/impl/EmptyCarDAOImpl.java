@@ -45,7 +45,7 @@ public class EmptyCarDAOImpl implements EmptyCarDAO {
 	@Override
 	public Grid getData(Parameter parameter) {
 		String sql = "SELECT der.`name` emptyReason,date_format(e.callTime,'%Y-%c-%d %h:%i:%s') acceptTime,e.eventAddress sickAddress,	"
-				+ "u.personName dispatcher,TIMESTAMPDIFF(SECOND,et.taskEmptyTime,et.taskAwaitTime) emptyRunTime	"
+				+ "u.personName dispatcher,TIMESTAMPDIFF(SECOND,et.taskEmptyTime,et.taskHospitalAwaitTime) emptyRunTimes	"
 				+ "from `event` e LEFT JOIN event_history eh on eh.eventCode=e.eventCode	"
 				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
 				+ "LEFT JOIN define_empty_reason der on der.`code`=et.emptyVehicleReason	"

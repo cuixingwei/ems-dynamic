@@ -10,6 +10,10 @@ public class CarPause {
 	 */
 	private String carCode;
 	/**
+	 * 操作类型
+	 */
+	private String operatorType;
+	/**
 	 * 司机
 	 */
 	private String driver;
@@ -76,16 +80,16 @@ public class CarPause {
 	public void setPauseReason(String pauseReason) {
 		this.pauseReason = pauseReason;
 	}
-	public CarPause(String carCode, String driver, String pauseTimes,
-			String pauseTime, String endTime, String dispatcher,
-			String pauseReason) {
-		this.carCode = carCode;
-		this.driver = driver;
-		this.pauseTimes = pauseTimes;
-		this.pauseTime = pauseTime;
-		this.endTime = endTime;
-		this.dispatcher = dispatcher;
-		this.pauseReason = pauseReason;
+	
+	public String getOperatorType() {
+		return operatorType;
+	}
+	public void setOperatorType(String operatorType) {
+		this.operatorType = operatorType;
+	}
+	
+	public CarPause() {
+		
 	}
 	
 	

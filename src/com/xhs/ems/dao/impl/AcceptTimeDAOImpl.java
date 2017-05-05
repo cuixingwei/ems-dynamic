@@ -119,10 +119,6 @@ public class AcceptTimeDAOImpl implements AcceptTimeDAO {
 		for (AcceptTime sm : summaryList) {
 			results.add(sm);
 		}
-		for (AcceptTime result : results) {
-			// result.setReadyTime(CommonUtil.formatSecond(result.getReadyTime()));
-			// result.setLeaveTime(CommonUtil.formatSecond(result.getLeaveTime()));
-		}
 		logger.info("一共有" + results.size() + "条数据");
 
 		Grid grid = new Grid();

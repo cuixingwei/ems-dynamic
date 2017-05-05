@@ -45,8 +45,8 @@ public class DriverWorkDAOImpl implements DriverWorkDAO {
 	@Override
 	public Grid getData(Parameter parameter) {
 		String sql = "SELECT s.stationName station,et.driverName driver,COUNT(DISTINCT et.taskCode) outCarNumbers,	"
-				+ "avg(TIMESTAMPDIFF(SECOND,et.createTime,et.taskDriveToTime)) averageOutCarTimes,sum(if(et.taskResult=1,1,0)) stopNumbers,	"
-				+ "avg(TIMESTAMPDIFF(SECOND,et.createTime,et.taskArriveTime)) averageArriveSpotTimes,sum(if(et.taskResult=2,1,0)) emptyNumbers,	"
+				+ "round(avg(TIMESTAMPDIFF(SECOND,et.createTime,et.taskDriveToTime)),0) averageOutCarTimes,sum(if(et.taskResult=1,1,0)) stopNumbers,	"
+				+ "round(avg(TIMESTAMPDIFF(SECOND,et.createTime,et.taskArriveTime)),0) averageArriveSpotTimes,sum(if(et.taskResult=2,1,0)) emptyNumbers,	"
 				+ "sum(if(et.taskResult=3,1,0)) nomalNumbers,sum(if(et.taskResult=4,1,0)) refuseNumbers	"
 				+ "from `event` e LEFT JOIN event_history eh on e.eventCode=eh.eventCode	"
 				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"

@@ -30,10 +30,12 @@ public class StationMsgDAOImpl implements StationMsgDAO {
 			.getLogger(StationMsgDAOImpl.class);
 
 	private NamedParameterJdbcTemplate npJdbcTemplate;
+	private NamedParameterJdbcTemplate npJdbcTemplateSQLServer;
 
 	@Autowired
-	public void setDataSource(DataSource dataSourceMysql) {
+	public void setDataSource(DataSource dataSourceMysql,DataSource dataSourceSQLServer) {
 		this.npJdbcTemplate = new NamedParameterJdbcTemplate(dataSourceMysql);
+		this.npJdbcTemplateSQLServer = new NamedParameterJdbcTemplate(dataSourceSQLServer);
 	}
 	/**
 	 * @author cuixingwei
@@ -41,18 +43,18 @@ public class StationMsgDAOImpl implements StationMsgDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "SELECT s.分站名称 station, SUM(case when t.任务编码 is not null then 1 else 0 end) totalCount,	"
-				+ "SUM(case when DATEDIFF(ss,t.生成任务时刻, m.接收时刻)> :overtimes then 1 else 0 end) lateReturn,	"
-				+ "SUM(case when DATEDIFF(ss,t.生成任务时刻, m.接收时刻)<= :overtimes then 1 else 0 end) normalReturn,"
-				+ "SUM(case when m.任务编码 is null then 1 else 0 end) noReturn "
-				+ "FROM  AuSp120.tb_EventV AS e LEFT OUTER JOIN AuSp120.tb_TaskV AS t ON t.事件编码 = e.事件编码 AND e.事件性质编码 = 1 "
-				+ "LEFT OUTER JOIN  AuSp120.tb_StationMsg AS m ON m.任务编码 = t.任务编码 LEFT OUTER JOIN   "
-				+ "AuSp120.tb_Station AS s ON s.分站编码 = t.分站编码       "
-				+ "where s.分站名称 is not null   and e.受理时刻 between :startTime and :endTime ";
+		String sql = "SELECT s.stationName station,sum(if(et.taskCode is not null,1,0)) totalCount,	"
+				+ "sum(if(TIMESTAMPDIFF(SECOND,et.createTime,et.stationAcceptTime)<=:overtimes or TIMESTAMPDIFF(SECOND,et.createTime,et.stationRefuseTime)<=:overtimes,1,0)) normalReturn,	"
+				+ "sum(if(TIMESTAMPDIFF(SECOND,et.createTime,et.stationAcceptTime)>:overtimes or TIMESTAMPDIFF(SECOND,et.createTime,et.stationRefuseTime)>:overtimes,1,0)) lateReturn,	"
+				+ "sum(if(et.stationAcceptTime is null and et.stationRefuseTime is null,1,0)) noReturn	"
+				+ "from `event` e LEFT JOIN event_history eh on e.eventCode=eh.eventCode	"
+				+ "LEFT JOIN event_task et on et.eventCode=eh.eventCode and eh.handleTimes=et.handleTimes	"
+				+ "LEFT JOIN station s on s.stationCode=et.stationCode	"
+				+ "WHERE e.eventProperty=1   and eh.createTime between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
-			sql = sql + " and t.分站编码=:station ";
+			sql = sql + " and et.stationCode=:station ";
 		}
-		sql += "  group by s.分站名称  ";
+		sql += "  group by s.stationName  ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());

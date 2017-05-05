@@ -45,26 +45,24 @@ public class CarPauseDAOImpl implements CarPauseDAO {
 	 */
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select am.实际标识 carCode,rpr.司机 driver,isnull(DATEDIFF(Second,rpr.操作时刻,rpr.结束时刻),0) pauseTimes,convert(varchar(20),rpr.操作时刻,120) pauseTime,"
-				+ "convert(varchar(20),rpr.结束时刻,120) endTime,m.姓名 dispatcher,rpr.暂停调用原因 pauseReason	"
-				+ "from AuSp120.tb_RecordPauseReason rpr	"
-				+ "left outer join AuSp120.tb_Ambulance am on am.车辆编码=rpr.车辆编码	"
-				+ "left outer join AuSp120.tb_MrUser m on rpr.调度员编码=m.工号  "
-				+ "left outer join AuSp120.tb_DPauseReason dpr on dpr.NameM=rpr.暂停调用原因	"
-				+ "where rpr.操作时刻 between :startTime and :endTime ";
+		String sql = "SELECT dpr.name pauseReason,vpl.actualSign carCode,vpl.operatorName dispatcher,"
+				+ "date_format(vpl.createTime,'%Y-%c-%d %h:%i:%s') pauseTime,	date_format(vpl.stateChangeTime,'%Y-%c-%d %h:%i:%s') endTime,"
+				+ "TIMESTAMPDIFF(SECOND,vpl.createTime,vpl.stateChangeTime) pauseTimes	from vehicle_pause_log vpl "
+				+ "LEFT JOIN define_pause_reason dpr  on vpl.pauseReasonCode=dpr.`code` "
+				+ "where vpl.createTime between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
-			sql = sql + "and rpr.调度员编码= :dispatcher ";
+			sql = sql + "and vpl.operatorJobNum= :dispatcher ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getStation())) {
-			sql = sql + " and am.分站编码=:station ";
+			sql = sql + " and vpl.stationCode=:station ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getCarCode())) {
-			sql = sql + " and rpr.车辆编码=:carCode ";
+			sql = sql + " and vpl.vehicleCode=:carCode ";
 		}
 		if (!CommonUtil.isNullOrEmpty(parameter.getPauseReason())) {
-			sql = sql + " and dpr.Code=:pauseReason ";
+			sql = sql + " and vpl.pauseReasonCode=:pauseReason ";
 		}
-		sql += " order by rpr.操作时刻";
+		sql += " order by vpl.createTime ";
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
@@ -73,18 +71,20 @@ public class CarPauseDAOImpl implements CarPauseDAO {
 		paramMap.put("carCode", parameter.getCarCode());
 		paramMap.put("pauseReason", parameter.getPauseReason());
 
-		List<CarPause> results = this.npJdbcTemplateSQLServer.query(sql, paramMap,
+		List<CarPause> results = this.npJdbcTemplate.query(sql, paramMap,
 				new RowMapper<CarPause>() {
 					@Override
 					public CarPause mapRow(ResultSet rs, int index)
 							throws SQLException {
-						return new CarPause(rs.getString("carCode"), rs
-								.getString("driver"), rs
-								.getString("pauseTimes"), rs
-								.getString("pauseTime"), rs
-								.getString("endTime"), rs
-								.getString("dispatcher"), rs
-								.getString("pauseReason"));
+						CarPause carPause = new CarPause();
+						carPause.setCarCode(rs.getString("carCode"));
+						carPause.setDispatcher(rs.getString("dispatcher"));
+						carPause.setEndTime(rs.getString("endTime"));
+						carPause.setOperatorType(rs.getString("operatorType"));
+						carPause.setPauseReason(rs.getString("pauseReason"));
+						carPause.setPauseTime(rs.getString("pauseTime"));
+						carPause.setPauseTimes(rs.getString("pauseTimes"));
+						return carPause;
 					}
 				});
 		logger.info("一共有" + results.size() + "条数据");

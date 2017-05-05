@@ -167,7 +167,7 @@ public class HistoryEventDAOImpl implements HistoryEventDAO {
 				historyEvent.setWaitAddress(rs.getString("waitAddress"));
 				historyEvent.setCancelReason(rs.getString("cancelReason"));
 				historyEvent.setSuspendReason(rs.getString("suspendReason"));
-				historyEvent.setTaskAwaitTime(rs.getString("taskAwaitTime"));
+				historyEvent.setTaskAwaitTime(rs.getString("taskHospitalAwaitTime"));
 				historyEvent.setWeatherState(rs.getString("weatherState"));
 				historyEvent.setRoadState(rs.getString("roadState"));
 				historyEvent.setSendTarget(rs.getString("sendTarget"));
