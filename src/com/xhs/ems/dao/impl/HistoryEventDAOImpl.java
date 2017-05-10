@@ -105,7 +105,7 @@ public class HistoryEventDAOImpl implements HistoryEventDAO {
 	 */
 	@Override
 	public List<HistoryEvent> getDetail(String eventCode, HttpServletRequest request) {
-		String sql = "select * from v_event_detail	where eventCode  = :eventCode order by eventCode,acceptCount,taskCode ";
+		String sql = "select * from v_event_detail	where eventCode  = :eventCode order by eventCode,acceptCount,taskCode,taskOrder ";
 		
 		
 		Map<String, String> paramMap = new HashMap<String, String>();
