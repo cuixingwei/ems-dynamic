@@ -60,6 +60,7 @@
 		for(var i=0;i<length;i++){
 			if((resultData[i].acceptOrder == index) && (resultData[i].taskOrder == 1)){
 				$('form').form('load', resultData[i]);
+				$('#record').attr('src', resultData[i].record);
 			}
 			if(resultData[i].acceptOrder == index){
 				taskCount += 1; //任务次数
@@ -78,6 +79,7 @@
 		for(var i=0;i<length;i++){
 			if((resultData[i].acceptOrder == acceptOrder) && (resultData[i].taskOrder == index)){
 				$('form').form('load', resultData[i]);
+				$('#record').attr('src', resultData[i].record);
 			}
 		}
 	};
