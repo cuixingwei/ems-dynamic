@@ -43,82 +43,130 @@
 						field : 'station',
 						title : '分站名称',
 						resizable : true,
-						width : "8%",
-						align : 'center',
-						nowrap : false
+						width : "6%",
+						rowspan : 2,
+						align : 'center'
 					}, {
 						field : 'sendNumbers',
 						title : '120派诊',
 						resizable : true,
-						width : "7%",
+						rowspan : 2,
+						width : "5%",
 						align : 'center',
 					}, {
 						field : 'nomalNumbers',
 						title : '正常完成',
 						resizable : true,
-						width : "7%",
+						rowspan : 2,
+						width : "5%",
 						align : 'center'
 					}, {
 						field : 'nomalRate',
 						title : '正常完成比率',
 						resizable : true,
-						width : "9%",
+						rowspan : 2,
+						width : "5%",
 						align : 'center'
 					}, {
 						field : 'stopNumbers',
 						title : '中止任务',
 						resizable : true,
-						width : "7%",
+						rowspan : 2,
+						width : "5%",
 						align : 'center',
 					}, {
 						field : 'stopRate',
 						title : '中止任务比率',
 						resizable : true,
-						width : "8%",
+						rowspan : 2,
+						width : "5%",
 						align : 'center'
 					}, {
 						field : 'emptyNumbers',
 						title : '空车',
 						resizable : true,
-						width : "7%",
+						rowspan : 2,
+						width : "5%",
 						align : 'center'
 					}, {
 						field : 'emptyRate',
 						title : '空车比率',
 						resizable : true,
-						width : "7%",
+						width : "5%",
+						rowspan : 2,
 						align : 'center',
 					}, {
 						field : 'refuseNumbers',
 						title : '拒绝出车',
 						resizable : true,
-						width : "7%",
+						width : "5%",
+						rowspan : 2,
 						align : 'center'
 					}, {
 						field : 'refuseRate',
 						title : '拒绝出车比率',
 						resizable : true,
-						width : "8%",
+						width : "5%",
+						rowspan : 2,
 						align : 'center'
 					}, {
 						field : 'pauseNumbers',
 						title : '暂停调用',
 						resizable : true,
-						width : "7%",
+						width : "5%",
+						rowspan : 2,
 						align : 'center',
-					}, {
-						field : 'treatNumbers',
-						title : '救治人数',
-						resizable : true,
-						width : "7%",
-						align : 'center'
 					}, {
 						field : 'choiseHosNumbers',
 						title : '择院次数',
 						resizable : true,
-						width : "7%",
+						rowspan : 2,
+						width : "5%",
 						align : 'center'
-					} ] ],
+					}, {
+						title : '救治人数(病例)',
+						colspan : 8
+					} ],[{
+						field : 'noTreat',
+						title : '未治',
+						width : "5%",
+						align : 'center'
+					}, {
+						field : 'afterDeathSpot',
+						title : '救后死亡(现场)',
+						width : "5%",
+						align : 'center'
+					}, {
+						field : 'effect',
+						title : '有效',
+						width : "5%",
+						align : 'center'
+					}, {
+						field : 'noChange',
+						title : '无变化',
+						width : "5%",
+						align : 'center'
+					}, {
+						field : 'stable',
+						title : '稳定',
+						width : "5%",
+						align : 'center'
+					}, {
+						field : 'afterDeathRoad',
+						title : '救后死亡(途中) ',
+						width : "5%",
+						align : 'center'
+					}, {
+						field : 'afterDeathHopital',
+						title : '救后死亡(院内)',
+						width : "5%",
+						align : 'center'
+					}, {
+						field : 'treatNumbers',
+						title : '合计',
+						width : "5%",
+						align : 'center'
+					}] ],
 					toolbar : '#toolbar',
 					onBeforeLoad : function(param) {
 						var varify = cxw.checkStartTimeBeforeEndTime(
