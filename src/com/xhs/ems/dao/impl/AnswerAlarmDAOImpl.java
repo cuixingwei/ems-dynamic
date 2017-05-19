@@ -114,7 +114,7 @@ public class AnswerAlarmDAOImpl implements AnswerAlarmDAO {
 	@Override
 	public Grid getPhoneRecord(Parameter parameter) {
 		String sql = "select CONVERT(varchar(20),tr.振铃时刻,120) answerAlarmTime,tr.电话号码 alarmPhone,m.姓名 dispatcher,"
-				+ "	tr.录音文件名 recordPath,dtrr.NameM result,dtr.NameM recordType	from AuSp120.tb_TeleRecordV tr	"
+				+ "	tr.录音文件名 recordPath,dtrr.NameM result,dtr.NameM recordType	from AuSp120.tb_TeleRecord tr	"
 				+ "left outer join AuSp120.tb_MrUser m on m.工号=tr.调度员编码	"
 				+ "left outer join AuSp120.tb_DTeleRecordType dtr on dtr.Code=tr.记录类型编码	"
 				+ "left outer join AuSp120.tb_DTeleRecordResult dtrr on dtrr.Code=tr.结果编码	"

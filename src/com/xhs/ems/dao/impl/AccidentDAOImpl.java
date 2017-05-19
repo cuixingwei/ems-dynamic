@@ -37,7 +37,7 @@ public class AccidentDAOImpl implements AccidentDAO {
 	public Grid getData(Parameter parameter) {
 		String sql = "select e.事件编码 eventCode,ac.事发时间 eventTime,e.事件名称 eventName,e.呼救电话 callPhone,"
 				+ "m.姓名 dispatcher,dgc.NameM className,dgt.NameM type	from AuSp120.tb_AccidentEventLink ael  	"
-				+ "left outer join AuSp120.tb_EventV e  on e.事件编码=ael.事件编码	"
+				+ "left outer join AuSp120.tb_Event e  on e.事件编码=ael.事件编码	"
 				+ "left outer join AuSp120.tb_Accident ac on ac.事故编码=ael.事故编码	"
 				+ "left outer join AuSp120.tb_MrUser m on e.调度员编码=m.工号 left outer join "
 				+ "AuSp120.tb_DGroAccidentClass dgc on dgc.Code=ac.事故分类编码 "

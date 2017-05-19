@@ -46,8 +46,8 @@ public class CarPauseDAOImpl implements CarPauseDAO {
 	@Override
 	public Grid getData(Parameter parameter) {
 		String sql = "SELECT dpr.name pauseReason,vpl.actualSign carCode,vpl.operatorName dispatcher,"
-				+ "date_format(vpl.createTime,'%Y-%c-%d %h:%i:%s') pauseTime,	date_format(vpl.stateChangeTime,'%Y-%c-%d %h:%i:%s') endTime,"
-				+ "TIMESTAMPDIFF(SECOND,vpl.createTime,vpl.stateChangeTime) pauseTimes	from vehicle_pause_log vpl "
+				+ "date_format(vpl.createTime,'%Y-%c-%d %h:%i:%s') pauseTime,vpl.operatorType operatorType ,	date_format(vpl.stateChangeTime,'%Y-%c-%d %h:%i:%s') endTime,"
+				+ "TIMESTAMPDIFF(SECOND,vpl.createTime,vpl.stateChangeTime) pauseTimes,vpl.driverName driver	from vehicle_pause_log vpl "
 				+ "LEFT JOIN define_pause_reason dpr  on vpl.pauseReasonCode=dpr.`code` "
 				+ "where vpl.createTime between :startTime and :endTime ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
@@ -82,6 +82,7 @@ public class CarPauseDAOImpl implements CarPauseDAO {
 						carPause.setEndTime(rs.getString("endTime"));
 						carPause.setOperatorType(rs.getString("operatorType"));
 						carPause.setPauseReason(rs.getString("pauseReason"));
+						carPause.setDriver(rs.getString("driver"));
 						carPause.setPauseTime(rs.getString("pauseTime"));
 						carPause.setPauseTimes(rs.getString("pauseTimes"));
 						return carPause;
