@@ -102,5 +102,13 @@ public interface DictionaryDAO {
 	 * @return
 	 */
 	List<Dictionary> GetProfession();
+	
+	/**
+	 * 电话记录表
+	 * author cuixingwei
+	 * datetime 2017年5月24日下午1:10:06
+	 * @return
+	 */
+	List<Dictionary> GetPhoneType();
 
 }

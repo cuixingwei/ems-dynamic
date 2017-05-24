@@ -82,5 +82,14 @@ public class DictionaryServiceImpl implements DictionaryService {
 	public List<Dictionary> GetProfession() {
 		return dictionaryDAO.GetProfession();
 	}
+	
+	/**
+	 * @author cuixingwei
+	 * @datetime 2017年5月24日下午1:10:18
+	 */
+	@Override
+	public List<Dictionary> GetPhoneType() {
+		return dictionaryDAO.GetPhoneType();
+	}
 
 }

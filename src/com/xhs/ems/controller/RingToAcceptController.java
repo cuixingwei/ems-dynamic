@@ -42,9 +42,9 @@ public class RingToAcceptController {
 		response.setContentType("application/msexcel;charset=UTF-8");
 
 		String title = "响铃到接听大于X秒";
-		String[] headers = new String[] { "调度员", "电话振铃时刻", "通话时刻", "响铃时长(秒)",
+		String[] headers = new String[] { "调度员", "电话类型","电话振铃时刻", "通话时刻", "响铃时长(秒)",
 				"受理台号", "受理备注" };
-		String[] fields = new String[] { "dispatcher", "ringTime", "callTime",
+		String[] fields = new String[] { "dispatcher", "phoneType","ringTime", "callTime",
 				"ringDuration", "acceptCode", "acceptRemark" };
 		int spanCount = 1; // 需要合并的列数。从第1列开始到指定列。
 		TableData td = ExcelUtils.createTableData(

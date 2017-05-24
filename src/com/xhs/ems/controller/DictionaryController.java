@@ -102,5 +102,11 @@ public class DictionaryController {
 		return dictionaryService.GetProfession();
 	}
 	
+	@RequestMapping(value = "/GetPhoneType", method = RequestMethod.GET)
+	public @ResponseBody List<Dictionary> GetPhoneType() {
+		logger.info("获取职业编码字典表");
+		return dictionaryService.GetPhoneType();
+	}
+	
 	
 }

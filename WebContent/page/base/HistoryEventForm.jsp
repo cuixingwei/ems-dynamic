@@ -114,7 +114,7 @@
 							taskCount += 1; //任务次数
 						}
 					}
-					$('#record').attr('src', result.record);
+					$('#record').attr('src', data.record);
 					var str = '';
 					for(var i=0;i<acceptCount;i++){
 						str += cxw.formatString('<a class="button" onclick="acceptClick(this,\'{0}\');" id="accept{1}">第{2}次受理</a>', i+1,i+1,i+1);

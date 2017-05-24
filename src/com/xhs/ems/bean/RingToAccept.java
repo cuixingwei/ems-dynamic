@@ -10,6 +10,10 @@ public class RingToAccept {
 	 */
 	private String dispatcher;
 	/**
+	 * 电话类型
+	 */
+	private String phoneType;
+	/**
 	 * 电话振铃时刻
 	 */
 	private String ringTime;
@@ -78,14 +82,24 @@ public class RingToAccept {
 		this.acceptRemark = acceptRemark;
 	}
 
-	public RingToAccept(String dispatcher, String ringTime, String callTime,
-			String ringDuration, String acceptCode, String acceptRemark) {
+	public String getPhoneType() {
+		return phoneType;
+	}
+
+	public void setPhoneType(String phoneType) {
+		this.phoneType = phoneType;
+	}
+
+	public RingToAccept(String dispatcher, String phoneType, String ringTime, String callTime, String ringDuration,
+			String acceptCode, String acceptRemark) {
 		this.dispatcher = dispatcher;
+		this.phoneType = phoneType;
 		this.ringTime = ringTime;
 		this.callTime = callTime;
 		this.ringDuration = ringDuration;
 		this.acceptCode = acceptCode;
 		this.acceptRemark = acceptRemark;
 	}
+
 
 }

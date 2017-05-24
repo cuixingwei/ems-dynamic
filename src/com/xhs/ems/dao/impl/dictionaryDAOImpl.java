@@ -222,5 +222,24 @@ public class dictionaryDAOImpl implements DictionaryDAO {
 		results.add(0, new Dictionary("", "--请选择--"));
 		return results;
 	}
-
+	
+	/**
+	 * @author cuixingwei
+	 * @datetime 2017年5月24日下午1:11:16
+	 */
+	@Override
+	public List<Dictionary> GetPhoneType() {
+		String sql = "select * from AuSp120.tb_DTeleRecordType";
+		final List<Dictionary> results = new ArrayList<Dictionary>();
+		this.npJdbcTemplate.query(sql, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
+				Dictionary dictionary = new Dictionary(rs.getString("Code"), rs
+						.getString("NameM"));
+				results.add(dictionary);
+			}
+		});
+		results.add(0, new Dictionary("", "--请选择--"));
+		return results;
+	}
+	
 }

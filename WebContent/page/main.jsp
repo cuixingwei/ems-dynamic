@@ -56,6 +56,16 @@
 						{
 							url : 'getMenu',
 							parentField : 'pid',
+							animate : true,
+							cascadeCheck : true,
+							dnd : true,
+							lines : true,
+							onSelect : function(node) {
+								$(this)
+										.tree(
+												node.state === 'closed' ? 'expand'
+														: 'collapse', node.target);
+							},
 							onClick : function(node) {
 								if (node.attributes.url) {
 									var src = "base/" + node.attributes.url;

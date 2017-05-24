@@ -42,6 +42,10 @@ public class Parameter {
 	 */
 	private String phone;
 	/**
+	 * 电话类型
+	 */
+	private String phoneType;
+	/**
 	 * 中心任务信息统计（分站）
 	 */
 	private String station;
@@ -182,10 +186,16 @@ public class Parameter {
 	 */
 	private String driver;
 	
-	
-	
 
 	
+	public String getPhoneType() {
+		return phoneType;
+	}
+
+	public void setPhoneType(String phoneType) {
+		this.phoneType = phoneType;
+	}
+
 	public String getEventCode() {
 		return eventCode;
 	}

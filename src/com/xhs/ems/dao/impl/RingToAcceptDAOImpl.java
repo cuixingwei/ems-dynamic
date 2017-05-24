@@ -34,11 +34,15 @@ public class RingToAcceptDAOImpl implements RingToAcceptDAO {
 
 	@Override
 	public Grid getData(Parameter parameter) {
-		String sql = "select m.姓名 dispatcher,convert(varchar(20),tr.振铃时刻,120) ringTime,convert(varchar(20),tr.通话开始时刻,120) callTime,datediff(Second,tr.振铃时刻,tr.通话开始时刻) ringDuration,tr.座席号 acceptCode,tr.备注  acceptRemark	"
+		String sql = "select m.姓名 dispatcher,dtr.NameM phoneType,convert(varchar(20),tr.振铃时刻,120) ringTime,convert(varchar(20),tr.通话开始时刻,120) callTime,datediff(Second,tr.振铃时刻,tr.通话开始时刻) ringDuration,tr.座席号 acceptCode,tr.备注  acceptRemark	"
 				+ "from AuSp120.tb_TeleRecord tr left outer join AuSp120.tb_MrUser m on tr.调度员编码=m.工号 	"
+				+ "left join AuSp120.tb_DTeleRecordType dtr on dtr.Code = tr.记录类型编码 "
 				+ "where m.人员类型=0 and tr.振铃时刻 between :startTime and :endTime  and datediff(Second,tr.振铃时刻,tr.通话开始时刻)> :overtimes ";
 		if (!CommonUtil.isNullOrEmpty(parameter.getDispatcher())) {
 			sql = sql + " and tr.调度员编码=:dispatcher ";
+		}
+		if (!CommonUtil.isNullOrEmpty(parameter.getPhoneType())) {
+			sql = sql + " and tr.记录类型编码=:phoneType ";
 		}
 		sql = sql + "order by tr.调度员编码,tr.振铃时刻";
 		Map<String, String> paramMap = new HashMap<String, String>();
@@ -46,6 +50,7 @@ public class RingToAcceptDAOImpl implements RingToAcceptDAO {
 		paramMap.put("dispatcher", parameter.getDispatcher());
 		paramMap.put("startTime", parameter.getStartTime());
 		paramMap.put("endTime", parameter.getEndTime());
+		paramMap.put("phoneType", parameter.getPhoneType());
 
 		List<RingToAccept> results = this.npJdbcTemplate.query(sql, paramMap,
 				new RowMapper<RingToAccept>() {
@@ -53,7 +58,7 @@ public class RingToAcceptDAOImpl implements RingToAcceptDAO {
 					public RingToAccept mapRow(ResultSet rs, int index)
 							throws SQLException {
 
-						return new RingToAccept(rs.getString("dispatcher"), rs
+						return new RingToAccept(rs.getString("dispatcher"),rs.getString("phoneType"), rs
 								.getString("ringTime"), rs
 								.getString("callTime"), rs
 								.getString("ringDuration"), rs

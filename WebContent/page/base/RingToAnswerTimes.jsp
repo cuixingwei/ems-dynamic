@@ -16,7 +16,8 @@
 				+ $('#startTime').datetimebox('getValue') + "&endTime="
 				+ $('#endTime').datetimebox('getValue') + "&overtimes="
 				+ $('#overtimes').val() + "&dispatcher="
-				+ $('#dispatcher').combobox('getValue');
+				+ $('#dispatcher').combobox('getValue') + "&phoneType="
+				+ $('#phoneType').combobox('getValue');
 		window.location.href = url;
 	};
 	/* 初始化页面标签 */
@@ -38,6 +39,13 @@
 			textField : 'name',
 			method : 'get'
 		});
+		$('#phoneType').combobox({
+			url : 'GetPhoneType',
+			valueField : 'code',
+			textField : 'name',
+			editable : false,
+			method : 'get'
+		});
 		grid = $('#grid').datagrid(
 				{
 					url : 'getRingToAcceptDatas',
@@ -53,14 +61,18 @@
 					columns : [ [ {
 						field : 'dispatcher',
 						title : '调度员',
-						width : "15%",
+						width : "10%",
+						align : 'center'
+					}, {
+						field : 'ringTime',
+						title : '电话类型',
+						width : "10%",
 						align : 'center'
 					}, {
 						field : 'ringTime',
 						title : '电话振铃时刻',
 						width : "15%",
-						align : 'center',
-						sortable : true
+						align : 'center'
 					}, {
 						field : 'callTime',
 						title : '通话时刻',
@@ -74,7 +86,7 @@
 					}, {
 						field : 'acceptCode',
 						title : '受理台号',
-						width : "15%",
+						width : "10%",
 						align : 'center'
 					}, {
 						field : 'acceptRemark',
@@ -118,6 +130,9 @@
 								<td>调度员:</td>
 								<td><input style="width: 80em;" id="dispatcher"
 									name="dispatcher" /></td>
+								<td>电话类型:</td>
+								<td><input style="width: 120em;" id="phoneType"
+									name="phoneType" /></td>
 								<td>查询时间</td>
 								<td><input id="startTime" name="startTime"
 									style="width: 150em;" />至<input id="endTime" name="endTime"
