@@ -51,6 +51,7 @@
 	var taskCount = 0;//任务次数
 	var acceptOrder = 1;//当前受理序号
 	var taskOrder = 1;//当前任务序号
+	var currentTask;//当前任务信息
 	function acceptClick(target,index) {
 		$(target).addClass("button_click");
 		$(target).siblings().removeClass("button_click");
@@ -59,8 +60,8 @@
 		taskCount = 0;
 		for(var i=0;i<length;i++){
 			if((resultData[i].acceptOrder == index) && (resultData[i].taskOrder == 1)){
+				currentTask = resultData[i];
 				$('form').form('load', resultData[i]);
-				$('#record').attr('src', resultData[i].record);
 			}
 			if(resultData[i].acceptOrder == index){
 				taskCount += 1; //任务次数
@@ -78,8 +79,8 @@
 		var length = resultData.length;
 		for(var i=0;i<length;i++){
 			if((resultData[i].acceptOrder == acceptOrder) && (resultData[i].taskOrder == index)){
+				currentTask = resultData[i];
 				$('form').form('load', resultData[i]);
-				$('#record').attr('src', resultData[i].record);
 			}
 		}
 	};
@@ -87,12 +88,16 @@
 		$("#printBtn").click(function(){
 			var param;
 			var length = resultData.length;
-			for(var i=0;i<length;i++){
+			console.log('acceptOrder='+acceptOrder+';taskOrder='+taskOrder);
+			console.log(currentTask);
+			param = currentTask;
+			param = JSON.stringify(param);
+			/*for(var i=0;i<length;i++){
 				if((resultData[i].acceptOrder == acceptOrder) && (resultData[i].taskOrder == taskOrder)){
 					param = resultData[i];
 					param = JSON.stringify(param);
 				}
-			}
+			}*/
 			parent.window.open("printHistoryEvent.jsp?data="+param);
 		});
 		eventCode = '<%=eventCode%>';
@@ -107,6 +112,7 @@
 				var rLength = result.length;
 				if (rLength > 0) {
 					data = result[0];
+					currentTask = data;
 					$('form').form('load', data);
 					acceptCount = data.acceptCount; //受理次数
 					for(var i=0;i<rLength;i++){
